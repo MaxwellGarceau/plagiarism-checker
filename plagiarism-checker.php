@@ -14,14 +14,17 @@
 
 // Your code starts here.
 
-use Max_Garceau\Plagiarism_Checker\Main;
 use Kucrut\Vite;
+use Max_Garceau\Plagiarism_Checker\Main;
+use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
 
 // Include the Composer autoloader.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 // Initialize the plugin.
-$main = new Main();
+
+// TODO: Add PHP-DI when the number of classes expands.
+$main = new Main( new Form_Controller() );
 $main->init();
 
 // Enqueue the Vite assets.
