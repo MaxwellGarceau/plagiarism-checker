@@ -1,0 +1,16 @@
+{
+  "name": "plagiarism-checker",
+  "version": "0.1.0",
+  "main": "/src/assets/js/scripts.js",
+  "author": "Max Garceau",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@kucrut/vite-for-wp": "^0.9.3",
+    "sass": "^1.79.5",
+    "vite": "^5.4.9"
+  }
+}

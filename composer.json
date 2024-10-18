@@ -1,0 +1,31 @@
+{
+    "name": "maxgarceau/wp-admin-codex",
+    "description": "Access the WP documention when you need it from the WP Admin",
+    "authors": [
+        {
+            "name": "Max Garceau",
+            "email": "maxwellgarceau@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7",
+        "wp-coding-standards/wpcs": "^3.1"
+    },
+    "scripts": {
+        "sniff": "phpcs --standard=WordPress --extensions=php",
+        "lint": "phpcbf --standard=WordPress --extensions=php"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Max_Garceau\\Plagiarism_Checker\\": "src/"
+        }
+    },
+    "require": {
+        "kucrut/vite-for-wp": "^0.9.3"
+    }
+}

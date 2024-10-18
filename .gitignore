@@ -1,0 +1,21 @@
+.DS_Store
+phpcs.xml
+phpunit.xml
+Thumbs.db
+wp-cli.local.yml
+node_modules/
+*.sql
+*.tar.gz
+*.zip
+
+/vendor/
+
+# Vite
+vite-dev-server.json
+.vite/
+
+# Dist
+/dist/
+
+# Misc
+/.circleci/
