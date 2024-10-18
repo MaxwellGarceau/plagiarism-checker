@@ -1,0 +1,32 @@
+<div id="plagiarism-checker" class="plagiarism-checker">
+    <form id="plagiarism-checker__form" class="plagiarism-checker__form">
+      <label for="plagiarism-checker__input" class="plagiarism-checker__label">Enter Lyrics:</label>
+      <input 
+        type="text" 
+        id="plagiarism-checker__input" 
+        class="plagiarism-checker__input" 
+        name="lyric-input" 
+        placeholder="Type your lyrics here..." 
+        required 
+      />
+      
+      <button 
+        type="submit" 
+        id="plagiarism-checker__submit-button" 
+        class="plagiarism-checker__submit-button"
+      >
+        Check for Plagiarism
+      </button>
+    </form>
+  
+    <div id="plagiarism-checker__results" class="plagiarism-checker__results">
+      <label for="plagiarism-checker__textarea" class="plagiarism-checker__label">Matching Songs:</label>
+      <textarea 
+        id="plagiarism-checker__textarea" 
+        class="plagiarism-checker__textarea" 
+        readonly 
+        placeholder="Matching songs will appear here..."
+      ></textarea>
+    </div>
+  </div>
+  
