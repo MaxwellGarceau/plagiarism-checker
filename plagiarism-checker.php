@@ -28,7 +28,7 @@ $main = new Main( new Form_Controller() );
 $main->init();
 
 // Enqueue the Vite assets.
-add_action( 'admin_enqueue_scripts', function (): void {
+add_action( 'wp_enqueue_scripts', function (): void {
     Vite\enqueue_asset(
         __DIR__ . '/dist',
         'src/assets/js/scripts.ts',
