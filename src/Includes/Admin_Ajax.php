@@ -12,7 +12,7 @@ class Admin_Ajax {
 	/**
 	 * @param Nonce_Service $nonce_service
 	 */
-	public function __construct( private Nonce_Service $nonce_service ) {}
+	public function __construct( private readonly Nonce_Service $nonce_service ) {}
 
 	public function handle_plagiarism_checker_request(): void {
 

@@ -15,7 +15,7 @@ class Enqueue {
 	/**
 	 * @param Nonce_Service $nonce_service
 	 */
-	public function __construct( private Nonce_Service $nonce_service ) {}
+	public function __construct( private readonly Nonce_Service $nonce_service ) {}
 
 	// TODO: Move into enqueue class
 	public function vite(): void {

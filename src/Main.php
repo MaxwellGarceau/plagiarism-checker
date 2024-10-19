@@ -21,9 +21,9 @@ class Main {
 	 * @param Enqueue         $enqueue
 	 */
 	public function __construct(
-		private Form_Controller $form_controller,
-		private Admin_Ajax $admin_ajax,
-		private Enqueue $enqueue
+		private readonly Form_Controller $form_controller,
+		private readonly Admin_Ajax $admin_ajax,
+		private readonly Enqueue $enqueue
 	) {}
 
 	/**
