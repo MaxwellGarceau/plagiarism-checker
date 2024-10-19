@@ -78,7 +78,30 @@ class Admin_Ajax {
 		$actual_properties = $this->array_keys_recursive( $data );
 
 		// Ensure that all properties from $required_properties are present in $actual_properties
-		return count( array_diff( $required_properties, $actual_properties ) ) === 0;
+		return $this->check_required_properties( $required_properties, $actual_properties );
+	}
+
+	private function check_required_properties( array $required_properties, array $data ): bool {
+		foreach ( $required_properties as $key => $value ) {
+			if ( is_array( $value ) ) {
+				// If the value is an array, the corresponding key in $data must also be an array
+				if ( ! isset( $data[ $key ] ) || ! is_array( $data[ $key ] ) ) {
+					return false;
+				}
+
+				// Recursively check the nested properties
+				if ( ! $this->check_required_properties( $value, $data[ $key ] ) ) {
+					return false;
+				}
+			} else {
+				// Check if the simple key exists
+				if ( ! array_key_exists( $value, $data ) ) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -90,7 +113,7 @@ class Admin_Ajax {
 	 * Answer in php.net
 	 * https://www.php.net/manual/en/function.array-keys.php#114584
 	 */
-	private function array_keys_recursive( array $my_array, int $MAXDEPTH = INF, int $depth = 0, array $array_keys = array() ): array {
+	private function array_keys_recursive( array $my_array, int $MAXDEPTH = PHP_INT_MAX, int $depth = 0, array $array_keys = array() ): array {
 		if ( $depth < $MAXDEPTH ) {
 			++$depth;
 			$keys = array_keys( $my_array );

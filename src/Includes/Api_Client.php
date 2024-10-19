@@ -57,7 +57,6 @@ class Api_Client {
 	 * @return array|WP_Error The response data or WP_Error on failure.
 	 */
 	public function search_songs( string $text ): array|WP_Error {
-		error_log( 'hi' );
 		// Prepare the request URL
 		$url = add_query_arg(
 			array(
