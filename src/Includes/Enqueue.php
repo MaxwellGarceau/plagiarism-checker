@@ -20,7 +20,9 @@ class Enqueue {
 	// TODO: Move into enqueue class
 	public function vite(): void {
 		Vite\enqueue_asset(
-			__DIR__ . '/../../dist',
+			$this->get_plugin_base_path( '/dist' ),
+
+			// Must be relative to root directory. Kucrut\Vite generates the full path in the plugin.
 			'../../src/assets/js/scripts.ts',
 			array(
 				'handle'           => self::JS_SCRIPTS_HANDLE,
@@ -33,17 +35,17 @@ class Enqueue {
 		);
 	}
 
-	public function theme_json() {
+	public function theme_json(): void {
 		// Enqueue theme.json styles
 		wp_enqueue_style(
 			'plagiarism-checker-theme-styles',
-			plugin_dir_url( __DIR__ ) . '../../theme.json', // adjust the path as per your plugin structure
+			$this->get_plugin_base_url( '/theme.json' ), // adjust the path as per your plugin structure
 			array(),
 			wp_get_theme()->get( 'Version' )
 		);
 	}
 
-	public function localize_scripts( string $nonce ): void {
+	public function localize_scripts(): void {
 		wp_localize_script(
 			self::JS_SCRIPTS_HANDLE,
 			self::JS_OBJECT_NAME,
@@ -52,5 +54,13 @@ class Enqueue {
 				'nonce'    => $this->nonce_service->create_nonce(),
 			)
 		);
+	}
+
+	private function get_plugin_base_path( string $path = '' ): string {
+		return plugin_dir_path( __FILE__ ) . '../..' . $path;
+	}
+
+	private function get_plugin_base_url( string $path = '' ): string {
+		return plugin_dir_url( __FILE__ ) . '../..' . $path;
 	}
 }
