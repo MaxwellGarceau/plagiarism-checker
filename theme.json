@@ -1,0 +1,92 @@
+{
+    "version": 2,
+    "settings": {
+      "color": {
+        "custom": true,
+        "customGradient": true,
+        "palette": [
+          {
+            "slug": "primary",
+            "color": "#0073aa",
+            "name": "Primary"
+          },
+          {
+            "slug": "secondary",
+            "color": "#005177",
+            "name": "Secondary"
+          }
+        ]
+      },
+      "typography": {
+        "customFontSize": true,
+        "fontSizes": [
+          {
+            "slug": "small",
+            "size": "0.75rem",
+            "name": "Small"
+          },
+          {
+            "slug": "normal",
+            "size": "1rem",
+            "name": "Normal"
+          },
+          {
+            "slug": "large",
+            "size": "1.5rem",
+            "name": "Large"
+          }
+        ]
+      }
+    },
+    "styles": {
+      "elements": {
+        "button": {
+          "backgroundColor": "var(--wp--preset--color--primary)",
+          "color": "#fff",
+          "borderRadius": "0.25rem",
+          "padding": "0.625rem 1.25rem"
+        },
+        "input": {
+          "border": "1px solid var(--wp--preset--color--secondary)",
+          "padding": "0.5rem",
+          "borderRadius": "0.25rem",
+          "color": "#333"
+        },
+        "textarea": {
+          "border": "1px solid var(--wp--preset--color--secondary)",
+          "padding": "0.5rem",
+          "borderRadius": "0.25rem",
+          "color": "#333",
+          "minHeight": "12.5rem"
+        }
+      },
+      "blocks": {
+        "plagiarism-checker/input": {
+          "spacing": {
+            "padding": "0.75rem"
+          },
+          "typography": {
+            "fontSize": "1rem"
+          }
+        },
+        "plagiarism-checker/submit-button": {
+          "color": {
+            "text": "#fff",
+            "background": "var(--wp--preset--color--primary)"
+          },
+          "spacing": {
+            "padding": "0.625rem 1.25rem"
+          }
+        },
+        "plagiarism-checker/textarea": {
+          "spacing": {
+            "padding": "0.625rem"
+          },
+          "typography": {
+            "fontSize": "0.875rem"
+          }
+        }
+      }
+    }
+  }
+  

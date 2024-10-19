@@ -25,7 +25,7 @@ class Enqueue {
         // Enqueue theme.json styles
         wp_enqueue_style(
             'plagiarism-checker-theme-styles',
-            plugin_dir_url( __DIR__ ) . '/../../theme.json', // adjust the path as per your plugin structure
+            plugin_dir_url( __DIR__ ) . '../../theme.json', // adjust the path as per your plugin structure
             [],
             wp_get_theme()->get( 'Version' )
         );
