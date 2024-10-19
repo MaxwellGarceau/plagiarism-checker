@@ -7,6 +7,7 @@ namespace Max_Garceau\Plagiarism_Checker;
 use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
 use Max_Garceau\Plagiarism_Checker\Includes\Admin_Ajax;
 use Max_Garceau\Plagiarism_Checker\Includes\Enqueue;
+use Max_Garceau\Plagiarism_Checker\Includes\Hook_Manager;
 
 /**
  * Loads and coordinates activities of the plugin
@@ -16,28 +17,29 @@ use Max_Garceau\Plagiarism_Checker\Includes\Enqueue;
 class Main {
 
 	/**
-	 * @param Form_Controller $form_controller
-	 * @param Admin_Ajax      $admin_ajax
-	 * @param Enqueue         $enqueue
+	 * @property-read Form_Controller $form_controller
+	 * @property-read Admin_Ajax      $admin_ajax
+	 * @property-read Enqueue         $enqueue
+	 * @property-read Hook_Manager    $hook_manager
+	 *
+	 * NOTE: Inject classes here and then pass them to
+	 * Hook_Manager for the hooks initialization.
+	 *
+	 * Helps centralization init of the plugin, but
+	 * let's revisit this idea if no longer serves us
+	 * in the future
 	 */
 	public function __construct(
-		private readonly Form_Controller $form_controller,
-		private readonly Admin_Ajax $admin_ajax,
-		private readonly Enqueue $enqueue
+		public readonly Form_Controller $form_controller,
+		public readonly Admin_Ajax $admin_ajax,
+		public readonly Enqueue $enqueue,
+		public readonly Hook_Manager $hook_manager
 	) {}
 
 	/**
 	 * Initializes the plugin
 	 */
 	public function init() {
-		// Enqueue the Vite assets.
-		add_action( 'wp_enqueue_scripts', array( $this->enqueue, 'vite' ) );
-		add_action( 'wp_enqueue_scripts', array( $this->enqueue, 'theme_json' ) );
-
-		add_action( 'wp_footer', array( $this->form_controller, 'render' ) );
-		add_action( 'wp_enqueue_scripts', array( $this->enqueue, 'localize_scripts' ) );
-
-		// Only logged in users can make these requests. Non logged in users can't use this plugin.
-		add_action( 'wp_ajax_plagiarism_checker', array( $this->admin_ajax, 'handle_plagiarism_checker_request' ) );
+		$this->hook_manager->add_actions( $this );
 	}
 }

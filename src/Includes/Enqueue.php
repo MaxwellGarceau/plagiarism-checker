@@ -21,7 +21,6 @@ class Enqueue {
 	public function vite(): void {
 		Vite\enqueue_asset(
 			$this->get_plugin_base_path( '/dist' ),
-
 			// Must be relative to root directory. Kucrut\Vite generates the full path in the plugin.
 			'../../src/assets/js/scripts.ts',
 			array(
