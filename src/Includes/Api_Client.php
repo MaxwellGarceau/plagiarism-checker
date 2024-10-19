@@ -6,6 +6,7 @@ namespace Max_Garceau\Plagiarism_Checker\Includes;
 
 use WP_Error;
 use WP_Http;
+use Monolog\Logger;
 
 class Api_Client {
 
@@ -25,9 +26,28 @@ class Api_Client {
 	 */
 	private string $api_token;
 
-	public function __construct() {
+	/**
+	 * @param Logger $logger
+	 */
+	private Logger $logger;
+
+	public function __construct(
+		Logger $logger
+	) {
+		$this->logger = $logger;
+
 		// TODO: Set this via a WP menu where users can add their own token
 		$this->api_token = getenv( 'GENIUS_API_TOKEN' ) ?: '';
+
+		// TODO: Add an admin notice if the token is missing
+		if ( $this->api_token === '' ) {
+			$this->logger->error(
+				'The Genius API token is missing.',
+				array(
+					'Class_Name::method_name' => __CLASS__ . '::' . __FUNCTION__,
+				)
+			);
+		}
 	}
 
 	/**
@@ -37,6 +57,7 @@ class Api_Client {
 	 * @return array|WP_Error The response data or WP_Error on failure.
 	 */
 	public function search_songs( string $text ): array|WP_Error {
+		error_log( 'hi' );
 		// Prepare the request URL
 		$url = add_query_arg(
 			array(
@@ -67,6 +88,14 @@ class Api_Client {
 
 		// Check for errors in the API response
 		if ( wp_remote_retrieve_response_code( $response ) !== WP_Http::OK || ! isset( $data['response']['hits'] ) ) {
+			$this->logger->error(
+				'The Genius API request returned a non 200 response.',
+				array(
+					'search_text'   => $text,
+					'status_code'   => wp_remote_retrieve_response_code( $response ),
+					'response_data' => $data,
+				)
+			);
 			return new WP_Error( 'genius_api_error', 'The Genius API request failed or returned invalid data.' );
 		}
 

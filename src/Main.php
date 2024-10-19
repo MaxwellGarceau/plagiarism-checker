@@ -8,6 +8,7 @@ use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
 use Max_Garceau\Plagiarism_Checker\Includes\Admin_Ajax;
 use Max_Garceau\Plagiarism_Checker\Includes\Enqueue;
 use Max_Garceau\Plagiarism_Checker\Includes\Hook_Manager;
+use Max_Garceau\Plagiarism_Checker\Utilities\Env_Loader;
 
 /**
  * Loads and coordinates activities of the plugin
@@ -33,13 +34,15 @@ class Main {
 		public readonly Form_Controller $form_controller,
 		public readonly Admin_Ajax $admin_ajax,
 		public readonly Enqueue $enqueue,
-		public readonly Hook_Manager $hook_manager
+		public readonly Hook_Manager $hook_manager,
+		private readonly Env_Loader $env_loader
 	) {}
 
 	/**
 	 * Initializes the plugin
 	 */
 	public function init() {
+		// Init WP Hooks
 		$this->hook_manager->add_actions( $this );
 	}
 }
