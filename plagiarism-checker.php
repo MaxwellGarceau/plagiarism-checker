@@ -19,22 +19,13 @@ use Kucrut\Vite;
 // Include the Composer autoloader.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
-// Initialize the plugin.
-$container = new \DI\Container();
-$container->get( \Max_Garceau\Plagiarism_Checker\Main::class )->init();
+add_action( 'plugins_loaded', function (): void {
+    // Bail early if the user is not logged in.
+    if ( ! is_user_logged_in() ) {
+        return;
+    }
 
-// Enqueue the Vite assets.
-add_action( 'wp_enqueue_scripts', function (): void {
-    Vite\enqueue_asset(
-        __DIR__ . '/dist',
-        'src/assets/js/scripts.ts',
-        [
-            'handle' => 'plagiarism-checker-scripts',
-            'dependencies' => [], // Optional script dependencies. Defaults to empty array.
-            'css-dependencies' => [], // Optional style dependencies. Defaults to empty array.
-            'css-media' => 'all', // Optional.
-            'css-only' => false, // Optional. Set to true to only load style assets in production mode.
-            'in-footer' => true, // Optional. Defaults to false.
-        ]
-    );
+    // Initialize the plugin.
+    $container = new \DI\Container();
+    $container->get( \Max_Garceau\Plagiarism_Checker\Main::class )->init();
 } );
