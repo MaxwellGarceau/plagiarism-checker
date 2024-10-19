@@ -1,0 +1,40 @@
+/**
+ * Visual Styles (Skin Layer)
+ *
+ * It's easier to separate the visual CSS from
+ * the structural CSS
+ *
+ * This way we have a clear picture of where to make changes
+ * for the sidebar functionality versus the visual display
+ */
+.plagiarism-checker {
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px 0 0 0;
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, right 0.3s ease-in-out;
+
+    &--closed {
+        // Optionally, define a different visual state when closed
+        box-shadow: none;
+    }
+  
+    &__submit-button {
+      background-color: var(--wp--preset--color--primary);
+      color: #000;
+      cursor: pointer;
+    }
+
+    &__toggle {
+        background-color: var(--wp--preset--color--secondary);
+        color: #000;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        display: block; // Ensure it remains visible
+      }
+  }
+  
