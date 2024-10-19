@@ -41,7 +41,6 @@ add_action(
 			$dotenv->load();
 		} catch ( Exception $e ) {
 			error_log( 'Error loading .env file: ' . $e->getMessage() );
-			return;
 		}
 
 		// Initialize the plugin.
