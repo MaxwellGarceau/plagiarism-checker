@@ -12,33 +12,16 @@
  * @package         Plagiarism_Checker
  */
 
-// Your code starts here.
-
-use Kucrut\Vite;
-use Max_Garceau\Plagiarism_Checker\Main;
-use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
-
 // Include the Composer autoloader.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
-// Initialize the plugin.
+add_action( 'plugins_loaded', function (): void {
+    // Bail early if the user is not logged in.
+    if ( ! is_user_logged_in() ) {
+        return;
+    }
 
-// TODO: Add PHP-DI when the number of classes expands.
-$main = new Main( new Form_Controller() );
-$main->init();
-
-// Enqueue the Vite assets.
-add_action( 'wp_enqueue_scripts', function (): void {
-    Vite\enqueue_asset(
-        __DIR__ . '/dist',
-        'src/assets/js/scripts.ts',
-        [
-            'handle' => 'plagiarism-checker-scripts',
-            'dependencies' => [], // Optional script dependencies. Defaults to empty array.
-            'css-dependencies' => [], // Optional style dependencies. Defaults to empty array.
-            'css-media' => 'all', // Optional.
-            'css-only' => false, // Optional. Set to true to only load style assets in production mode.
-            'in-footer' => true, // Optional. Defaults to false.
-        ]
-    );
+    // Initialize the plugin.
+    $container = new \DI\Container();
+    $container->get( \Max_Garceau\Plagiarism_Checker\Main::class )->init();
 } );

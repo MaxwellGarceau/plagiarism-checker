@@ -26,6 +26,7 @@
         }
     },
     "require": {
-        "kucrut/vite-for-wp": "^0.9.3"
+        "kucrut/vite-for-wp": "^0.9.3",
+        "php-di/php-di": "^6.4"
     }
 }
