@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Max_Garceau\Plagiarism_Checker\Includes;
 
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
+use Max_Garceau\Plagiarism_Checker\Services\Nonce_Status;
 
 class Admin_Ajax {
 
@@ -15,9 +16,9 @@ class Admin_Ajax {
 
 	public function handle_plagiarism_checker_request(): void {
 
-		// Check nonce
-		if ( $this->nonce_service->verify_nonce() === false ) {
-			wp_send_json_error( 'Invalid nonce.' );
+		// Verify nonce
+		if ( $this->nonce_service->verify_nonce() === Nonce_Status::INVALID ) {
+			wp_send_json_error( 'Invalid or expired nonce.' );
 		}
 
 		// Validate and sanitize

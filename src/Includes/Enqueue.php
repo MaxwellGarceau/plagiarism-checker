@@ -9,8 +9,8 @@ use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
 
 class Enqueue {
 
-	const JS_HANDLE      = 'plagiarism-checker-scripts';
-	const JS_OBJECT_NAME = 'plagiarismCheckerAjax';
+	private const JS_SCRIPTS_HANDLE = 'plagiarism-checker-scripts';
+	private const JS_OBJECT_NAME    = 'plagiarismCheckerAjax';
 
 	/**
 	 * @param Nonce_Service $nonce_service
@@ -23,7 +23,7 @@ class Enqueue {
 			__DIR__ . '/../../dist',
 			'../../src/assets/js/scripts.ts',
 			array(
-				'handle'           => self::JS_HANDLE,
+				'handle'           => self::JS_SCRIPTS_HANDLE,
 				'dependencies'     => array(), // Optional script dependencies. Defaults to empty array.
 				'css-dependencies' => array(), // Optional style dependencies. Defaults to empty array.
 				'css-media'        => 'all', // Optional.
@@ -43,11 +43,9 @@ class Enqueue {
 		);
 	}
 
-
-
 	public function localize_scripts( string $nonce ): void {
 		wp_localize_script(
-			self::JS_HANDLE,
+			self::JS_SCRIPTS_HANDLE,
 			self::JS_OBJECT_NAME,
 			array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
