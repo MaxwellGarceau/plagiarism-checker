@@ -95,7 +95,7 @@ class Api_Client {
 					'response_data' => $data,
 				)
 			);
-			return new WP_Error( 'genius_api_error', 'The Genius API request failed or returned invalid data.' );
+			return new WP_Error( 'genius_api_error', 'The Genius API request failed or returned invalid data.', $response );
 		}
 
 		return $data['response']['hits'];

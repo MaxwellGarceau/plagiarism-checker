@@ -26,7 +26,7 @@ class Admin_Ajax {
 
 		// Verify nonce
 		if ( $this->nonce_service->verify_nonce() === Nonce_Status::INVALID ) {
-			// TODO: Log failure here (should I?)
+			$this->logger->error( 'Invalid or expired nonce.' );
 			wp_send_json_error( 'Invalid or expired nonce.' );
 		}
 
@@ -41,7 +41,10 @@ class Admin_Ajax {
 		// Make API request to Genius and get response
 		$data = $this->api_client->search_songs( $text );
 		if ( is_wp_error( $data ) ) {
-			// TODO: Log failure here
+			$this->logger->error( 'API request failed', [
+				'wp_error_message' => $data->get_error_message(),
+				'api_response' => $data->get_error_data(),
+			] );
 			wp_send_json_error( $data->get_error_message() );
 		}
 
