@@ -37,7 +37,7 @@ class Api_Client {
 		$this->logger = $logger;
 
 		// TODO: Set this via a WP menu where users can add their own token
-		$this->api_token = getenv( 'GENIUS_API_TOKEN' ) ?: '';
+		$this->api_token = $_ENV['GENIUS_API_TOKEN'] ?: '';
 
 		// TODO: Add an admin notice if the token is missing
 		if ( $this->api_token === '' ) {

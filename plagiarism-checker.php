@@ -17,7 +17,7 @@ declare( strict_types = 1 );
 
 use Max_Garceau\Plagiarism_Checker\Includes\DI_Container;
 use Max_Garceau\Plagiarism_Checker\Main;
-use Max_Garceau\Plagiarism_Checker\Utilities\Env_Loader;
+use Dotenv\Dotenv;
 
 // Include the Composer autoloader.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
@@ -34,7 +34,15 @@ add_action(
 		 * Load the environment variables.
 		 * Calling here so that we can be sure we're passing in the root path.
 		 */
-		Env_Loader::load_env( plugin_dir_path( __FILE__ ) );
+		$dotenv = Dotenv::createImmutable( plugin_dir_path( __FILE__ ) );
+
+		// Load the environment variables.
+		try {
+			$dotenv->load();
+		} catch ( Exception $e ) {
+			error_log( 'Error loading .env file: ' . $e->getMessage() );
+			return;
+		}
 
 		// Initialize the plugin.
 		$container = DI_Container::build_container();
