@@ -40,16 +40,15 @@ class Admin_Ajax {
 		}
 
 		// TODO: Set up call to genius.com API
-		$response = array(
-			'success' => true,
-			'data'    => array(),
-		);
+		$response = new \WP_REST_Response( json_decode( file_get_contents( plugin_dir_path( __DIR__ ) . '../tests/fixtures/response.json' ), true ) );
 
-		if ( is_wp_error( $response ) ) {
+		if ( is_wp_error( $response ) || $response->get_status() !== 200 ) {
 			wp_send_json_error( 'API request failed.' );
 		}
 
+		$data = $response->get_data();
+
 		// Process the response and send it back to the frontend
-		wp_send_json_success( $response );
+		wp_send_json_success( $data['response']['hits'] );
 	}
 }

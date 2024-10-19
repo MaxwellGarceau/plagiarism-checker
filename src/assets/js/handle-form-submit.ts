@@ -1,21 +1,36 @@
-interface PlagiarismCheckData {
+type PlagiarismCheckData = {
 	text: string;
 	_ajax_nonce: string;
 	_ajax_url: string;
 	action: string;
-}
+};
+
+type Response = {
+	ok: boolean;
+	json: Function;
+	status: number;
+};
+
+type Results = {
+	result: {
+		title: string;
+		url: string;
+		primary_artist: {
+			name: string;
+			url: string;
+		};
+	};
+};
 
 const textInput = document.querySelector(
 	'#plagiarism-checker__input'
 ) as HTMLTextAreaElement;
 const resultTextarea = document.querySelector(
 	'#plagiarism-checker__results'
-) as HTMLTextAreaElement;
+) as HTMLDivElement;
 
-export default async function handleFormSubmit(event) {
+export default async function handleFormSubmit(event: Event): Promise<void> {
 	event.preventDefault();
-
-	console.log(window);
 
 	const data: PlagiarismCheckData = {
 		text: textInput.value,
@@ -25,7 +40,7 @@ export default async function handleFormSubmit(event) {
 	};
 
 	try {
-		const response = await fetch(data._ajax_url, {
+		const response: Response = await fetch(data._ajax_url, {
 			method: 'POST',
 			headers: {
 				'Content-Type':
@@ -34,21 +49,30 @@ export default async function handleFormSubmit(event) {
 			body: new URLSearchParams(data as any),
 		});
 
-		console.log(response);
-
 		if (!response.ok) {
 			throw new Error(`HTTP error! Status: ${response.status}`);
 		}
 
-		const result = await response.text();
+		const result: Results[] = await response.json().then((res) => res.data);
 
 		// Render the result to the screen
-		// TODO: Do I want to render this in a textarea or another HTML element?
-		resultTextarea.value = result;
-		return false;
+		resultTextarea.innerHTML = renderOutput(result);
 	} catch (error) {
 		console.error('Error:', error);
-		resultTextarea.value = 'An error occurred while checking plagiarism.';
-		return false;
+		resultTextarea.innerHTML =
+			'An error occurred while checking plagiarism.';
 	}
+}
+
+function renderOutput(result: Results[]): string {
+	let output = '<ul>';
+	output += result
+		.map((e: Results) => {
+			const songTitle = `<a href="${e.result.url}" target="_blank">${e.result.title}</a>`;
+			const artistName = `<a href="${e.result.primary_artist.url}" target="_blank">${e.result.primary_artist.name}</a>`;
+			return `<li>${songTitle} - ${artistName}</li>`;
+		})
+		.join('\n');
+	output += '</ul>';
+	return output;
 }

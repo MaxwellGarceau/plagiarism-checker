@@ -46,7 +46,7 @@ class Main {
 	}
 
 	// TODO: Move into enqueue class
-	private function enqueue_vite(): void {
+	public function enqueue_vite(): void {
 		Vite\enqueue_asset(
 			__DIR__ . '/../dist',
 			'../src/assets/js/scripts.ts',
