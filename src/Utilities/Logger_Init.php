@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Max_Garceau\Plagiarism_Checker\Utilities;
 
 use Monolog\Logger;
@@ -7,7 +9,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Handler\NullHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\ErrorHandler;
-// use Dotenv\Dotenv;
 
 class Logger_Init {
 
@@ -17,9 +18,6 @@ class Logger_Init {
 	protected $log_file;
 
 	public function __construct( $log_channel = null, $log_level = null, $log_file = null ) {
-		// // Try to load .env file and default to hardcoded values if not available
-		// $this->load_env();
-
 		// Use passed values or fall back to .env values, and default values as the last resort
 		$this->log_channel = $log_channel ?: getenv( 'LOG_CHANNEL' ) ?: 'plagiarism_checker';
 		$this->log_level   = $log_level ?: getenv( 'LOG_LEVEL' ) ?: $this->get_default_log_level();
@@ -27,17 +25,6 @@ class Logger_Init {
 
 		$this->init_logger();
 	}
-
-	// protected function load_env() {
-	// Load the .env file using Symfony Dotenv component
-	// $dotenv = Dotenv::createImmutable( dirname( __DIR__, 2 ) );
-	// $env_path = WP_PLUGIN_DIR . '/plagiarism-checker/.env';
-
-	// Check if the .env file exists before loading it
-	// if (file_exists($env_path)) {
-	// $dotenv->load($env_path);
-	// }
-	// }
 
 	protected function init_logger(): void {
 		$this->logger = new Logger( $this->log_channel );
@@ -60,7 +47,7 @@ class Logger_Init {
 		ErrorHandler::register( $this->logger );
 	}
 
-	protected function get_default_log_level() {
+	protected function get_default_log_level(): \Monolog\Level {
 		// Default log level to error and above in production
 		return ( defined( 'WP_ENV' ) && getenv( 'WP_ENV' ) === 'production' ) ? \Monolog\Level::Error : \Monolog\Level::Debug;
 	}

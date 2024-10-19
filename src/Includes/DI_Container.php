@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Max_Garceau\Plagiarism_Checker\Includes;
 
 use DI\ContainerBuilder;
@@ -13,7 +15,7 @@ use Monolog\Logger;
  */
 class DI_Container {
 
-	public static function build_container() {
+	public static function build_container(): \DI\Container {
 		$containerBuilder = new ContainerBuilder();
 
 		// Add custom logger definition

@@ -41,10 +41,13 @@ class Admin_Ajax {
 		// Make API request to Genius and get response
 		$data = $this->api_client->search_songs( $text );
 		if ( is_wp_error( $data ) ) {
-			$this->logger->error( 'API request failed', [
-				'wp_error_message' => $data->get_error_message(),
-				'api_response' => $data->get_error_data(),
-			] );
+			$this->logger->error(
+				'API request failed',
+				array(
+					'wp_error_message' => $data->get_error_message(),
+					'api_response'     => $data->get_error_data(),
+				)
+			);
 			wp_send_json_error( $data->get_error_message() );
 		}
 
