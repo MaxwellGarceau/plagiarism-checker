@@ -15,17 +15,13 @@
 // Your code starts here.
 
 use Kucrut\Vite;
-use Max_Garceau\Plagiarism_Checker\Main;
-use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
 
 // Include the Composer autoloader.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
 // Initialize the plugin.
-
-// TODO: Add PHP-DI when the number of classes expands.
-$main = new Main( new Form_Controller() );
-$main->init();
+$container = new \DI\Container();
+$container->get( \Max_Garceau\Plagiarism_Checker\Main::class )->init();
 
 // Enqueue the Vite assets.
 add_action( 'wp_enqueue_scripts', function (): void {

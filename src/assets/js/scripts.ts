@@ -3,7 +3,7 @@ import toggleForm from './toggle-form';
 
 // Init TS files
 document.addEventListener('DOMContentLoaded', () => {
-    toggleForm();
+	toggleForm();
 });
 
 // SCSS
