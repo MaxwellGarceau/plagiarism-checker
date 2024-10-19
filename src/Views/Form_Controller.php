@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Max_Garceau\Plagiarism_Checker\Views;
 
 use Max_Garceau\Plagiarism_Checker\Views\Interface_Renderable;
