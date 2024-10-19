@@ -12,10 +12,6 @@
  * @package         Plagiarism_Checker
  */
 
-// Your code starts here.
-
-use Kucrut\Vite;
-
 // Include the Composer autoloader.
 require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
