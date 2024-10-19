@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Max_Garceau\Plagiarism_Checker;
 
 use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
@@ -14,29 +16,15 @@ use Max_Garceau\Plagiarism_Checker\Includes\Enqueue;
 class Main {
 
 	/**
-	 * @var Form_Controller $form_controller
+	 * @param Form_Controller $form_controller
+	 * @param Admin_Ajax      $admin_ajax
+	 * @param Enqueue         $enqueue
 	 */
-	private Form_Controller $form_controller;
-
-	/**
-	 * @var Admin_Ajax $admin_ajax
-	 */
-	private Admin_Ajax $admin_ajax;
-
-	/**
-	 * @var Enqueue $enqueue
-	 */
-	private Enqueue $enqueue;
-
 	public function __construct(
-		Form_Controller $form_Controller,
-		Admin_Ajax $admin_ajax,
-		Enqueue $enqueue
-	) {
-		$this->form_controller = $form_Controller;
-		$this->admin_ajax      = $admin_ajax;
-		$this->enqueue         = $enqueue;
-	}
+		private Form_Controller $form_controller,
+		private Admin_Ajax $admin_ajax,
+		private Enqueue $enqueue
+	) {}
 
 	/**
 	 * Initializes the plugin
@@ -47,7 +35,7 @@ class Main {
 		add_action( 'wp_enqueue_scripts', array( $this->enqueue, 'theme_json' ) );
 
 		add_action( 'wp_footer', array( $this->form_controller, 'render' ) );
-		add_action( 'wp_enqueue_scripts', array( $this->admin_ajax, 'localize_scripts' ) );
+		add_action( 'wp_enqueue_scripts', array( $this->enqueue, 'localize_scripts' ) );
 
 		// Only logged in users can make these requests. Non logged in users can't use this plugin.
 		add_action( 'wp_ajax_plagiarism_checker', array( $this->admin_ajax, 'handle_plagiarism_checker_request' ) );

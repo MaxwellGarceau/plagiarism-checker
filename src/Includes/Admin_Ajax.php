@@ -1,35 +1,24 @@
 <?php
 
+declare( strict_types = 1 );
+
 namespace Max_Garceau\Plagiarism_Checker\Includes;
+
+use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
 
 class Admin_Ajax {
 
-	const NONCE_KEY = 'plagiarism_checker_nonce';
-
-	// TODO: This doesn't belong here. Move to an Enqueue class later.
-	const JS_HANDLE = 'plagiarism-checker-scripts';
-
-	const JS_OBJECT_NAME = 'plagiarismCheckerAjax';
-
-	public function localize_scripts(): void {
-		wp_localize_script(
-			self::JS_HANDLE,
-			self::JS_OBJECT_NAME,
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => $this->create_nonce(),
-			)
-		);
-	}
-
-	private function create_nonce(): string {
-		return wp_create_nonce( self::NONCE_KEY );
-	}
+	/**
+	 * @param Nonce_Service $nonce_service
+	 */
+	public function __construct( private Nonce_Service $nonce_service ) {}
 
 	public function handle_plagiarism_checker_request(): void {
 
 		// Check nonce
-		check_ajax_referer( 'plagiarism_checker_nonce' );
+		if ( $this->nonce_service->verify_nonce() === false ) {
+			wp_send_json_error( 'Invalid nonce.' );
+		}
 
 		// Validate and sanitize
 		$text = isset( $_POST['text'] ) ? sanitize_text_field( $_POST['text'] ) : '';
