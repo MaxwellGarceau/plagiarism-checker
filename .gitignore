@@ -8,10 +8,12 @@ node_modules/
 *.sql
 *.tar.gz
 *.zip
+.phpunit.result.cache
 
 # Composer
 /vendor/
 /tests/wordpress/
+wp/
 
 # Vite
 vite-dev-server.json

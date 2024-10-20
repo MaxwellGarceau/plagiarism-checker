@@ -1,5 +1,24 @@
 <?php
 
+use Pest\test;
+
+/*
+|--------------------------------------------------------------------------
+| Bindings
+|--------------------------------------------------------------------------
+|
+| I made this. We'll bind Pest to WordPress specific test cases here
+|
+*/
+use Yoast\WPTestUtils\BrainMonkey\TestCase;
+
+uses()->group( 'integration' )->in( 'Integration' );
+uses()->group( 'unit' )->in( 'Unit' );
+uses()->group( 'feature' )->in( 'Feature' );
+
+uses( TestCase::class )->in( 'Integration' );
+uses( TestCase::class )->in( 'Feature' );
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,7 +30,8 @@
 |
 */
 
-// pest()->extend(Tests\TestCase::class)->in('Feature');
+// pest()->extend(Tests\TestCase::class)->in('Integration');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +44,12 @@
 |
 */
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
+expect()->extend(
+	'toBeOne',
+	function () {
+		return $this->toBe( 1 );
+	}
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +62,6 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
-{
-    // ..
+function something() {
+	// ..
 }
