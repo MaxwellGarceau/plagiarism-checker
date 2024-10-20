@@ -3,12 +3,12 @@
 namespace Max_Garceau\Plagiarism_Checker\Tests\Bootstrap;
 
 use Dotenv\Dotenv;
-use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\TestConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\AbstractConfigManager;
 
 /**
  * Manage global requirements for testing
  */
-class WpGlobalTestConfigManager extends TestConfigManager {
+class WpGlobalTestConfigManager extends AbstractConfigManager {
 	public function loadProject(): void {
 		// Autoload everything for unit tests.
 		require_once $this->getRootProjectPath() . '/vendor/autoload.php';

@@ -2,7 +2,7 @@
 
 namespace Max_Garceau\Plagiarism_Checker\Tests\Bootstrap;
 
-use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\TestConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\AbstractConfigManager;
 
 /**
  * TODO: Is this over engineered? Maybe we should put this into a function and call it a day.
@@ -22,7 +22,7 @@ use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\TestConfigManager;
  * - Modifies /wp/tests/phpunit/wp-tests-config.php to set the ABSPATH to /wp/src
  * - Modifies /wp/tests/phpunit/wp-tests-config.php to set the DB_NAME, DB_USER, DB_PASSWORD, and DB_HOST
  */
-class WpCoreTestConfigManager extends TestConfigManager {
+class WpCoreTestConfigManager extends AbstractConfigManager {
 
 	/**
 	 * Path to the sample test config file.
@@ -80,7 +80,7 @@ class WpCoreTestConfigManager extends TestConfigManager {
 		$requiredKeys = array( 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST' );
 		foreach ( $requiredKeys as $key ) {
 			if ( ! isset( $dbConfig[ $key ] ) ) {
-				throw new InvalidArgumentException( "Missing required database configuration key: $key" );
+				throw new \InvalidArgumentException( "Missing required database configuration key: $key" );
 			}
 		}
 

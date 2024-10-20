@@ -10,7 +10,7 @@ namespace Max_Garceau\Plagiarism_Checker\Tests\Bootstrap;
  * and I don't anticipate the testing configs expanding much past
  * this point.
  */
-abstract class TestConfigManager {
+abstract class AbstractConfigManager {
 	/**
 	 * Get the root path of the testing suite.
 	 *

@@ -2,7 +2,7 @@
 
 namespace Max_Garceau\Plagiarism_Checker\Tests\Bootstrap;
 
-use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\TestConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\AbstractConfigManager;
 
 /**
  * This class is to manage how we mock all of WP when running integration
@@ -11,7 +11,7 @@ use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\TestConfigManager;
  * Using Brain Monkey for the mocking
  */
 
-class WpSimulatedTestConfigManager extends TestConfigManager {
+class WpSimulatedTestConfigManager extends AbstractConfigManager {
 
 	/**
 	 * Main entry point to initialize the test config.

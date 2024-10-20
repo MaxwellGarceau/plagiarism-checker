@@ -4,7 +4,7 @@ use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpCoreTestConfigManager;
 use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpSimulatedTestConfigManager;
 use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpGlobalTestConfigManager;
 
-require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/TestConfigManager.php';
+require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/AbstractConfigManager.php';
 require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpGlobalTestConfigManager.php';
 
 $wpGlobalTestConfigManager = new WpGlobalTestConfigManager();
