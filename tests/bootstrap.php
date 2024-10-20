@@ -15,6 +15,11 @@ $wpGlobalTestConfigManager = new WpGlobalConfigManager();
 $wpGlobalTestConfigManager->loadProject();
 
 /**
+ * Load WordPress stubs from php-stubs/wordpress-stubs
+ */
+$wpGlobalTestConfigManager->loadWpStubs();
+
+/**
  * Load the .env.test file
  */
 $wpGlobalTestConfigManager->loadDotEnv();

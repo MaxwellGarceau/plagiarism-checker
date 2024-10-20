@@ -14,6 +14,16 @@ class WpGlobalConfigManager extends AbstractConfigManager {
 		require_once $this->getRootProjectPath() . '/vendor/autoload.php';
 	}
 
+	/**
+	 * WordPress stubs by the php-stubs/wordpress-stubs package
+	 *
+	 * Included so that we can use WP functions and classes with having
+	 * to mock then or include the entire WordPress core.
+	 */
+	public function loadWpStubs(): void {
+		require_once $this->getRootProjectPath() . '/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php';
+	}
+
 	public function loadDotEnv(): void {
 		/**
 		 * Load the test environment variables.
