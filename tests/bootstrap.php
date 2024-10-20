@@ -20,22 +20,24 @@ $wpSimulatedConfigManager = new WpSimulatedConfigManager();
  * We may want to revisit this in the future.
  */
 match ( true ) {
-	$wpGlobalTestConfigManager->commandLineHas( 'simulated_wp' ) => ( function () use ( $wpSimulatedConfigManager ) {
+	$wpGlobalTestConfigManager->commandLineHas( 'wp_brain_monkey' ) => ( function () use ( $wpSimulatedConfigManager ) {		
 		/**
-		 * Load WordPress stubs from php-stubs/wordpress-stubs
+		 * Load Brain Monkey for function and class mocking
+		 * 
+		 * We will have to manually mock WP objects inside our tests
+		 * but we can use Brain Monkey to make assertions on WP functions
 		 */
-		$wpSimulatedConfigManager->loadWpStubs();
-
 		$wpSimulatedConfigManager->setupBrainMonkey();
 	} )(),
 
-	$wpGlobalTestConfigManager->commandLineHas( 'full_wp' ) => ( function () {
+	$wpGlobalTestConfigManager->commandLineHas( 'wp_full' ) => ( function () {
 		$wpTestConfigManager = new WpCoreConfigManager( $_SERVER );
 
 		// Copy and overwrite the wp-tests-config.php file every time
 		$wpTestConfigManager->overwriteWpCoreConfig();
 
 		// Register mock theme
+		// TODO: Not sure if we need this
 		$wpTestConfigManager->registerMockTheme();
 
 		$wpTestConfigManager->bootstrapWpPhpUnit();
@@ -44,8 +46,8 @@ match ( true ) {
 	default => ( function () use ( $wpSimulatedConfigManager ) {
 		/**
 		 * Load WordPress stubs from php-stubs/wordpress-stubs
-		 *
-		 * TODO: Might merge this with simulated_wp
+		 * 
+		 * This will let us test WP code, but not interact with it.
 		 */
 		$wpSimulatedConfigManager->loadWpStubs();
 	} )()

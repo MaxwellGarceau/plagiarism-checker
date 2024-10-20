@@ -4,10 +4,6 @@ use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
 use function Brain\Monkey\Functions\expect;
 use Monolog\Logger;
 
-// it('simulates WordPress', function() {
-
-// })->group('simulated_wp');
-
 it(
 	'sends a valid API request and returns the expected result',
 	function () {
@@ -43,7 +39,7 @@ it(
 			}
 		);
 	}
-)->group( 'simulated_wp' );
+)->group( 'wp_brain_monkey' );
 
 it(
 	'returns an empty array when the API response is empty',
@@ -66,7 +62,7 @@ it(
 
 		expect( $result )->toBe( array() );
 	}
-)->group( 'simulated_wp' );
+)->group( 'wp_brain_monkey' );
 
 it(
 	'handles an error response from the API',
@@ -90,7 +86,7 @@ it(
 		expect( $result )->toBeInstanceOf( WP_Error::class );
 		expect( $result->get_error_message() )->toMatch( '/^(.*)request failed.*$/i' );
 	}
-)->group( 'simulated_wp' );
+)->group( 'wp_brain_monkey' );
 
 it(
 	'does not sanitize or validate data',
@@ -98,7 +94,7 @@ it(
 		// The Api_Client is only accessed through Admin_Ajax
 		// which already sanitizes and validates the data
 	}
-)->group( 'simulated_wp' )->skip( 'This is a note.' );
+)->group( 'wp_brain_monkey' )->skip( 'This is a note.' );
 
 it(
 	'throws an error when no api token is set',
@@ -124,4 +120,4 @@ it(
 		// Assert that the logger was called with the expected message
 		expect( $loggerMock )->toHaveReceived( 'error' );
 	}
-)->group( 'simulated_wp' );
+)->group( 'wp_brain_monkey' );
