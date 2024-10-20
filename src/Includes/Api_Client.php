@@ -57,6 +57,13 @@ class Api_Client {
 	 * @return array|WP_Error The response data or WP_Error on failure.
 	 */
 	public function search_songs( string $text ): array|WP_Error {
+
+		/**
+		 * NOTE: We aren't validating or sanitizing the data here because
+		 * we're already doing that in Admin_Ajax. We should consider adding
+		 * sanitization if we change the design in the future
+		 */
+
 		// Prepare the request URL
 		$url = add_query_arg(
 			array(

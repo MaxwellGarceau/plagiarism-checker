@@ -55,8 +55,8 @@ It's important that we run each test with the kind of mocking they need. Ideally
 
 At the moment, I'm organizing the test folders by Unit, Integration, and Feature and adding these groups based on the mocking needs.
 
- - "full-wp" - Load full WP Core 
- - "simulated-wp" - Load simulated WP Core
- - "no-wp" - Load no WP Core
+ - "full_wp" - Load full WP Core 
+ - "simulated_wp" - Load simulated WP Core
+ - "no_wp" - Load no WP Core
 
 There's no way to filter these tests, but we can take care of that once there are enough tests for that kind of dev work to make sense.

@@ -3,6 +3,17 @@
 // Autoload everything for unit tests.
 require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
 
+// Toggle mocking of WordPress functions
+if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], 'simulated_wp' ) !== false ) {
+	// Set up Brain Monkey for mocking WordPress functions
+	\Brain\Monkey\setUp();
+
+	// Register a shutdown function to tear down Brain Monkey after tests
+	register_shutdown_function(function () {
+		\Brain\Monkey\tearDown();
+	});
+}
+
 /**
  * Include core bootstrap for an integration test suite
  *
@@ -11,18 +22,7 @@ require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
  * add additional argument to the test run command if you want to run
  * integration tests.
  */
-if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], 'integration' ) !== false ) {
-
-	// // Toggle mocking of WordPress functions
-	// if () {
-	// Set up Brain Monkey for mocking WordPress functions
-	// \Brain\Monkey\setUp();
-
-	// Register a shutdown function to tear down Brain Monkey after tests
-	// register_shutdown_function(function () {
-	// \Brain\Monkey\tearDown();
-	// });
-	// }
+else if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], 'integration' ) !== false ) {
 
 	if ( ! file_exists( dirname( __DIR__, 1 ) . '/wp/tests/phpunit/wp-tests-config.php' ) ) {
 		// We need to set up core config details and test details
