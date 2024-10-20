@@ -14,10 +14,10 @@
     </testsuites>
     <php>
         <env name="TEST" value="true" force="true" />
-        <server name="DB_NAME" value="wordpress_test"/>
-        <server name="DB_USER" value="wordpress"/>
-        <server name="DB_PASSWORD" value="wordpress"/>
-        <server name="DB_HOST" value="database"/>
+        <server name="DB_NAME" value="${DB_NAME}"/>
+        <server name="DB_USER" value="${DB_USER}"/>
+        <server name="DB_PASSWORD" value="${DB_PASSWORD}"/>
+        <server name="DB_HOST" value="${DB_HOST}"/>
     </php>
     <coverage processUncoveredFiles="true">
         <include>
