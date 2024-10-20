@@ -9,8 +9,11 @@ use Dotenv\Dotenv;
  * Load the test environment variables.
  * Calling here so that we can be sure we're passing in the root path.
  */
-$envFile = file_exists(dirname( __DIR__, 1 ) . '/.env.test') ? '.env.test' : '.env';
-$dotenv = Dotenv::createImmutable( dirname( __DIR__, 1 ), $envFile );
+if (! file_exists(dirname( __DIR__, 1 ) . '/.env.test')) {
+	die("Error: .env.test file is missing. Aborting tests. Please check " . __FILE__ . "\n");
+}
+
+$dotenv = Dotenv::createImmutable( dirname( __DIR__, 1 ), '/.env.test' );
 
 // Load the environment variables.
 try {
