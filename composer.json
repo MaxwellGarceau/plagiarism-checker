@@ -15,7 +15,7 @@
         "koodimonni/composer-dropin-installer": "^1.4",
         "mnsami/composer-custom-directory-installer": "^2.0",
         "pestphp/pest": "^1.2",
-        "php-stubs/wordpress-stubs": "^5.9",
+        "php-stubs/wordpress-stubs": "^6.6",
         "phpunit/phpunit": "^9.5",
         "roave/security-advisories": "dev-master",
         "wordpress/wordpress": "^6.6",
