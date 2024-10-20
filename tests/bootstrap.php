@@ -3,6 +3,22 @@
 // Autoload everything for unit tests.
 require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
 
+use Dotenv\Dotenv;
+
+/**
+ * Load the test environment variables.
+ * Calling here so that we can be sure we're passing in the root path.
+ */
+$envFile = file_exists(dirname( __DIR__, 1 ) . '/.env.test') ? '.env.test' : '.env';
+$dotenv = Dotenv::createImmutable( dirname( __DIR__, 1 ), $envFile );
+
+// Load the environment variables.
+try {
+	$dotenv->load();
+} catch ( Exception $e ) {
+	error_log( 'Error loading .env.test file in' . __FILE__ . ' :' . $e->getMessage() );
+}
+
 // Toggle mocking of WordPress functions
 if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], 'simulated_wp' ) !== false ) {
 	// Set up Brain Monkey for mocking WordPress functions
@@ -22,7 +38,7 @@ if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBA
  * add additional argument to the test run command if you want to run
  * integration tests.
  */
-else if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], 'integration' ) !== false ) {
+if ( isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], 'integration' ) !== false ) {
 
 	if ( ! file_exists( dirname( __DIR__, 1 ) . '/wp/tests/phpunit/wp-tests-config.php' ) ) {
 		// We need to set up core config details and test details
