@@ -21,6 +21,7 @@ vite-dev-server.json
 
 # Dev
 .env
+.env.test
 
 # Misc
 /.circleci/
