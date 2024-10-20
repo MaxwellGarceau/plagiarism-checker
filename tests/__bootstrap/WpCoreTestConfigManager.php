@@ -1,5 +1,9 @@
 <?php
 
+namespace Max_Garceau\Plagiarism_Checker\Tests\Bootstrap;
+
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\TestConfigManager;
+
 /**
  * TODO: Is this over engineered? Maybe we should put this into a function and call it a day.
  * I like the class approach because it's to make small changes in isolation, but the functional
@@ -18,7 +22,7 @@
  * - Modifies /wp/tests/phpunit/wp-tests-config.php to set the ABSPATH to /wp/src
  * - Modifies /wp/tests/phpunit/wp-tests-config.php to set the DB_NAME, DB_USER, DB_PASSWORD, and DB_HOST
  */
-class WpTestConfigManager {
+class WpCoreTestConfigManager extends TestConfigManager {
 
 	/**
 	 * Path to the sample test config file.
@@ -45,8 +49,8 @@ class WpTestConfigManager {
 	 * Constructor to set up paths and load environment variables.
 	 */
 	public function __construct( array $dbConfig ) {
-		$this->sampleConfigPath = $this->getRootPath() . '/wp/wp-tests-config-sample.php';
-		$this->testConfigPath   = $this->getRootPath() . '/wp/tests/phpunit/wp-tests-config.php';
+		$this->sampleConfigPath = $this->getRootTestPath() . '/wp/wp-tests-config-sample.php';
+		$this->testConfigPath   = $this->getRootTestPath() . '/wp/tests/phpunit/wp-tests-config.php';
 		$this->dbConfig         = $this->loadDatabaseConfig( $dbConfig );
 	}
 
@@ -56,15 +60,6 @@ class WpTestConfigManager {
 	public function overwriteWpCoreConfig(): void {
 		$this->copySampleConfig();
 		$this->updateTestConfig();
-	}
-
-	/**
-	 * Get the root path of the project.
-	 *
-	 * @return string
-	 */
-	private function getRootPath(): string {
-		return dirname( __DIR__, 2 );
 	}
 
 	/**
@@ -137,35 +132,45 @@ class WpTestConfigManager {
 	}
 
 	public function registerMockTheme(): void {
-		tests_add_filter( 'muplugins_loaded', array( $this, '_register_theme' ) );
+		// Include functions for tests_add_filter()
+		require_once $this->getRootTestPath() . '/wp/tests/phpunit/includes/functions.php';
+
+		// Register Mock theme - anonymous function for brevity
+		tests_add_filter(
+			'muplugins_loaded',
+			function () {
+				$themeDir     = dirname( __DIR__, 1 );
+				$currentTheme = basename( $themeDir );
+				$themeToot    = dirname( $themeDir );
+
+				add_filter(
+					'theme_root',
+					function () use ( $themeToot ) {
+						return $themeToot;
+					}
+				);
+
+				register_theme_directory( $themeToot );
+
+				add_filter(
+					'pre_option_template',
+					function () use ( $currentTheme ) {
+						return $currentTheme;
+					}
+				);
+
+				add_filter(
+					'pre_option_stylesheet',
+					function () use ( $currentTheme ) {
+						return $currentTheme;
+					}
+				);
+			}
+		);
 	}
 
-	public function _register_theme() {
-		$themeDir     = dirname( __DIR__, 1 );
-		$currentTheme = basename( $themeDir );
-		$themeToot    = dirname( $themeDir );
-
-		add_filter(
-			'theme_root',
-			function () use ( $themeToot ) {
-				return $themeToot;
-			}
-		);
-
-		register_theme_directory( $themeToot );
-
-		add_filter(
-			'pre_option_template',
-			function () use ( $currentTheme ) {
-				return $currentTheme;
-			}
-		);
-
-		add_filter(
-			'pre_option_stylesheet',
-			function () use ( $currentTheme ) {
-				return $currentTheme;
-			}
-		);
+	public function bootstrapWpPhpUnit(): void {
+		// Bootstrap wp/tests/phpunit
+		require_once $this->getRootTestPath() . '/wp/tests/phpunit/includes/bootstrap.php';
 	}
 }

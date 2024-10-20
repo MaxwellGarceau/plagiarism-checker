@@ -1,64 +1,45 @@
 <?php
 
-// Autoload everything for unit tests.
-require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpCoreTestConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpSimulatedTestConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpGlobalTestConfigManager;
 
-use Dotenv\Dotenv;
+require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/TestConfigManager.php';
+require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpGlobalTestConfigManager.php';
 
-/**
- * Load the test environment variables.
- * Calling here so that we can be sure we're passing in the root path.
- */
-if ( ! file_exists( dirname( __DIR__, 1 ) . '/.env.test' ) ) {
-	die( 'Error: .env.test file is missing. Aborting tests. Please check ' . __FILE__ . "\n" );
-}
-
-$dotenv = Dotenv::createImmutable( dirname( __DIR__, 1 ), '/.env.test' );
-
-// Load the environment variables.
-try {
-	$dotenv->load();
-} catch ( Exception $e ) {
-	error_log( 'Error loading .env.test file in' . __FILE__ . ' :' . $e->getMessage() );
-}
+$wpGlobalTestConfigManager = new WpGlobalTestConfigManager();
 
 /**
- * Easier command line checking to route arguments to the correct loading sequence
+ * Autoload vendor/autoload.php from composer project
  */
-function argVHasCommand( string $command ): bool {
-	return isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], $command ) !== false;
-}
+$wpGlobalTestConfigManager->loadProject();
 
 /**
- * Route command arguments to appropriate configuration using a match statement
+ * Load the .env.test file
  */
-$command = $GLOBALS['argv'][1] ?? '';
+$wpGlobalTestConfigManager->loadDotEnv();
 
 /**
  * TODO: This match will stop at the first match.
  * We may want to revisit this in the future.
  */
 match ( true ) {
-	argVHasCommand( 'simulated_wp' ) => ( function () {
+	$wpGlobalTestConfigManager->commandLineHas( 'simulated_wp' ) => ( function () {
 		require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpSimulatedTestConfigManager.php';
 		( new WpSimulatedTestConfigManager() )->init();
 	} )(),
 
-	argVHasCommand( 'full_wp' ) => ( function () {
-		require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpTestConfigManager.php';
-		$wpTestConfigManager = new WpTestConfigManager( $_SERVER );
+	$wpGlobalTestConfigManager->commandLineHas( 'full_wp' ) => ( function () {
+		require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpCoreTestConfigManager.php';
+		$wpTestConfigManager = new WpCoreTestConfigManager( $_SERVER );
 
 		// Copy and overwrite the wp-tests-config.php file every time
 		$wpTestConfigManager->overwriteWpCoreConfig();
 
-		// Include functions for tests_add_filter()
-		require_once dirname( __DIR__, 1 ) . '/wp/tests/phpunit/includes/functions.php';
-
 		// Register mock theme
 		$wpTestConfigManager->registerMockTheme();
 
-		// Bootstrap wp/tests/phpunit
-		require_once dirname( __DIR__, 1 ) . '/wp/tests/phpunit/includes/bootstrap.php';
+		$wpTestConfigManager->bootstrapWpPhpUnit();
 	} )(),
 
 	default => ( function () {

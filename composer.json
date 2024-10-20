@@ -55,10 +55,10 @@
     ],
     "extra": {
         "installer-paths": {
-            "./wp/": ["wordpress/wordpress", "aaemnnosttv/wp-sqlite-db"]
+            "./tests/wp/": ["wordpress/wordpress", "aaemnnosttv/wp-sqlite-db"]
         },
         "dropin-paths": {
-            "wp/src/wp-content/": ["package:aaemnnosttv/wp-sqlite-db:src/db.php"]
+            "tests/wp/src/wp-content/": ["package:aaemnnosttv/wp-sqlite-db:src/db.php"]
         }
     }
 }
