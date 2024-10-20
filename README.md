@@ -55,6 +55,7 @@ It's important that we run each test with the kind of mocking they need. Ideally
 
 At the moment, I'm organizing the test folders by Unit, Integration, and Feature and adding these groups based on the mocking needs.
 
+(Underscores "_" to not conflict with Pest command line)
  - "full_wp" - Load full WP Core 
  - "simulated_wp" - Load simulated WP Core
  - "no_wp" - Load no WP Core
