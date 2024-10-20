@@ -22,7 +22,7 @@ use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\AbstractConfigManager;
  * - Modifies /wp/tests/phpunit/wp-tests-config.php to set the ABSPATH to /wp/src
  * - Modifies /wp/tests/phpunit/wp-tests-config.php to set the DB_NAME, DB_USER, DB_PASSWORD, and DB_HOST
  */
-class WpCoreTestConfigManager extends AbstractConfigManager {
+class WpCoreConfigManager extends AbstractConfigManager {
 
 	/**
 	 * Path to the sample test config file.

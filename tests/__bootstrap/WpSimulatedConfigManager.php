@@ -11,7 +11,7 @@ use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\AbstractConfigManager;
  * Using Brain Monkey for the mocking
  */
 
-class WpSimulatedTestConfigManager extends AbstractConfigManager {
+class WpSimulatedConfigManager extends AbstractConfigManager {
 
 	/**
 	 * Main entry point to initialize the test config.
