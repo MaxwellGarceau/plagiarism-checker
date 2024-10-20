@@ -26,52 +26,42 @@ try {
  * Easier command line checking to route arguments to the correct loading sequence
  */
 function argVHasCommand( string $command ): bool {
-	return isset( $GLOBALS['argv'] ) && isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], $command ) !== false;
+	return isset( $GLOBALS['argv'][1] ) && strpos( $GLOBALS['argv'][1], $command ) !== false;
 }
-
 
 /**
- * Mock all of WP Core with Brain Monkey
+ * Route command arguments to appropriate configuration using a match statement
  */
-if ( argVHasCommand( 'simulated_wp' ) ) {
-	require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpSimulatedTestConfigManager.php';
-	( new WpSimulatedTestConfigManager() )->init();
+$command = $GLOBALS['argv'][1] ?? '';
 
-	/**
-	 * Include core bootstrap for an integration test suite
-	 *
-	 * This will only work if you run the tests from the command line.
-	 * Running the tests from IDE such as PhpStorm will require you to
-	 * add additional argument to the test run command if you want to run
-	 * integration tests.
-	 */
-} elseif ( argVHasCommand( 'full_wp' ) ) {
-	require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpTestConfigManager.php';
-	$wpTestConfigManager = new WpTestConfigManager( $_SERVER );
-	/**
-	 * Copy and overwrite the /wp/tests/phpunit/wp-tests-config.php file every time
-	 * It's worth it to avoid the troubleshooting that will inevitably come from a stale config file.
-	 */
-	// if ( ! file_exists( dirname( __DIR__, 1 ) . '/wp/tests/phpunit/wp-tests-config.php' ) ) {
+/**
+ * TODO: This match will stop at the first match.
+ * We may want to revisit this in the future.
+ */
+match ( true ) {
+	argVHasCommand( 'simulated_wp' ) => ( function () {
+		require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpSimulatedTestConfigManager.php';
+		( new WpSimulatedTestConfigManager() )->init();
+	} )(),
+
+	argVHasCommand( 'full_wp' ) => ( function () {
 		require_once dirname( __DIR__, 1 ) . '/tests/__bootstrap/WpTestConfigManager.php';
+		$wpTestConfigManager = new WpTestConfigManager( $_SERVER );
+
+		// Copy and overwrite the wp-tests-config.php file every time
 		$wpTestConfigManager->overwriteWpCoreConfig();
-	// }
 
-	// Give access to tests_add_filter() function.
-	// TODO: Should this be inside registerMockTheme?
-	require_once dirname( __DIR__, 1 ) . '/wp/tests/phpunit/includes/functions.php';
+		// Include functions for tests_add_filter()
+		require_once dirname( __DIR__, 1 ) . '/wp/tests/phpunit/includes/functions.php';
 
-	/**
-	 * Register mock theme.
-	 */
-	$wpTestConfigManager->registerMockTheme();
+		// Register mock theme
+		$wpTestConfigManager->registerMockTheme();
 
-	// Bootstrap wp/tests/phpunit
-	require_once dirname( __DIR__, 1 ) . '/wp/tests/phpunit/includes/bootstrap.php';
-} else {
-	/**
-	 * Default bootstrap
-	 */
+		// Bootstrap wp/tests/phpunit
+		require_once dirname( __DIR__, 1 ) . '/wp/tests/phpunit/includes/bootstrap.php';
+	} )(),
 
-	// Currently set to nothing to keep the test setup lightweight
-}
+	default => ( function () {
+		// Default bootstrap - currently doing nothing for lightweight setup
+	} )()
+};
