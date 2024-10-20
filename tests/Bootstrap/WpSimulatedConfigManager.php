@@ -16,7 +16,7 @@ class WpSimulatedConfigManager extends AbstractConfigManager {
 	/**
 	 * Main entry point to initialize the test config.
 	 */
-	public function init(): void {
+	public function setupBrainMonkey(): void {
 		// Set up Brain Monkey for mocking WordPress functions
 		\Brain\Monkey\setUp();
 
@@ -26,5 +26,15 @@ class WpSimulatedConfigManager extends AbstractConfigManager {
 				\Brain\Monkey\tearDown();
 			}
 		);
+	}
+
+	/**
+	 * WordPress stubs by the php-stubs/wordpress-stubs package
+	 *
+	 * Included so that we can use WP functions and classes with having
+	 * to mock then or include the entire WordPress core.
+	 */
+	public function loadWpStubs(): void {
+		require_once $this->getRootProjectPath() . '/vendor/php-stubs/wordpress-stubs/wordpress-stubs.php';
 	}
 }

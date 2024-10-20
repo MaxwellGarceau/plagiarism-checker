@@ -41,6 +41,11 @@
             "Max_Garceau\\Plagiarism_Checker\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Max_Garceau\\Plagiarism_Checker\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "kucrut/vite-for-wp": "^0.9.3",
         "php-di/php-di": "^6.4",
