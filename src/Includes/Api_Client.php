@@ -51,9 +51,9 @@ class Api_Client {
 		} catch( \InvalidArgumentException $e ) {
 			$this->logger->error(
 				'The Genius API token is missing.',
-				array(
+				[
 					'Class_Name::method_name' => __CLASS__ . '::' . __FUNCTION__,
-				)
+				]
 			);
 
 			// TODO: This feels like 2015 code. Is there a better way to do this?
@@ -77,19 +77,19 @@ class Api_Client {
 
 		// Prepare the request URL
 		$url = add_query_arg(
-			array(
+			[
 				'q' => $text,
-			),
+			],
 			self::API_URL
 		);
 
 		// Set up request headers
-		$args = array(
-			'headers' => array(
+		$args = [
+			'headers' => [
 				'Authorization' => 'Bearer ' . $this->api_token,
-			),
+			],
 			'timeout' => 15,
-		);
+		];
 
 		// Make the request
 		$response = wp_remote_get( $url, $args );
@@ -107,11 +107,11 @@ class Api_Client {
 		if ( wp_remote_retrieve_response_code( $response ) !== self::STATUS_OK || ! isset( $data['response']['hits'] ) ) {
 			$this->logger->error(
 				'The Genius API request returned a non 200 response.',
-				array(
+				[
 					'search_text'   => $text,
 					'status_code'   => wp_remote_retrieve_response_code( $response ),
 					'response_data' => $data,
-				)
+				]
 			);
 			return new WP_Error( 'genius_api_error', 'The Genius API request failed or returned invalid data.', $response );
 		}

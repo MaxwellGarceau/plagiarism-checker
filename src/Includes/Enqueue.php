@@ -23,14 +23,14 @@ class Enqueue {
 			$this->get_plugin_base_path( '/dist' ),
 			// Must be relative to root directory. Kucrut\Vite generates the full path in the plugin.
 			'src/assets/js/scripts.ts',
-			array(
+			[
 				'handle'           => self::JS_SCRIPTS_HANDLE,
-				'dependencies'     => array(), // Optional script dependencies. Defaults to empty array.
-				'css-dependencies' => array(), // Optional style dependencies. Defaults to empty array.
+				'dependencies'     => [], // Optional script dependencies. Defaults to empty array.
+				'css-dependencies' => [], // Optional style dependencies. Defaults to empty array.
 				'css-media'        => 'all', // Optional.
 				'css-only'         => false, // Optional. Set to true to only load style assets in production mode.
 				'in-footer'        => true, // Optional. Defaults to false.
-			)
+			]
 		);
 	}
 
@@ -39,7 +39,7 @@ class Enqueue {
 		wp_enqueue_style(
 			'plagiarism-checker-theme-styles',
 			$this->get_plugin_base_url( '/theme.json' ), // adjust the path as per your plugin structure
-			array(),
+			[],
 			wp_get_theme()->get( 'Version' )
 		);
 	}
@@ -48,10 +48,10 @@ class Enqueue {
 		wp_localize_script(
 			self::JS_SCRIPTS_HANDLE,
 			self::JS_OBJECT_NAME,
-			array(
+			[
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'nonce'    => $this->nonce_service->create_nonce(),
-			)
+			]
 		);
 	}
 

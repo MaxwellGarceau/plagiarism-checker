@@ -43,10 +43,10 @@ class Admin_Ajax {
 		if ( is_wp_error( $data ) ) {
 			$this->logger->error(
 				'API request failed',
-				array(
+				[
 					'wp_error_message' => $data->get_error_message(),
 					'api_response'     => $data->get_error_data(),
-				)
+				]
 			);
 			wp_send_json_error( $data->get_error_message() );
 		}
@@ -84,14 +84,14 @@ class Admin_Ajax {
 	 */
 	private function response_has_required_properties( array $data ): bool {
 		// Define the required properties structure for each result object
-		$required_properties = array(
+		$required_properties = [
 			'url',
 			'title',
-			'primary_artist' => array(
+			'primary_artist' => [
 				'name',
 				'url',
-			),
-		);
+			],
+		];
 
 		// Loop over each result object and validate its properties
 		foreach ( $data as $resource ) {
