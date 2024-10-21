@@ -22,15 +22,16 @@ type Results = {
 	};
 };
 
-const textInput = document.querySelector(
-	'#plagiarism-checker__input'
-) as HTMLTextAreaElement;
-const resultTextarea = document.querySelector(
-	'#plagiarism-checker__results'
-) as HTMLDivElement;
-
 export default async function handleFormSubmit(event: Event): Promise<void> {
 	event.preventDefault();
+	
+	// Query the DOM elements we need
+	const textInput = document.querySelector(
+		'#plagiarism-checker__input'
+	) as HTMLInputElement;
+	const resultTextarea = document.querySelector(
+		'#plagiarism-checker__results'
+	) as HTMLDivElement;
 
 	const data: PlagiarismCheckData = {
 		text: textInput.value,
