@@ -48,6 +48,9 @@ match ( true ) {
 		 * 
 		 * This will let us test WP code, but not interact with it.
 		 */
-		$wpSimulatedConfigManager->loadWpStubs();
+		// $wpSimulatedConfigManager->loadWpStubs();
+
+		// Use Brain Monkey as the default for tests (for now)
+		$wpSimulatedConfigManager->setupBrainMonkey();
 	} )()
 };
