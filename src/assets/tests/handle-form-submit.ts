@@ -4,6 +4,7 @@ import handleFormSubmit from '../js/handle-form-submit';
 // Mock the DOM elements
 let textInput: HTMLInputElement;
 let resultTextarea: HTMLDivElement;
+let mockConsoleError: ReturnType<typeof vi.spyOn>;
 
 // Mock the global window object for Ajax nonce and URL
 (globalThis as any).plagiarismCheckerAjax = {
@@ -66,6 +67,8 @@ const mockFetchFailure = () => {
 };
 
 beforeEach(() => {
+	// Mock console.error to prevent error messages during test
+	mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 	// Reset the DOM elements before each test
 	document.body.innerHTML = `
     <form id="plagiarism-checker__form">
