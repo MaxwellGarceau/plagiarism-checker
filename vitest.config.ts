@@ -16,5 +16,9 @@ export default mergeConfig(viteConfig, defineConfig({
       '**/wp/**',
     ],
     setupFiles: ["./vitest-setup.ts"],
+    coverage: {
+      include: ['src/assets/tests/**'],
+      all: true,
+    }
   },
 }))

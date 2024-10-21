@@ -23,14 +23,14 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
-        <exclude>
-            <file>./src/Build/BuildExample.php</file>
-            <file>./src/Menu/BemMenuWalker.php</file>
-            <file>./src/ConfigProject/ConfigProjectExample.php</file>
-        </exclude>
         <report>
             <clover outputFile="tests/coverage/clover.xml"/>
             <html outputDirectory="tests/coverage/html" lowUpperBound="50" highLowerBound="90"/>
         </report>
     </coverage>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </source>
 </phpunit>
