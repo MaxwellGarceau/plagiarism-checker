@@ -1,38 +1,53 @@
 <?php
-/**
- * PHPUnit bootstrap file.
- *
- * @package Plagiarism_Checker
- */
 
-$_tests_dir = getenv( 'WP_TESTS_DIR' );
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpCoreConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpSimulatedConfigManager;
+use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpGlobalConfigManager;
 
-if ( ! $_tests_dir ) {
-	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
-}
-
-// Forward custom PHPUnit Polyfills configuration to PHPUnit bootstrap file.
-$_phpunit_polyfills_path = getenv( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' );
-if ( false !== $_phpunit_polyfills_path ) {
-	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', $_phpunit_polyfills_path );
-}
-
-if ( ! file_exists( "{$_tests_dir}/includes/functions.php" ) ) {
-	echo "Could not find {$_tests_dir}/includes/functions.php, have you run bin/install-wp-tests.sh ?" . PHP_EOL; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	exit( 1 );
-}
-
-// Give access to tests_add_filter() function.
-require_once "{$_tests_dir}/includes/functions.php";
+// Load autoloaded files
+require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
 
 /**
- * Manually load the plugin being tested.
+ * Load the .env.test file
  */
-function _manually_load_plugin() {
-	require dirname( dirname( __FILE__ ) ) . '/plagiarism-checker.php';
-}
+$wpGlobalTestConfigManager = new WpGlobalConfigManager();
+$wpGlobalTestConfigManager->loadDotEnv();
 
-tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
+$wpSimulatedConfigManager = new WpSimulatedConfigManager();
 
-// Start up the WP testing environment.
-require "{$_tests_dir}/includes/bootstrap.php";
+/**
+ * TODO: This match will stop at the first match.
+ * We may want to revisit this in the future.
+ */
+match ( true ) {
+	$wpGlobalTestConfigManager->commandLineHas( 'wp_brain_monkey' ) => ( function () use ( $wpSimulatedConfigManager ) {		
+		/**
+		 * Load Brain Monkey for function and class mocking
+		 * 
+		 * We will have to manually mock WP objects inside our tests
+		 * but we can use Brain Monkey to make assertions on WP functions
+		 */
+		$wpSimulatedConfigManager->setupBrainMonkey();
+	} )(),
+
+	$wpGlobalTestConfigManager->commandLineHas( 'wp_full' ) => ( function () use ( $wpSimulatedConfigManager ) {
+		$wpTestConfigManager = new WpCoreConfigManager( $_SERVER );
+
+		// Copy and overwrite the wp-tests-config.php file every time
+		$wpTestConfigManager->overwriteWpCoreConfig();
+
+		$wpTestConfigManager->registerThisPluginWithTestsAddFilter();
+
+		$wpTestConfigManager->bootstrapWpPhpUnit();
+
+	} )(),
+
+	default => ( function () use ( $wpSimulatedConfigManager ) {
+		/**
+		 * Load WordPress stubs from php-stubs/wordpress-stubs
+		 * 
+		 * This will let us test WP code, but not interact with it.
+		 */
+		$wpSimulatedConfigManager->loadWpStubs();
+	} )()
+};

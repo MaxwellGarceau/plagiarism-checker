@@ -1,6 +1,6 @@
 {
-    "name": "maxgarceau/wp-admin-codex",
-    "description": "Access the WP documention when you need it from the WP Admin",
+    "name": "maxgarceau/plagiarism-checker",
+    "description": "Check for plagiarism via a 3rd party API",
     "authors": [
         {
             "name": "Max Garceau",
@@ -9,15 +9,31 @@
     ],
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",
-        "wp-coding-standards/wpcs": "^3.1"
+        "wp-coding-standards/wpcs": "^3.1",
+        "aaemnnosttv/wp-sqlite-db": "^1.2",
+        "brain/monkey": "^2.6",
+        "koodimonni/composer-dropin-installer": "^1.4",
+        "mnsami/composer-custom-directory-installer": "^2.0",
+        "pestphp/pest": "^1.2",
+        "php-stubs/wordpress-stubs": "^6.6",
+        "phpunit/phpunit": "^9.5",
+        "roave/security-advisories": "dev-master",
+        "wordpress/wordpress": "^6.6",
+        "yoast/phpunit-polyfills": "^1.0",
+        "yoast/wp-test-utils": "^1.0",
+        "mockery/mockery": "^1.6"
     },
     "scripts": {
-        "sniff": "phpcs --standard=WordPress --extensions=php",
-        "lint": "phpcbf --standard=WordPress --extensions=php"
+        "sniff": "phpcs --standard=phpcs.xml.dist --extensions=php",
+        "lint": "phpcbf --standard=phpcs.xml.dist --extensions=php"
     },
     "config": {
         "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "pestphp/pest-plugin": true,
+            "mnsami/composer-custom-directory-installer": true,
+            "composer/installers": true,
+            "koodimonni/composer-dropin-installer": true
         }
     },
     "autoload": {
@@ -25,10 +41,29 @@
             "Max_Garceau\\Plagiarism_Checker\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Max_Garceau\\Plagiarism_Checker\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "kucrut/vite-for-wp": "^0.9.3",
         "php-di/php-di": "^6.4",
         "monolog/monolog": "^3.7",
         "vlucas/phpdotenv": "^5.6"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/WordPress/wordpress-develop/"
+        }
+    ],
+    "extra": {
+        "installer-paths": {
+            "./tests/wp/": ["wordpress/wordpress", "aaemnnosttv/wp-sqlite-db"]
+        },
+        "dropin-paths": {
+            "tests/wp/src/wp-content/": ["package:aaemnnosttv/wp-sqlite-db:src/db.php"]
+        }
     }
 }

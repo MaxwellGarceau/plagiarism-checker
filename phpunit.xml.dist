@@ -1,16 +1,36 @@
-<?xml version="1.0"?>
-<phpunit
-	bootstrap="tests/bootstrap.php"
-	backupGlobals="false"
-	colors="true"
-	convertErrorsToExceptions="true"
-	convertNoticesToExceptions="true"
-	convertWarningsToExceptions="true"
-	>
-	<testsuites>
-		<testsuite name="testing">
-			<directory prefix="test-" suffix=".php">./tests/</directory>
-			<exclude>./tests/test-sample.php</exclude>
-		</testsuite>
-	</testsuites>
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit Test Suite">
+            <directory>./tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="Integration Test Suite">
+            <directory>./tests/Integration/</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="TEST" value="true" force="true" />
+        <server name="DB_NAME" value="${DB_NAME}"/>
+        <server name="DB_USER" value="${DB_USER}"/>
+        <server name="DB_PASSWORD" value="${DB_PASSWORD}"/>
+        <server name="DB_HOST" value="${DB_HOST}"/>
+    </php>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <exclude>
+            <file>./src/Build/BuildExample.php</file>
+            <file>./src/Menu/BemMenuWalker.php</file>
+            <file>./src/ConfigProject/ConfigProjectExample.php</file>
+        </exclude>
+        <report>
+            <clover outputFile="tests/coverage/clover.xml"/>
+            <html outputDirectory="tests/coverage/html" lowUpperBound="50" highLowerBound="90"/>
+        </report>
+    </coverage>
 </phpunit>
