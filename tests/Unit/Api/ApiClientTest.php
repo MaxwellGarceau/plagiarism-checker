@@ -7,100 +7,147 @@ use function Brain\Monkey\Functions\expect as monkeyExpect;
 use Monolog\Logger;
 use Mockery;
 
-beforeEach(function () {
-    $this->apiToken = 'mocked_api_token';
-});
+beforeEach(
+	function () {
+		$this->apiToken = 'mocked_api_token';
+	}
+);
 
 it(
-    'sends a valid API request and returns the expected result',
-    function () {
-        $responseJsonPath = dirname( __DIR__, 2 ) . '/__fixtures/response.json';
-        $expected_data    = json_decode( file_get_contents( $responseJsonPath ), true );
+	'sends a valid API request and returns the expected result',
+	function () {
+		$responseJsonPath = dirname( __DIR__, 2 ) . '/__fixtures/response.json';
+		$expected_data    = json_decode( file_get_contents( $responseJsonPath ), true );
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
+		$client     = new Api_Client( $loggerMock, $this->apiToken );
 
-		// Inject the logger mock into the Api_Client
-		$client = new Api_Client( $loggerMock, $this->apiToken );
+		// Mock add_query_arg to return the expected API URL
+		$expected_url = 'https://api.genius.com/search?q=heart';
+		monkeyExpect( 'add_query_arg' )
+			->once()
+			->with(
+				array(
+					'q' => 'heart',
+				),
+				'https://api.genius.com/search'
+			)
+			->andReturn( $expected_url );
 
-        // Mock add_query_arg to return the expected API URL
-        $expected_url = 'https://api.genius.com/search?q=heart';
-        monkeyExpect( 'add_query_arg' )
-            ->once()
-            ->with(
-                [
-                    'q' => 'heart',
-                ],
-                'https://api.genius.com/search'
-            )
-            ->andReturn( $expected_url );
+		// Mock wp_remote_get to return a successful response
+		$response = array(
+			'body'     => json_encode( $expected_data ),
+			'response' => array(
+				'code'    => 200,   // Ensure this is properly structured and not interpreted as a function
+				'message' => 'OK',  // Add message to avoid interpreting as an invalid name
+			),
+		);
 
-        // Mock wp_remote_get to return a successful response
-        $response = [
-            'body'     => json_encode( $expected_data ),
-            'response' => [
-                'code'    => 200,   // Ensure this is properly structured and not interpreted as a function
-                'message' => 'OK',  // Add message to avoid interpreting as an invalid name
-            ],
-        ];
-
-        monkeyExpect( 'wp_remote_get' )->once()
+		monkeyExpect( 'wp_remote_get' )->once()
 			// No way to get this from API
-			->with( $expected_url, [
-				'headers' => [
-					'Authorization' => "Bearer {$this->apiToken}",
-				],
-				'timeout' => 15,
-			])
-            ->andReturn( $response );
+			->with(
+				$expected_url,
+				array(
+					'headers' => array(
+						'Authorization' => "Bearer {$this->apiToken}",
+					),
+					'timeout' => 15,
+				)
+			)
+			->andReturn( $response );
 
-        // Mock wp_remote_retrieve_body to return the body part of the response
-        monkeyExpect( 'wp_remote_retrieve_body' )
-            ->once()
-            ->with( $response )
-            ->andReturn( json_encode( $expected_data ) );
+		// Mock wp_remote_retrieve_body to return the body part of the response
+		monkeyExpect( 'wp_remote_retrieve_body' )
+			->once()
+			->with( $response )
+			->andReturn( json_encode( $expected_data ) );
 
-        // Mock wp_remote_retrieve_response_code to return a 200 status
-        monkeyExpect( 'wp_remote_retrieve_response_code' )
-            ->once()
-            ->with( $response )
-            ->andReturn( 200 );
+		// Mock wp_remote_retrieve_response_code to return a 200 status
+		monkeyExpect( 'wp_remote_retrieve_response_code' )
+			->once()
+			->with( $response )
+			->andReturn( 200 );
 
-        // Mock WP_Error class (since we're not loading WP Core)
-        Mockery::mock( 'alias:WP_Error' );
+		$result = $client->search_songs( 'heart' );
 
-        $result = $client->search_songs( 'heart' );
-
-        // Assert that $result has 10 entries
-        expect( count( $result ) )->toBe( 10 );
+		// Assert that $result has 10 entries
+		expect( count( $result ) )->toBe( 10 );
 
 		// Assert that the result matches the expected data
 		expect( $result )->toEqualCanonicalizing( $expected_data['response']['hits'] );
-    }
+	}
 )->group( 'wp_brain_monkey' );
 
 it(
 	'returns an empty array when the API response is empty',
 	function () {
-		$response = array(
+		// This is the empty response from Genius
+		$expected_data = array(
+			'meta'     => array(
+				'status' => 200,
+			),
 			'response' => array(
-				'body' => json_encode( array() ), // empty response
-				'code' => \WP_Http::OK,
+				'hits' => array(),
 			),
 		);
 
-		expect( 'wp_remote_get' )->once()->andReturn( $response );
+		$response = array(
+			'body'     => json_encode( $expected_data ), // empty response
+			'response' => array(
+				'code'    => 200,   // Ensure this is properly structured and not interpreted as a function
+				'message' => 'OK',  // Add message to avoid interpreting as an invalid name
+			),
+		);
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
+		$client     = new Api_Client( $loggerMock, $this->apiToken );
 
-		$client = new Api_Client( $loggerMock );
+		// Mock add_query_arg to return the expected API URL
+		$expected_url = 'https://api.genius.com/search?q=klfkjadfajdf;kjfd';
+		monkeyExpect( 'add_query_arg' )
+			->once()
+			->with(
+				array(
+					'q' => 'klfkjadfajdf;kjfd',
+				),
+				'https://api.genius.com/search'
+			)
+			->andReturn( $expected_url );
+
+		// Mock wp_remote_get to return an empty response
+		monkeyExpect( 'wp_remote_get' )->once()
+			->with(
+				$expected_url,
+				array(
+					'headers' => array(
+						'Authorization' => "Bearer {$this->apiToken}",
+					),
+					'timeout' => 15,
+				)
+			)
+			->andReturn( $response );
+
+		// Mock wp_remote_retrieve_body to return the empty body part of the response
+		monkeyExpect( 'wp_remote_retrieve_body' )
+			->once()
+			->with( $response )
+			->andReturn( json_encode( $expected_data ) );
+
+		// Mock wp_remote_retrieve_response_code to return a 200 status
+		monkeyExpect( 'wp_remote_retrieve_response_code' )
+			->once()
+			->with( $response )
+			->andReturn( 200 );
 
 		$result = $client->search_songs( 'klfkjadfajdf;kjfd' );
 
-		expect( $result )->toBe( array() );
+		// Assert that $result is an empty array
+		expect( $result )->toBe( $expected_data['response']['hits'] );
 	}
 )->group( 'wp_brain_monkey' );
+
 
 it(
 	'handles an error response from the API',

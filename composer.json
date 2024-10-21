@@ -24,8 +24,8 @@
         "mockery/mockery": "^1.6"
     },
     "scripts": {
-        "sniff": "phpcs --standard=WordPress --extensions=php",
-        "lint": "phpcbf --standard=WordPress --extensions=php"
+        "sniff": "phpcs --standard=phpcs.xml.dist --extensions=php",
+        "lint": "phpcbf --standard=phpcs.xml.dist --extensions=php"
     },
     "config": {
         "allow-plugins": {
