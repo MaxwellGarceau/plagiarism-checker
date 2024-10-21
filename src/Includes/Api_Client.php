@@ -39,19 +39,25 @@ class Api_Client {
 		$this->logger = $logger;
 		$this->api_token = $api_token;
 
-		// TODO: Set this via a WP menu where users can add their own token
-		if ( ( $this->api_token === null || $this->api_token === '' ) && isset( $_ENV['GENIUS_API_TOKEN'] ) && $_ENV['GENIUS_API_TOKEN'] !== '' ) {
-			$this->api_token = $_ENV['GENIUS_API_TOKEN'];
-		}
-
-		// TODO: Add an admin notice if the token is missing
-		if ( $this->api_token === null || $this->api_token === '' ) {
+		try {
+			// TODO: Set this via a WP menu where users can add their own token
+			if ( ( $this->api_token === null || $this->api_token === '' ) && isset( $_ENV['GENIUS_API_TOKEN'] ) && $_ENV['GENIUS_API_TOKEN'] !== '' ) {
+				$this->api_token = $_ENV['GENIUS_API_TOKEN'];
+			}
+	
+			if ( $this->api_token === null || $this->api_token === '' ) {
+				throw new \InvalidArgumentException( 'The Genius API token is missing.' );
+			}
+		} catch( \InvalidArgumentException $e ) {
 			$this->logger->error(
 				'The Genius API token is missing.',
 				array(
 					'Class_Name::method_name' => __CLASS__ . '::' . __FUNCTION__,
 				)
 			);
+
+			// TODO: This feels like 2015 code. Is there a better way to do this?
+			add_action( 'wp_footer', fn () => $_POST['api_token_not_set'] = 'true', 1 );
 		}
 	}
 

@@ -13,6 +13,6 @@ use Max_Garceau\Plagiarism_Checker\Views\Interface_Renderable;
  */
 class Form_Controller implements Interface_Renderable {
 	public function render(): void {
-		require plugin_dir_path( __FILE__ ) . '../Views/form.html';
+		require plugin_dir_path( __FILE__ ) . '../Views/form.php';
 	}
 }

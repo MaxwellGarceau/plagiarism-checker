@@ -20,6 +20,11 @@
 	  >
 		Check for Plagiarism
 	  </button>
+	  	<?php
+	 	if ( isset( $_POST['api_token_not_set'] ) && $_POST['api_token_not_set'] === 'true' ): ?>
+	 		<p class="plagiarism-checker__error">The Genius API token is missing. Please add it in the plugin settings.</p>
+		<?php
+		endif; ?>
 	</form>
   
 	<div id="plagiarism-checker__results" class="plagiarism-checker__results">
