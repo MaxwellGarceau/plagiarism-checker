@@ -20,13 +20,13 @@ class DI_Container {
 
 		// Add custom logger definition
 		$containerBuilder->addDefinitions(
-			array(
+			[
 				Logger::class => function () {
 					// Initialize Logger_Init and return the logger instance
 					$logger_init = Logger_Init::init();
 					return $logger_init->get_logger();
 				},
-			)
+			]
 		);
 
 		// Build and return the container
