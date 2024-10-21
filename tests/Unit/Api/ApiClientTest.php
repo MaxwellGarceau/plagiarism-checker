@@ -7,14 +7,8 @@ use function Brain\Monkey\Functions\expect as monkeyExpect;
 use Monolog\Logger;
 use Mockery;
 
-// Set up Brain Monkey before each test
 beforeEach(function () {
-	parent::setUp();
-});
-
-// Tear down Brain Monkey after each test
-afterEach(function () {
-	parent::tearDown();
+    $this->apiToken = 'mocked_api_token';
 });
 
 it(
@@ -27,7 +21,7 @@ it(
 		$loggerMock = Mockery::mock( Logger::class );
 
 		// Inject the logger mock into the Api_Client
-		$client = new Api_Client( $loggerMock );
+		$client = new Api_Client( $loggerMock, $this->apiToken );
 
         // Mock add_query_arg to return the expected API URL
         $expected_url = 'https://api.genius.com/search?q=heart';
@@ -51,12 +45,13 @@ it(
         ];
 
         monkeyExpect( 'wp_remote_get' )->once()
-			// ->with( $expected_url, [
-			// 	'headers' => [
-			// 		'Authorization' => 'Bearer YOUR_API_TOKEN', // Replace with your actual token or mock this
-			// 	],
-			// 	'timeout' => 15,
-			// ])
+			// No way to get this from API
+			->with( $expected_url, [
+				'headers' => [
+					'Authorization' => "Bearer {$this->apiToken}",
+				],
+				'timeout' => 15,
+			])
             ->andReturn( $response );
 
         // Mock wp_remote_retrieve_body to return the body part of the response

@@ -33,15 +33,19 @@ class Api_Client {
 	private Logger $logger;
 
 	public function __construct(
-		Logger $logger
+		Logger $logger,
+		string $api_token = ''
 	) {
 		$this->logger = $logger;
+		$this->api_token = $api_token;
 
 		// TODO: Set this via a WP menu where users can add their own token
-		$this->api_token = $_ENV['GENIUS_API_TOKEN'] ?: '';
+		if ( ( $this->api_token === null || $this->api_token === '' ) && isset( $_ENV['GENIUS_API_TOKEN'] ) && $_ENV['GENIUS_API_TOKEN'] !== '' ) {
+			$this->api_token = $_ENV['GENIUS_API_TOKEN'];
+		}
 
 		// TODO: Add an admin notice if the token is missing
-		if ( $this->api_token === '' ) {
+		if ( $this->api_token === null || $this->api_token === '' ) {
 			$this->logger->error(
 				'The Genius API token is missing.',
 				array(
