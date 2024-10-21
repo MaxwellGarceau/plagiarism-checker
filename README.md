@@ -43,16 +43,23 @@ This project has three main test categories
 
 If possible, try to keep the majority of your tests to Unit and Simulated Integration tests. Full integration tests take more overhead, are harder to run, and harder to troubleshoot. In addition, they are very easy to misuse and can result in tests that have a vague scope and make it difficult to localize errors. These tests should be saved for end to end functionality, for difficult bugs, or areas where failure would be critical.
 
-#### Folders vs Groups for organizing tests
+<details>
+
+<summary>Folders vs Groups for organizing tests</summary>
+
+You can add text within a collapsed section. 
 Use the folders to organize tests by Unit, Integration, and Feature. Use the groups to organize tests by how they need to load.
 
 Run your tests by group, not by folder. For example, every test in the "wp_brain_monkey" group needs Brain Monkey to run, but not every test with Brain Monkey is an Integration test. Maybe a class can only really be tested if we sniff out something it's doing inside a WP core function that we need to mock with Brain Monkey. This is WordPress, we need to be flexible with our categorization here.
 
 TODO: When a user runs tests by Unit, Integration, or Feature folders let's organize the tests so that they rerun the bootstrap and load the required setup automatically.
 
-### WordPress Stubs, Brain Monkey, and loading WP Core
+</details>
 
-In addition, we have three ways to handle WP dependencies. Testing code that doesn't include them, mocking them with Brain Monkey, or loading them as normal and testing with a test DB.
+<details>
+	<summary>WordPress Stubs, Brain Monkey, and loading WP Core</summary>
+
+ In addition, we have three ways to handle WP dependencies. Testing code that doesn't include them, mocking them with Brain Monkey, or loading them as normal and testing with a test DB.
 
 - Unit (WP stubs are loaded)
 - Simulated Integration (WP Core can be mocked with Brain Monkey)
@@ -68,8 +75,11 @@ At the moment, I'm organizing the test folders by Unit, Integration, and Feature
  - (default) "wp_stubs" - Load no WP Core and load WP stubs
 
 There's no way to filter these tests at the moment, but we can take care of that once there are enough tests for that kind of dev work to make sense.
+</details>
 
-#### Load both WP Core/Stubs and Brain Monkey together
+<details>
+	<summary>Load both WP Core/Stubs and Brain Monkey together</summary>
+
 In a perfect world, we would be able to load the WP Core or the WP stubs and then overwrite them with Brain Monkey. Not impossible! However, we would need pluggable functions (the hard part) and then need to load them after Brain Monkey (easy part).
 
 I did some experiments with [lucatume/function-mocker](https://github.com/lucatume/function-mocker). Using this package, we can load all of WP Core or all of the WP stubs and then patch out functions that we want to write assertions against.
@@ -79,3 +89,4 @@ I really like this library and use it for writing tests on legacy code to pin fu
 I sent a message to the dev and would like to pick this idea up again in the future if the library maintenance changes.
 
 For the moment, this is on hold, but getting WP set up with Pest and having a selectable way of choosing between WP stubs, Brain Monkey, and WP Core would be a great project in and of itself.
+</details>
