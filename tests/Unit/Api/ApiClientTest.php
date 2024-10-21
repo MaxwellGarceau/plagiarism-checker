@@ -28,32 +28,32 @@ it(
 		monkeyExpect( 'add_query_arg' )
 			->once()
 			->with(
-				array(
+				[
 					'q' => 'heart',
-				),
+				],
 				'https://api.genius.com/search'
 			)
 			->andReturn( $expected_url );
 
 		// Mock wp_remote_get to return a successful response
-		$response = array(
+		$response = [
 			'body'     => json_encode( $expected_data ),
-			'response' => array(
+			'response' => [
 				'code'    => 200,   // Ensure this is properly structured and not interpreted as a function
 				'message' => 'OK',  // Add message to avoid interpreting as an invalid name
-			),
-		);
+			],
+		];
 
 		monkeyExpect( 'wp_remote_get' )->once()
 			// No way to get this from API
 			->with(
 				$expected_url,
-				array(
-					'headers' => array(
+				[
+					'headers' => [
 						'Authorization' => "Bearer {$this->apiToken}",
-					),
+					],
 					'timeout' => 15,
-				)
+				]
 			)
 			->andReturn( $response );
 
@@ -83,22 +83,22 @@ it(
 	'returns an empty array when the API response is empty',
 	function () {
 		// This is the empty response from Genius
-		$expected_data = array(
-			'meta'     => array(
+		$expected_data = [
+			'meta'     => [
 				'status' => 200,
-			),
-			'response' => array(
-				'hits' => array(),
-			),
-		);
+			],
+			'response' => [
+				'hits' => [],
+			],
+		];
 
-		$response = array(
+		$response = [
 			'body'     => json_encode( $expected_data ), // empty response
-			'response' => array(
+			'response' => [
 				'code'    => 200,   // Ensure this is properly structured and not interpreted as a function
 				'message' => 'OK',  // Add message to avoid interpreting as an invalid name
-			),
-		);
+			],
+		];
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
@@ -109,9 +109,9 @@ it(
 		monkeyExpect( 'add_query_arg' )
 			->once()
 			->with(
-				array(
+				[
 					'q' => 'klfkjadfajdf;kjfd',
-				),
+				],
 				'https://api.genius.com/search'
 			)
 			->andReturn( $expected_url );
@@ -120,12 +120,12 @@ it(
 		monkeyExpect( 'wp_remote_get' )->once()
 			->with(
 				$expected_url,
-				array(
-					'headers' => array(
+				[
+					'headers' => [
 						'Authorization' => "Bearer {$this->apiToken}",
-					),
+					],
 					'timeout' => 15,
-				)
+				]
 			)
 			->andReturn( $response );
 
@@ -152,18 +152,18 @@ it(
     'handles an error response from the API',
     function () {
         // Mock wp_remote_get to return an error response
-		$expected_data = array(
-			'meta'     => array(
+		$expected_data = [
+			'meta'     => [
 				'status' => 500,
-			),
-		);
+			],
+		];
 
-		$response = array(
+		$response = [
 			'body'     => json_encode( $expected_data ), // empty response
-			'response' => array(
+			'response' => [
 				'code'    => 500,   // Ensure this is properly structured and not interpreted as a function
-			),
-		);
+			],
+		];
 
 		// Mock add_query_arg to return the expected API URL
 		$search_text = 'this_search_will_fail';
@@ -172,9 +172,9 @@ it(
 		monkeyExpect( 'add_query_arg' )
 			->once()
 			->with(
-				array(
+				[
 					'q' => $search_text,
-				),
+				],
 				'https://api.genius.com/search'
 			)
 			->andReturn( $expected_url );
@@ -201,12 +201,12 @@ it(
 		monkeyExpect( 'wp_remote_get' )->once()
 			->with(
 				$expected_url,
-				array(
-					'headers' => array(
+				[
+					'headers' => [
 						'Authorization' => "Bearer {$this->apiToken}",
-					),
+					],
 					'timeout' => 15,
-				)
+				]
 			)
 			->andReturn( $response );
 

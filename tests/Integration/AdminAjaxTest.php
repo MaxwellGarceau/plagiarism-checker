@@ -90,7 +90,7 @@ test(
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST without 'text'
-		$_POST = array();
+		$_POST = [];
 
 		// Expect the wp_send_json_success to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
@@ -123,7 +123,7 @@ test(
 		->andReturn( 'API request failed' );
 		$wp_error
 		->shouldReceive( 'get_error_data' )
-		->andReturn( array() );
+		->andReturn( [] );
 
 		// Expect the API client to return WP_Error
 		$this->api_client
@@ -137,10 +137,10 @@ test(
 		->once()
 		->with(
 			'API request failed',
-			array(
+			[
 				'wp_error_message' => 'API request failed',
 				'api_response'     => [],
-			)
+			]
 		);
 
 		// Expect the wp_send_json_success to be called, which will throw an exception
@@ -165,10 +165,10 @@ test(
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST with text
-		$_POST = array( 'text' => 'test text' );
+		$_POST = [ 'text' => 'test text' ];
 
 		// Simulate a response missing required properties
-		$response_data = array( array( 'result' => array( 'title' => 'Song Title' ) ) );
+		$response_data = [ [ 'result' => [ 'title' => 'Song Title' ] ] ];
 
 		$this->api_client
 		->shouldReceive( 'search_songs' )
@@ -209,19 +209,19 @@ test(
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST with text
-		$_POST = array( 'text' => 'test text' );
+		$_POST = [ 'text' => 'test text' ];
 
 		// Simulate a valid response with all required properties
 		$response_data = [
 			[
-				'result' => array(
+				'result' => [
 					'url'            => 'https://example.com',
 					'title'          => 'Song Title',
-					'primary_artist' => array(
+					'primary_artist' => [
 						'name' => 'Artist Name',
 						'url'  => 'https://artist.com',
-					),
-				),
+					],
+				],
 			],
 		];
 

@@ -77,19 +77,19 @@ class WpCoreConfigManager extends AbstractConfigManager {
 	 * @return array
 	 */
 	private function loadDatabaseConfig( array $dbConfig ): array {
-		$requiredKeys = array( 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST' );
+		$requiredKeys = [ 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'DB_HOST' ];
 		foreach ( $requiredKeys as $key ) {
 			if ( ! isset( $dbConfig[ $key ] ) ) {
 				throw new \InvalidArgumentException( "Missing required database configuration key: $key" );
 			}
 		}
 
-		return array(
+		return [
 			'DB_NAME'     => $dbConfig['DB_NAME'],
 			'DB_USER'     => $dbConfig['DB_USER'],
 			'DB_PASSWORD' => $dbConfig['DB_PASSWORD'],
 			'DB_HOST'     => $dbConfig['DB_HOST'],
-		);
+		];
 	}
 
 	/**

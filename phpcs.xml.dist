@@ -47,6 +47,8 @@
     <exclude-pattern>*\.css</exclude-pattern>
     <exclude-pattern>*\.scss</exclude-pattern>
     <exclude-pattern>wp-content/uploads/</exclude-pattern>
+    <exclude-pattern>wp/*</exclude-pattern>
+    <exclude-pattern>tmp-wordpress-stubs.php</exclude-pattern>
 
     <!-- Allow symbol `/` in hook names. -->
     <rule ref="WordPress.NamingConventions.ValidHookName">
