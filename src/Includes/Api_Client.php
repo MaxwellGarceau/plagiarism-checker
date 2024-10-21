@@ -5,7 +5,6 @@ declare( strict_types = 1 );
 namespace Max_Garceau\Plagiarism_Checker\Includes;
 
 use WP_Error;
-use WP_Http;
 use Monolog\Logger;
 
 class Api_Client {
@@ -20,6 +19,8 @@ class Api_Client {
 	 * if we need to search more endpoints
 	 */
 	private const API_URL = 'https://api.genius.com/search';
+
+	private const STATUS_OK = 200;
 
 	/**
 	 * The Genius API token.
@@ -93,7 +94,7 @@ class Api_Client {
 		$data = json_decode( $body, true );
 
 		// Check for errors in the API response
-		if ( wp_remote_retrieve_response_code( $response ) !== WP_Http::OK || ! isset( $data['response']['hits'] ) ) {
+		if ( wp_remote_retrieve_response_code( $response ) !== self::STATUS_OK || ! isset( $data['response']['hits'] ) ) {
 			$this->logger->error(
 				'The Genius API request returned a non 200 response.',
 				array(
