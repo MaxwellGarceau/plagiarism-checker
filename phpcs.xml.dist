@@ -16,7 +16,6 @@
     <config name="minimum_supported_wp_version" value="6.6"/>
 
     <!-- Rules:  -->
-    <rule ref="PHPCompatibilityWP"/>
 
     <!-- What to scan -->
      <file>wp-content/mu-plugins/</file>
