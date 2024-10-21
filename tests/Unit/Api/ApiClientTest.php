@@ -156,18 +156,12 @@ it(
 			'meta'     => array(
 				'status' => 500,
 			),
-
-			// No response property on failed request
-			// 'response' => array(
-			// 	'hits' => array(),
-			// ),
 		);
 
 		$response = array(
 			'body'     => json_encode( $expected_data ), // empty response
 			'response' => array(
 				'code'    => 500,   // Ensure this is properly structured and not interpreted as a function
-				// 'message' => '',  // Add message to avoid interpreting as an invalid name
 			),
 		);
 
