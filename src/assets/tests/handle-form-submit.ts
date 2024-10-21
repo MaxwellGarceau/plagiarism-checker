@@ -28,6 +28,7 @@ const mockResponseData = {
 };
 
 // Create a mock response object that adheres to the Response interface
+// This is a little extra, but it helps with type checking
 const createMockResponse = (ok: boolean, status: number, data: any = null) => {
 	return {
 		ok,
