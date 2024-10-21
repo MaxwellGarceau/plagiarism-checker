@@ -1,28 +1,17 @@
 <?php
 
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
-// use function Brain\Monkey\Functions\expect;
+use function Brain\Monkey\Functions\expect;
 use Monolog\Logger;
-use Brain\Monkey\Functions;
-use tad\FunctionMocker\FunctionMocker;
-use Brain\Monkey;
-
-use function Tests\deleteCliOutput;
-use function Tests\setupMocks;
-use function Tests\mock;
 
 // Set up Brain Monkey before each test
 beforeEach(function () {
-	// FunctionMocker::setUp();
 	parent::setUp();
-    // Monkey\setUp();
 });
 
 // Tear down Brain Monkey after each test
 afterEach(function () {
-    // Monkey\tearDown();
 	parent::tearDown();
-	// FunctionMocker::tearDown();
 });
 
 it(
@@ -39,9 +28,7 @@ it(
 			),
 		);
 
-		// expect( 'wp_remote_get' )->once()->andReturn( $response );
-		FunctionMocker::replace('wp_remote_get', fn() => $response)
-		->wasCalledOnce();
+		expect( 'wp_remote_get' )->once()->andReturn( $response );
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
@@ -50,17 +37,17 @@ it(
 
 		$result = $client->search_songs( 'heart' );
 
-		// // Assert that $result has 10 entries
-		// expect( count( $result ) )->toBe( 10 );
+		// Assert that $result has 10 entries
+		expect( count( $result ) )->toBe( 10 );
 
-		// // Assert that each item in $result matches the expected data
-		// $index = 0;
-		// expect( $result )->each(
-		// 	function ( $item ) use ( $expected_data, &$index ) {
-		// 		expect( $item )->toMatchArray( $expected_data[ $index ] );
-		// 		$index++;
-		// 	}
-		// );
+		// Assert that each item in $result matches the expected data
+		$index = 0;
+		expect( $result )->each(
+			function ( $item ) use ( $expected_data, &$index ) {
+				expect( $item )->toMatchArray( $expected_data[ $index ] );
+				$index++;
+			}
+		);
 	}
 )->group( 'wp_full' );
 

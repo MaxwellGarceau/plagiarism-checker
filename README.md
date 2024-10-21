@@ -69,7 +69,13 @@ At the moment, I'm organizing the test folders by Unit, Integration, and Feature
 
 There's no way to filter these tests at the moment, but we can take care of that once there are enough tests for that kind of dev work to make sense.
 
-#### Load both WP Stubs and Brain Monkey
-In a perfect world, we would be able to load the WP stubs and then overwrite them with Brain Monkey. Not impossible! However, we would need the WordPress stubs to support function_exists and class_exists checks in order to make them pluggable (the hard part) and then load them after Brain Monkey (easy part).
+#### Load both WP Core/Stubs and Brain Monkey together
+In a perfect world, we would be able to load the WP Core or the WP stubs and then overwrite them with Brain Monkey. Not impossible! However, we would need pluggable functions (the hard part) and then need to load them after Brain Monkey (easy part).
 
-For the moment, this is on hold, but this would be a great project in and of itself.
+I did some experiments with [lucatume/function-mocker](https://github.com/lucatume/function-mocker). Using this package, we can load all of WP Core or all of the WP stubs and then patch out functions that we want to write assertions against.
+
+I really like this library and use it for writing tests on legacy code to pin functionality in place. However, the current stable version on composer hasn't been updated in 6 years and I decided to not tie this project down with code that was that old.
+
+I sent a message to the dev and would like to pick this idea up again in the future if the library maintenance changes.
+
+For the moment, this is on hold, but getting WP set up with Pest and having a selectable way of choosing between WP stubs, Brain Monkey, and WP Core would be a great project in and of itself.

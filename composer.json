@@ -21,8 +21,7 @@
         "wordpress/wordpress": "^6.6",
         "yoast/phpunit-polyfills": "^1.0",
         "yoast/wp-test-utils": "^1.0",
-        "mockery/mockery": "^1.6",
-        "lucatume/function-mocker": "~1.0"
+        "mockery/mockery": "^1.6"
     },
     "scripts": {
         "sniff": "phpcs --standard=WordPress --extensions=php",

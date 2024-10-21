@@ -4,8 +4,6 @@ use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpCoreConfigManager;
 use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpSimulatedConfigManager;
 use Max_Garceau\Plagiarism_Checker\Tests\Bootstrap\WpGlobalConfigManager;
 
-use tad\FunctionMocker\FunctionMocker;
-
 // Load autoloaded files
 require_once dirname( __DIR__, 1 ) . '/vendor/autoload.php';
 
@@ -29,14 +27,11 @@ match ( true ) {
 		 * We will have to manually mock WP objects inside our tests
 		 * but we can use Brain Monkey to make assertions on WP functions
 		 */
-		// $wpSimulatedConfigManager->setupBrainMonkey();
+		$wpSimulatedConfigManager->setupBrainMonkey();
 	} )(),
 
 	$wpGlobalTestConfigManager->commandLineHas( 'wp_full' ) => ( function () use ( $wpSimulatedConfigManager ) {
 		$wpTestConfigManager = new WpCoreConfigManager( $_SERVER );
-		
-		// $wpSimulatedConfigManager->setupBrainMonkey();
-		FunctionMocker::setUp();
 
 		// Copy and overwrite the wp-tests-config.php file every time
 		$wpTestConfigManager->overwriteWpCoreConfig();
