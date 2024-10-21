@@ -131,7 +131,7 @@ class WpCoreConfigManager extends AbstractConfigManager {
 		return $configContents;
 	}
 
-	public function registerMockTheme(): void {
+	public function registerThisPluginWithTestsAddFilter(): void {
 		// Include functions for tests_add_filter()
 		require_once $this->getRootTestPath() . '/wp/tests/phpunit/includes/functions.php';
 
@@ -139,32 +139,7 @@ class WpCoreConfigManager extends AbstractConfigManager {
 		tests_add_filter(
 			'muplugins_loaded',
 			function () {
-				$themeDir     = dirname( __DIR__, 1 );
-				$currentTheme = basename( $themeDir );
-				$themeToot    = dirname( $themeDir );
-
-				add_filter(
-					'theme_root',
-					function () use ( $themeToot ) {
-						return $themeToot;
-					}
-				);
-
-				register_theme_directory( $themeToot );
-
-				add_filter(
-					'pre_option_template',
-					function () use ( $currentTheme ) {
-						return $currentTheme;
-					}
-				);
-
-				add_filter(
-					'pre_option_stylesheet',
-					function () use ( $currentTheme ) {
-						return $currentTheme;
-					}
-				);
+				require $this->getRootProjectPath() . '/plagiarism-checker.php';
 			}
 		);
 	}
