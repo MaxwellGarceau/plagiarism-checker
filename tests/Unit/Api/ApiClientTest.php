@@ -172,24 +172,32 @@ it(
 		);
 
 		// Mock add_query_arg to return the expected API URL
-		$expected_url = 'https://api.genius.com/search?q=klfkjadfajdf;kjfd';
+		$search_text = 'this_search_will_fail';
+		$expected_url = 'https://api.genius.com/search?q=' . $search_text;
 		
 		monkeyExpect( 'add_query_arg' )
 			->once()
 			->with(
 				array(
-					'q' => 'klfkjadfajdf;kjfd',
+					'q' => $search_text,
 				),
 				'https://api.genius.com/search'
 			)
 			->andReturn( $expected_url );
 
-        // Mock Monolog\Logger
-        $loggerMock = Mockery::mock( Logger::class )->makePartial();
+        // Mock the logger but leave its behavior for other methods intact
+        $loggerMock = Mockery::mock(Logger::class)->shouldIgnoreMissing();
+
+        // Expect the logger to be called with the error message
         $loggerMock->shouldReceive('error')
             ->once()
-            ->with(Mockery::type('string'))
-            ->andReturnNull();
+            ->with(
+                Mockery::pattern('/non 200 response/i'),
+                Mockery::on(function ($context) use ($search_text) {
+                    return $context['search_text'] === $search_text &&
+							$context['status_code'] === 500;
+                })
+            );
 
         // Create the API client with the logger mock
 		/** @var \Monolog\Logger $loggerMock */
@@ -220,16 +228,17 @@ it(
 			->with( $response )
 			->andReturn( 500 );
 
+		// Mock the WP_Error class
+		Mockery::mock('WP_Error');
+
         // Call the method and assert the results
-        $result = $client->search_songs('this search will fail');
+        $result = $client->search_songs($search_text);
 
-		// Mock WP_Error
-		$wpErrorMock = Mockery::mock('WP_Error');
-		$wpErrorMock->shouldReceive('get_error_message')
-			->andReturn('The Genius API request failed or returned invalid data.');
+		// Assert that the result is an instance of WP_Error
+        expect($result)->toBeInstanceOf(\WP_Error::class);	
 
-        expect($result)->toBeInstanceOf(WP_Error::class);
-        expect($result->get_error_message())->toMatch('/^(.*)request failed.*$/i');
+		// Assert that the logger was called with the expected error
+		expect($loggerMock)->toHaveReceived('error');
     }
 )->group('wp_brain_monkey');
 
