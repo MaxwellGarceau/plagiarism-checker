@@ -21,6 +21,9 @@ class Hook_Manager {
 		/**
 		 * Admin Menu
 		 */
-		add_action('admin_menu', [ $main->menu, 'plagiarism_checker_add_admin_menu' ]);
+		add_action('admin_menu', function() use ( $main ): void {
+			$main->menu->plagiarism_checker_add_admin_menu( $main->settings );
+		});
+		add_action('admin_init', [ $main->settings, 'plagiarism_checker_settings_init' ]);
 	}
 }

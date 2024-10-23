@@ -9,6 +9,7 @@ use Max_Garceau\Plagiarism_Checker\Includes\Admin_Ajax;
 use Max_Garceau\Plagiarism_Checker\Includes\Enqueue;
 use Max_Garceau\Plagiarism_Checker\Includes\Hook_Manager;
 use Max_Garceau\Plagiarism_Checker\Admin\Menu;
+use Max_Garceau\Plagiarism_Checker\Admin\Settings;
 
 /**
  * Loads and coordinates activities of the plugin
@@ -23,6 +24,7 @@ class Main {
 	 * @property-read Enqueue         $enqueue
 	 * @property-read Hook_Manager    $hook_manager
 	 * @property-read Menu            $menu
+	 * @property-read Settings        $settings
 	 *
 	 * NOTE: Inject classes here and then pass them to
 	 * Hook_Manager for the hooks initialization.
@@ -36,7 +38,8 @@ class Main {
 		public readonly Admin_Ajax $admin_ajax,
 		public readonly Enqueue $enqueue,
 		public readonly Hook_Manager $hook_manager,
-		public readonly Menu $menu
+		public readonly Menu $menu,
+		public readonly Settings $settings
 	) {}
 
 	/**
