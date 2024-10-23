@@ -49,14 +49,13 @@ class Settings {
         <?php
     }
 
+	/**
+	 * Callback for the settings section.
+	 * 
+	 * Load the HTML from an html file.
+	 */
     public function plagiarism_checker_settings_section_callback(): void {
-        echo '<p>' . esc_html__( 'Enter your Genius.com API token below. This is required for the Plagiarism Checker to function.', 'plagiarism-checker' ) . '</p>';
-        echo '<p>' . esc_html__( 'Instructions for generating an API token can be found below:', 'plagiarism-checker' ) . '</p>';
-        echo '<p><strong>' . esc_html__( 'How to generate an API token:', 'plagiarism-checker' ) . '</strong></p>';
-        echo '<p>' . esc_html__( '1. Go to Genius.com and create an account.', 'plagiarism-checker' ) . '</p>';
-        echo '<p>' . esc_html__( '2. Visit the API section in your account settings.', 'plagiarism-checker' ) . '</p>';
-        echo '<p>' . esc_html__( '3. Generate a new API token.', 'plagiarism-checker' ) . '</p>';
-        echo '<p>' . esc_html__( '4. Copy and paste the token into the field below.', 'plagiarism-checker' ) . '</p>';
+		require plugin_dir_path( __DIR__ ) . 'Admin/Views/api_instructions.html';
     }
 
     private function render_api_token_field(): void {
