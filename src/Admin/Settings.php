@@ -7,6 +7,17 @@ namespace Max_Garceau\Plagiarism_Checker\Admin;
 use Max_Garceau\Plagiarism_Checker\Admin\Menu_Constants;
 use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 
+/**
+ * Settings page for the Plagiarism Checker plugin.
+ * 
+ * I would love to use the options API because it's quick, convenient,
+ * and secure, but I anticipate the admin page growing and supporting
+ * a plethora of API clients. I would prefer to start the admin page
+ * without the constraints of the settings API admin system creation.
+ * 
+ * I also like separating the plugin data from the site as it makes debugging,
+ * migration, and overall data management easier.
+ */
 class Settings {
 
     const SETTINGS_SECTION_ID = 'plagiarism_checker_settings_section';
