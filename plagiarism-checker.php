@@ -46,6 +46,12 @@ add_action(
 		// Initialize the plugin.
 		$container = DI_Container::build_container();
 
+		// Register activation hook for creating the database table.
+		// TODO: Initialize this from a different class
+		register_activation_hook( __FILE__, function() use ( $container ) {
+			$container->get( \Max_Garceau\Plagiarism_Checker\Admin\Token_Storage::class )->create_table();
+		});
+
 		// Use the container to initialize the main plugin class
 		$container->get( Main::class )->init();
 	}

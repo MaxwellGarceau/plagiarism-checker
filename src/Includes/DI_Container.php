@@ -7,6 +7,7 @@ namespace Max_Garceau\Plagiarism_Checker\Includes;
 use DI\ContainerBuilder;
 use Max_Garceau\Plagiarism_Checker\Utilities\Logger_Init;
 use Monolog\Logger;
+use wpdb;
 
 /**
  * Configure PHP DI
@@ -18,7 +19,22 @@ class DI_Container {
 	public static function build_container(): \DI\Container {
 		$containerBuilder = new ContainerBuilder();
 
-		// Add custom logger definition
+		/**
+		 * Add definitions for the wpdb global variable
+		 * Use the global $wpdb object when trying to autoresolve
+		 * 
+		 * @return wpdb
+		 */
+		$containerBuilder->addDefinitions([
+			wpdb::class => function () {
+				global $wpdb;
+				return $wpdb;
+			},
+		]);
+
+		/**
+		 * Add custom logger definition
+		 */
 		$containerBuilder->addDefinitions(
 			[
 				Logger::class => function () {
