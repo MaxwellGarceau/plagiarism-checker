@@ -17,5 +17,10 @@ class Hook_Manager {
 
 		// Only logged in users can make these requests. Non logged in users can't use this plugin.
 		add_action( 'wp_ajax_plagiarism_checker', [ $main->admin_ajax, 'handle_plagiarism_checker_request' ] );
+
+		/**
+		 * Admin Menu
+		 */
+		add_action('admin_menu', [ $main->menu, 'plagiarism_checker_add_admin_menu' ]);
 	}
 }
