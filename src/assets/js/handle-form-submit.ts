@@ -51,6 +51,9 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 
 		const results = parsedJson?.data;
 
+		console.log(results);
+		console.log(response);
+
 		// Error with fetch request - we didn't even receive an error respoce
 		if (!response.ok && results === undefined) {
 			throw new Error(
@@ -60,7 +63,7 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 
 		// Request succeeded, but we didn't get the answer we wanted
 		const resultsHtml = results.success ?
-			renderer.getSuccessHtml(results) :
+			renderer.getSuccessHtml(results.data) :
 			renderer.getErrorHtml(results);
 
 		// Render the result using the imported renderResults function

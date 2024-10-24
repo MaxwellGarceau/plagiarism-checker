@@ -279,7 +279,7 @@ it(
 )->group( 'wp_brain_monkey' )->skip( 'This is a note.' );
 
 it(
-    'throws an error when no api token is set',
+    'returns WP_Error when no api token is set',
     function () {
 
 		when('admin_url')->justReturn('https://example.com/wp-admin/');

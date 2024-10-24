@@ -14,18 +14,23 @@ let mockConsoleError: ReturnType<typeof vi.spyOn>;
 
 // Mock fetch response data
 const mockResponseData = {
+	success: true,
 	data: [
 		{
-			result: {
-				title: 'Test Song',
-				url: 'https://example.com/song',
-				primary_artist: {
-					name: 'Test Artist',
-					url: 'https://example.com/artist',
+			data: [
+				{
+					result: {
+						title: 'Test Song',
+						url: 'https://example.com/song',
+						primary_artist: {
+							name: 'Test Artist',
+							url: 'https://example.com/artist',
+						},
+					},
 				},
-			},
-		},
-	],
+			],
+		}
+	]
 };
 
 // Create a mock response object that adheres to the Response interface
