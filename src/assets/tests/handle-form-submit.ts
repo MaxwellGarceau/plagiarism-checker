@@ -1,5 +1,6 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import handleFormSubmit from '../js/handle-form-submit';
+import { AdminAjaxResponse } from '../js/types';
 
 // Mock the DOM elements
 let textInput: HTMLInputElement;
@@ -13,27 +14,32 @@ let mockConsoleError: ReturnType<typeof vi.spyOn>;
 };
 
 // Mock fetch response data
-const mockResponseData: MockResponseData = {
+const mockResponseData: AdminAjaxResponse = {
 	data: {
 		success: true,
 		data: [
-				{
-					result: {
-						title: 'Test Song',
-						url: 'https://example.com/song',
-						primary_artist: {
-							name: 'Test Artist',
-							url: 'https://example.com/artist',
-						},
+			{
+				result: {
+					title: 'Test Song',
+					url: 'https://example.com/song',
+					primary_artist: {
+						name: 'Test Artist',
+						url: 'https://example.com/artist',
 					},
+					header_image_thumbnail_url: 'https://example.com/image',
 				},
-			],
-		}
+			},
+		],
+	},
 };
 
 // Create a mock response object that adheres to the Response interface
 // This is a little extra, but it helps with type checking
-const createMockResponse = (ok: boolean, status: number, data: any = null): Response => {
+const createMockResponse = (
+	ok: boolean,
+	status: number,
+	data: any = null
+): Response => {
 	return {
 		ok,
 		status,

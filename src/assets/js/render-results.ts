@@ -6,7 +6,7 @@ import { Result, Error } from './types';
  * Opening up Html getters to public
  * I don't want to overengineer this class by accepting a response
  * and trying to do all the routing internally.
- * 
+ *
  * This level of separate is good for now.
  *
  * @class PlagiarismResultsRenderer
@@ -35,7 +35,9 @@ export class PlagiarismResultsRenderer {
 				</div>`;
 	}
 
-	public getServerFailureHtml(errorMessage: string = 'Error: Failed to fetch results from the server'): string {
+	public getServerFailureHtml(
+		errorMessage: string = 'Error: Failed to fetch results from the server'
+	): string {
 		return `<div class="plagiarism-checker__results-container--error">
 					<p class="plagiarism-check__error-message">${errorMessage}</p>
 				</div>`;
