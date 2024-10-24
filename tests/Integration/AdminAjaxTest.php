@@ -100,7 +100,7 @@ test(
 		->shouldReceive( 'error' )
 		->once() // Expect it to be called once
 		->with( 'Invalid or expired nonce.', '', 403 ) // Expect these arguments
-		->andReturn($resource_return); // Return the array as expected
+		->andReturn( $resource_return ); // Return the array as expected
 
 		// Expect the wp_send_json_error to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
@@ -123,6 +123,19 @@ test(
 		->shouldReceive( 'verify_nonce' )
 		->andReturn( Nonce_Status::VALID );
 
+		// Mock the Resource class's error method to ensure it is called with correct arguments
+		$resource_return = [
+			'success' => false,
+			'message' => 'No text to search was provided.',
+			'description' => '',
+			'status_code' => 422,
+		];
+		$this->resource
+		->shouldReceive( 'error' )
+		->once() // Expect it to be called once
+		->with( 'No text to search was provided.', '', 422 ) // Expect these arguments
+		->andReturn( $resource_return ); // Return the array as expected
+
 		// Mock the validator to confirm it checks for required properties
 		$this->validator
 		->shouldNotReceive( 'response_has_required_properties' );
@@ -138,7 +151,7 @@ test(
 		$this->admin_ajax->handle_plagiarism_checker_request();
 
 		// Verify wp_send_json_error was called
-		Monkey\Functions\expect( 'wp_send_json_error' )->once()->with( 'No text provided.' );
+		Monkey\Functions\expect( 'wp_send_json_error' )->once()->with( 'No text to search was provided.' );
 	}
 )->group( 'wp_brain_monkey' );
 
