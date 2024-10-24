@@ -22,29 +22,12 @@ class Api_Client {
 
 	private const STATUS_OK = 200;
 
-	/**
-	 * The Genius API token.
-	 */
-	private string $api_token;
-
-	/**
-	 * @param Logger $logger
-	 */
-	private Logger $logger;
+	private const WP_ERROR_CODE = 'genius_api_error';
 
 	public function __construct(
-		Logger $logger,
-		string $api_token = ''
-	) {
-		$this->logger = $logger;
-		$this->api_token = $api_token;
-
-		// TODO: Do we still need this? We already have an admin notice if no token is set.
-		// Maybe we should remove this?
-		if ( $this->api_token === '' ) {
-			add_action( 'wp_footer', fn () => $_POST['api_token_not_set'] = 'true', 1 );
-		}
-	}
+		private Logger $logger,
+		private string $api_token = ''
+	) {}
 
 	/**
 	 * Makes a GET request to the Genius API.
@@ -59,12 +42,12 @@ class Api_Client {
 		 * Prevents unnecessary API requests if the token is not set
 		 */
 		if ( $this->api_token === '' ) {
-			$menu_url = add_query_arg( array( 
+			$menu_url = add_query_arg( [ 
 				'page' => 'plagiarism-checker', // The page slug
 				'action' => 'edit', 
-			), admin_url( 'post.php' ) );
+			], admin_url( 'post.php' ) );
 			return new WP_Error(
-				'genius_api_error',
+				self::WP_ERROR_CODE,
 				'The Genius API token is not set. Please set the token in the <a href="' . $menu_url . '">admin menu</a>.' );
 		}
 
@@ -113,10 +96,13 @@ class Api_Client {
 				]
 			);
 
-			$wp_error_data = [];
-			$wp_error_data['description'] = $data['error_description'] ?? '';
-			$wp_error_data['status_code'] = wp_remote_retrieve_response_code( $response );
-			return new WP_Error( 'genius_api_error', 'The Genius API request failed - ' . $data['error'], $wp_error_data );
+			$message = $data['error'] ?? 'unknown error';
+			$wp_error_data = [
+				'message' => $message, // Duplicate message, but I feel better having it here too
+				'description' => $data['error_description'] ?? '',
+				'status_code' => wp_remote_retrieve_response_code( $response ),
+			];
+			return new WP_Error( self::WP_ERROR_CODE, 'The Genius API request failed - ' . $message, $wp_error_data );
 		}
 
 		return $data['response']['hits'];

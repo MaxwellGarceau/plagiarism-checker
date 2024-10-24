@@ -27,7 +27,10 @@ class Admin_Ajax {
 		// Verify nonce
 		if ( $this->nonce_service->verify_nonce() === Nonce_Status::INVALID ) {
 			$this->logger->error( 'Invalid or expired nonce.' );
-			wp_send_json_error( 'Invalid or expired nonce.' );
+			wp_send_json_error( [
+				'message' => 'Invalid or expired nonce.',
+				'description' => '',
+			], 403 );
 		}
 
 		// Validate and sanitize
@@ -35,7 +38,10 @@ class Admin_Ajax {
 
 		// TODO: Do I need a looser check here?
 		if ( $text === '' ) {
-			wp_send_json_error( 'No text provided.' );
+			wp_send_json_error( [
+				'message' => 'No text to search was provided.',
+				'description' => '',
+			], 422 );
 		}
 
 		// Make API request to Genius and get response
@@ -65,10 +71,8 @@ class Admin_Ajax {
 			$response['description'] = $genius_response_data['description'] ?? '';
 
 			// Fallback to 400 if for some reason no status code
-			// Let's change this later to a custom 4** code if we need to debug
-			$response['status_code'] = $genius_response_data['status_code'] ?? 400;
-			
-			wp_send_json_error( $response, $response['status_code'] );
+			// Let's change this later to a custom 4** code if we need to debug			
+			wp_send_json_error( $response, $genius_response_data['status_code'] ?? 400 );
 		}
 
 		// Enforce that we have the properties our app requires
@@ -77,7 +81,10 @@ class Admin_Ajax {
 
 			// The request was processed correctly, but there was a discrepancy
 			// in the contract between the client and server.
-			wp_send_json_error( 'API request failed. Not all of the required properties were returned.', 422 );
+			wp_send_json_error( [
+				'message' => 'The API response is missing required properties.',
+				'description' => '',
+			], 422 );
 		}
 
 		$this->logger->info(
