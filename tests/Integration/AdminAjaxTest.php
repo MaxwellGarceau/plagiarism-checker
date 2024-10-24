@@ -19,11 +19,21 @@ beforeEach(
 		Monkey\setUp();
 
 		// Mock dependencies - don't worry about API client
+		/** @var Nonce_Service $nonce_service */
 		$this->nonce_service = Mockery::mock( Nonce_Service::class );
-		$this->api_client    = Mockery::mock( Client::class );
-		$this->logger        = Mockery::mock( Logger::class );
-		$this->resource      = Mockery::mock( Resource::class );
-		$this->validator     = Mockery::mock( Api_Response_Validator::class );
+
+		/** @var Client $api_client */
+		$this->api_client = Mockery::mock( Client::class );
+
+		/** @var Logger $logger */
+		$this->logger = Mockery::mock( Logger::class );
+
+		/** @var Resource $resource */
+		$this->resource = Mockery::mock( Resource::class );
+
+		/** @var Api_Response_Validator $validator */
+		$this->validator = Mockery::mock( Api_Response_Validator::class );
+
 
 		// Initialize the class
 		$this->admin_ajax = new Admin_Ajax( $this->nonce_service, $this->api_client, $this->logger, $this->resource, $this->validator );
