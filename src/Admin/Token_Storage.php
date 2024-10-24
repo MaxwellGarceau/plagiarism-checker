@@ -36,6 +36,10 @@ class Token_Storage {
 	 */
 	public function save_token( int $user_id, string $token ): bool {
 		$sanitized_token = sanitize_text_field( $token );
+
+		/**
+		 * TODO: Find better access token validation
+		 */
 		if ( ! preg_match( '/^[A-Za-z0-9]+$/', $sanitized_token ) ) {
 			return false; // Invalid token format.
 		}
