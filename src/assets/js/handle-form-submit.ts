@@ -1,4 +1,4 @@
-import { renderResults } from './render-results';
+import { displayResults } from './render-results';
 
 type PlagiarismCheckData = {
 	text: string;
@@ -53,8 +53,8 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		}
 
 		// Render the result using the imported renderResults function
-		resultsContainer.innerHTML = renderResults(result.data);
-		resultsContainer.classList.add('plagiarism-checker__results-container--has-results');
+		displayResults(result.data, resultsContainer);
+
 	} catch (errorMessage) {
 		// Display an error message if the request fails
 		resultsContainer.innerHTML = `<div class="plagiarism-checker__results-container--error">${errorMessage}</div>`;

@@ -17,10 +17,9 @@ type Results = {
  * @param {Results[]} result The array of result objects to render.
  * @return {string} HTML string representing the results.
  */
-export function renderResults(result: Results[]): string {
-	console.log(result)
+function generateResultsHtml(results: Results[]): string {
 	let output = '<ul class="plagiarism-checker__results">';
-	output += result
+	output += results
 		.map((e: Results) => {
 			const songTitle = `<a href="${e.result.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${e.result.title}</a>`;
 			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${e.result.primary_artist.name}</a></span>`;
@@ -30,4 +29,20 @@ export function renderResults(result: Results[]): string {
 		.join('\n');
 	output += '</ul>';
 	return output;
+}
+
+function getEmptyResultsHtml(): string {
+	return '<div class="plagiarism-checker__results-container--no-results">No plagiarism detected!</div>';
+}
+
+function hasResults(results: Results[]): boolean {
+	return results !== undefined && results !== null && results.length === 0;
+}
+
+export function displayResults(results: Results[], resultsContainer: HTMLDivElement): void {
+	resultsContainer.innerHTML = hasResults(results)
+		? getEmptyResultsHtml()
+		: generateResultsHtml(results);
+
+	resultsContainer.classList.add('plagiarism-checker__results-container--has-results');
 }
