@@ -29,7 +29,7 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 	const textInput = document.querySelector(
 		'#plagiarism-checker__input'
 	) as HTMLInputElement;
-	const resultTextarea = document.querySelector(
+	const resultsContainer = document.querySelector(
 		'#plagiarism-checker__results-container'
 	) as HTMLDivElement;
 
@@ -57,9 +57,10 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 			);
 		}
 
-		resultTextarea.innerHTML = renderOutput(result.data);
+		resultsContainer.innerHTML = renderOutput(result.data);
+		resultsContainer.classList.add('plagiarism-checker__results-container--has-results');
 	} catch (errorMessage) {
-		resultTextarea.innerHTML = `<div class="error">${errorMessage}</div>`;
+		resultsContainer.innerHTML = `<div class="plagiarism-checker__results-container--error">${errorMessage}</div>`;
 	}
 }
 

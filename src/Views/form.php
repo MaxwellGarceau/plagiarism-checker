@@ -33,8 +33,7 @@
 	</form>
 
 	<div id="plagiarism-checker__results-container" class="plagiarism-checker__results-container">
-		<span class="plagiarism-checker__span">Matching Songs:</label>
-		<div id="plagiarism-checker__textarea" class="plagiarism-checker__textarea">Matching songs will display here...</div>
+		<div id="plagiarism-checker__results" class="plagiarism-checker__results">Matching songs will display here...</div>
 	</div>
 </section>
 	

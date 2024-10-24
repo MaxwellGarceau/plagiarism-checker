@@ -10,6 +10,12 @@
 		padding: 0;
 		margin: 20px 0 0;
 		overflow: hidden;
+		height: 100%;
+
+		&--error {
+			color: red;
+			margin-top: 20px;
+		  }
 	}
 
 	&__results {
@@ -44,6 +50,10 @@
 		margin-right: 20px;
 		vertical-align: bottom;
 	}
+
+	&__textarea {
+		height: 100%;
+	}
 }
 
 // Calculation to determine container height
@@ -52,5 +62,23 @@
 		max-height: calc(v.$plagiarism-checker-form-height - (v.$plagiarism-checker-form-height / 3));
 		overflow: scroll;
 		overflow-x: hidden;
+	}
+}
+
+.plagiarism-checker {
+	&__results-container {
+		&:not(.plagiarism-checker__results-container--has-results) {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-style: italic;
+			color: v.$plagiarism-checker-color-secondary;
+			font-weight: 300;
+			overflow: hidden;
+	
+			& > .plagiarism-checker__results {
+				overflow: hidden;
+			}
+		}
 	}
 }

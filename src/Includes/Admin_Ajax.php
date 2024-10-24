@@ -83,6 +83,7 @@ class Admin_Ajax {
 			'url',
 			'title',
 			'primary_artist' => array( 'name', 'url' ),
+			'header_image_thumbnail_url',
 		];
 
 		// Loop over each result object and validate its properties
