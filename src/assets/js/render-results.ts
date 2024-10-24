@@ -1,5 +1,3 @@
-// render-results.ts
-
 type Results = {
 	result: {
 		title: string;
@@ -13,36 +11,53 @@ type Results = {
 };
 
 /**
- * Render the results returned by the API into HTML.
- * @param {Results[]} result The array of result objects to render.
- * @return {string} HTML string representing the results.
+ * Class to render the results of the plagiarism check.
+ * 
+ * Refactored into a class because I really don't want this functionality
+ * to be exposed except via the one displayResults method.
+ * 
+ * @class PlagiarismResultsRenderer
  */
-function generateResultsHtml(results: Results[]): string {
-	let output = '<ul class="plagiarism-checker__results">';
-	output += results
-		.map((e: Results) => {
-			const songTitle = `<a href="${e.result.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${e.result.title}</a>`;
-			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${e.result.primary_artist.name}</a></span>`;
-			const thumbnail = `<img src="${e.result.header_image_thumbnail_url}" alt="${e.result.title} - ${e.result.primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
-			return `<li class="plagiarism-checker__result">${thumbnail}${songTitle} - ${artistName}</li>`;
-		})
-		.join('\n');
-	output += '</ul>';
-	return output;
-}
+export class PlagiarismResultsRenderer {
+	constructor(private resultsContainer: HTMLDivElement) {}
 
-function getEmptyResultsHtml(): string {
-	return '<div class="plagiarism-checker__results-container--no-results">No plagiarism detected!</div>';
-}
+	public displayResults(results: Results[]): void {
+		this.resultsContainer.innerHTML = this.hasResults(results)
+			? this.getEmptyResultsHtml()
+			: this.generateResultsHtml(results);
+		this.resultsContainer.classList.add(
+			'plagiarism-checker__results-container--has-results'
+		);
+	}
 
-function hasResults(results: Results[]): boolean {
-	return results !== undefined && results !== null && results.length === 0;
-}
+	public displayErrors(errorMessage: string): string {
+		return `<div class="plagiarism-checker__results-container--error">${errorMessage}</div>`;
+	}
 
-export function displayResults(results: Results[], resultsContainer: HTMLDivElement): void {
-	resultsContainer.innerHTML = hasResults(results)
-		? getEmptyResultsHtml()
-		: generateResultsHtml(results);
+	/**
+	 * Render the results returned by the API into HTML.
+	 * @param {Results[]} result The array of result objects to render.
+	 * @return {string} HTML string representing the results.
+	 */
+	private generateResultsHtml(results: Results[]): string {
+		let output = '<ul class="plagiarism-checker__results">';
+		output += results
+			.map(({ result: { url, title, header_image_thumbnail_url, primary_artist } }: Results) => {
+				const songTitle = `<a href="${url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${title}</a>`;
+				const artistName = `<span class="artist-name"><a href="${primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${primary_artist.name}</a></span>`;
+				const thumbnail = `<img src="${header_image_thumbnail_url}" alt="${title} - ${primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
+				return `<li class="plagiarism-checker__result">${thumbnail}${songTitle} - ${artistName}</li>`;
+			})
+			.join('\n');
+		output += '</ul>';
+		return output;
+	}
 
-	resultsContainer.classList.add('plagiarism-checker__results-container--has-results');
+	private getEmptyResultsHtml(): string {
+		return '<div class="plagiarism-checker__results-container--no-results">No plagiarism detected!</div>';
+	}
+
+	private hasResults(results: Results[]): boolean {
+		return results.length === 0;
+	}
 }

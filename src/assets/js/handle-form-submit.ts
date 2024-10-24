@@ -1,4 +1,4 @@
-import { displayResults } from './render-results';
+import { PlagiarismResultsRenderer } from './render-results';
 
 type PlagiarismCheckData = {
 	text: string;
@@ -24,6 +24,8 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		'#plagiarism-checker__results-container'
 	) as HTMLDivElement;
 
+	const renderer = new PlagiarismResultsRenderer(resultsContainer);
+
 	// Prepare the data payload for the AJAX request
 	const data: PlagiarismCheckData = {
 		text: textInput.value,
@@ -43,20 +45,21 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		});
 
 		// Parse the JSON response from the backend
-		const result = await response.json();
+		const parsedJson = await response.json();
+		const results = parsedJson.data;
 		
 		// Handle non-OK responses by throwing an error
 		if (!response.ok) {
 			throw new Error(
-				`Status: ${result.status_code} - ${result.message}: ${result.description}`
+				`Status: ${results.status_code} - ${results.message}: ${results.description}`
 			);
 		}
 
 		// Render the result using the imported renderResults function
-		displayResults(result.data, resultsContainer);
+		renderer.displayResults(results);
 
 	} catch (errorMessage) {
 		// Display an error message if the request fails
-		resultsContainer.innerHTML = `<div class="plagiarism-checker__results-container--error">${errorMessage}</div>`;
+		resultsContainer.innerHTML = renderer.displayErrors(errorMessage);
 	}
 }
