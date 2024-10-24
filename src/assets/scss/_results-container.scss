@@ -6,32 +6,34 @@
 		padding: 0;
 		margin: 20px 0 0;
 		overflow: hidden;
+	}
 
-		li {
-			padding: 10px;
-			border-bottom: 1px solid v.$plagiarism-checker-form-border-color;
+	&__result {
+		padding: 10px;
+		border-bottom: 1px solid v.$plagiarism-checker-form-border-color;
 
-			&:last-child {
+		&:last-child {
 			border-bottom: none;
-			}
+		}
 
-			a {
-			color: var(--wp--preset--color--primary, #007cba);
-			text-decoration: none;
-			font-weight: bold;
-
-			&:hover {
-				text-decoration: underline;
-			}
-			}
-
-			.artist-name {
+		.artist-name {
 			font-style: italic;
-			color: var(--wp--preset--color--secondary, #666);
-			}
+			color: v.$plagiarism-checker-color-secondary;
 		}
 	}
 
+	&__result-link {
+		color: v.$plagiarism-checker-color-primary;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+// Calculation to determine container height
+.plagiarism-checker {
 	&__results {
 		max-height: calc(v.$plagiarism-checker-form-height - (v.$plagiarism-checker-form-height / 3));
 		overflow: scroll;

@@ -7,16 +7,6 @@
 	border-radius: 8px 0 0 0;
 	transition: max-height 0.3s ease-in-out, background-color 0.3s ease-in-out, right 0.3s ease-in-out;
 
-  &__submit-button {
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: var(--wp--preset--color--primary-hover, #005a99); // Fallback for hover state
-    }
-  }
-
   &__toggle {
     cursor: pointer;
     margin-bottom: 10px;
@@ -32,6 +22,17 @@
   &__textarea {
 	border: 1px solid v.$plagiarism-checker-input-border-color;
     border-radius: 4px;
+  }
+
+  &__button {
+	cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+	// background-color: v.$plagiarism-checker-color-primary-hover;
+
+	&:hover {
+		background-color: var(--wp--preset--color--primary-hover, #005a99); // Fallback for hover state
+	}
   }
 
   .error {

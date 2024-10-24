@@ -1,5 +1,13 @@
 // Define variables with WordPress presets and fallbacks
 
+// Colors
+$plagiarism-checker-color-primary: var(--wp--preset--color--primary, --wp--preset--color--accent, #000);
+$plagiarism-checker-color-secondary: var(--wp--preset--color--secondary, --wp--preset--color--accent-2, #cfcabe);
+$plagiarism-checker-color-tertiary: var(--wp--preset--color--tertiary, --wp--preset--color--accent-3, #007cba);
+
+$plagiarism-checker-color-primary-hover: var(--wp--preset--color--primary-hover, #005a99);
+
+// Forms
 $plagiarism-checker-form-background-color: var(--wp--preset--color--background, #f9f9f9);
 $plagiarism-checker-form-text-color: var(--wp--preset--color--foreground, #333);
 $plagiarism-checker-form-border-color: var(--wp--preset--color--border, #ddd);

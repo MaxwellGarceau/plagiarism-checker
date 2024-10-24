@@ -66,9 +66,9 @@ function renderOutput(result: Results[]): string {
 	let output = '<ul class="plagiarism-checker__results">';
 	output += result
 		.map((e: Results) => {
-			const songTitle = `<a href="${e.result.url}" target="_blank">${e.result.title}</a>`;
-			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" target="_blank">${e.result.primary_artist.name}</a></span>`;
-			return `<li>${songTitle} - ${artistName}</li>`;
+			const songTitle = `<a href="${e.result.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${e.result.title}</a>`;
+			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${e.result.primary_artist.name}</a></span>`;
+			return `<li class="plagiarism-checker__result">${songTitle} - ${artistName}</li>`;
 		})
 		.join('\n');
 	output += '</ul>';
