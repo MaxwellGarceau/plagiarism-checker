@@ -31,6 +31,10 @@ class Settings {
 		$this->token_storage = $token_storage;
 	}
 
+	/**
+	 * TODO: Refactor nonce generation so that we use the Nonce_Service
+	 * to generate nonces here as well
+	 */
 	public function plagiarism_checker_settings_page(): void {
 		?>
 		<div class="wrap">
