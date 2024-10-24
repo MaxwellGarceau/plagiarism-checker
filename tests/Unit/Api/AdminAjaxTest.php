@@ -186,7 +186,10 @@ it(
 		$wp_error
 		->shouldReceive( 'get_error_data' )
 		->with( $this->wp_error_code )
-		->andReturn( $formatted_genius_response );
+		->andReturn( [
+			'succcess' => false,
+			'data' => $formatted_genius_response
+		] );
 
 		// Expect the API client to return WP_Error
 		$this->api_client
@@ -199,8 +202,8 @@ it(
 		// We're formatting the resource in the Api_Client\Client
 		// As far as Admin_Ajax is concerned, no resource activity happens here
 		$resource_return = [
-			...$formatted_genius_response,
 			'success' => false,
+			'data' => $formatted_genius_response,
 		];
 		$this->resource
 		->shouldReceive( 'error' )

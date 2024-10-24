@@ -1,20 +1,4 @@
-type Results = {
-	result: {
-		title: string;
-		url: string;
-		primary_artist: {
-			name: string;
-			url: string;
-		};
-		header_image_thumbnail_url: string;
-	};
-};
-
-type Error = {
-	message: string;
-	description: string;
-	status_code: number;
-}
+import { Result, Error } from './types';
 
 /**
  * Class to render the results of the plagiarism check.
@@ -37,7 +21,7 @@ export class PlagiarismResultsRenderer {
 		);
 	}
 
-	public getSuccessHtml(results: Results[]): string {
+	public getSuccessHtml(results: Result[]): string {
 		return this.hasResults(results)
 			? this.getEmptyResultsHtml()
 			: this.generateResultsHtml(results);
@@ -59,10 +43,10 @@ export class PlagiarismResultsRenderer {
 
 	/**
 	 * Render the results returned by the API into HTML.
-	 * @param {Results[]} result The array of result objects to render.
+	 * @param {Result[]} result The array of result objects to render.
 	 * @return {string} HTML string representing the results.
 	 */
-	private generateResultsHtml(results: Results[]): string {
+	private generateResultsHtml(results: Result[]): string {
 		let output = '<ul class="plagiarism-checker__results">';
 		output += results
 			.map(
@@ -73,7 +57,7 @@ export class PlagiarismResultsRenderer {
 						header_image_thumbnail_url,
 						primary_artist,
 					},
-				}: Results) => {
+				}: Result) => {
 					const songTitle = `<a href="${url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${title}</a>`;
 					const artistName = `<span class="artist-name"><a href="${primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${primary_artist.name}</a></span>`;
 					const thumbnail = `<img src="${header_image_thumbnail_url}" alt="${title} - ${primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
@@ -89,7 +73,7 @@ export class PlagiarismResultsRenderer {
 		return '<div class="plagiarism-checker__results-container--no-results">No plagiarism detected!</div>';
 	}
 
-	private hasResults(results: Results[]): boolean {
+	private hasResults(results: Result[]): boolean {
 		return results.length === 0;
 	}
 }

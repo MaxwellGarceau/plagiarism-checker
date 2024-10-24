@@ -55,7 +55,9 @@ class Admin_Ajax {
 		// Handle errors from the API client.
 		if ( is_wp_error( $data ) ) {
 			$error_data = $data->get_error_data( self::WP_ERROR_CODE ); // No error formatting here because this was formatted in the API client.
-			wp_send_json_error( $this->resource->error( $error_data['message'], $error_data['description'], $error_data['status_code'] ?? 400 ) );
+
+			// TODO: Let's clean this up. Maybe we pass in a resource to WP_Error that we create in the Api_Client?
+			wp_send_json_error( $this->resource->error( $error_data['data']['message'], $error_data['data']['description'], $error_data['data']['status_code'] ?? 400 ) );
 		}
 
 		// Enforce that we have the required properties in the API response.

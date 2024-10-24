@@ -1,17 +1,11 @@
 import { PlagiarismResultsRenderer } from './render-results';
 
+// Only used here, stays here for now
 type PlagiarismCheckData = {
 	text: string;
 	_ajax_nonce: string;
 	_ajax_url: string;
 	action: string;
-};
-
-type Response = {
-	ok: boolean;
-	json: Function;
-	status: number;
-	statusText: string;
 };
 
 export default async function handleFormSubmit(event: Event): Promise<void> {
@@ -51,8 +45,9 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 
 		const results = parsedJson?.data;
 
-		console.log(results);
-		console.log(response);
+		console.log('RESULTS', results);
+		console.log('PARSED JSON', parsedJson);
+		console.log('RESPONSE', response);
 
 		// Error with fetch request - we didn't even receive an error respoce
 		if (!response.ok && results === undefined) {
@@ -62,9 +57,9 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		}
 
 		// Request succeeded, but we didn't get the answer we wanted
-		const resultsHtml = results.success ?
-			renderer.getSuccessHtml(results.data) :
-			renderer.getErrorHtml(results);
+		const resultsHtml = ! results.success ?
+			renderer.getErrorHtml(results.data) :
+			renderer.getSuccessHtml(results.data);
 
 		// Render the result using the imported renderResults function
 		renderer.displayResults(resultsHtml);
