@@ -1,12 +1,10 @@
 // Define variables with WordPress presets and fallbacks
 
-$form-background-color: var(--wp--preset--color--background, #f9f9f9);
-$form-text-color: var(--wp--preset--color--foreground, #333);
-$form-border-color: var(--wp--preset--color--border, #ddd);
-$button-primary-background: var(--wp--preset--color--primary, #007cba);
-$button-primary-text: var(--wp--preset--color--background, #ffffff);
-$input-border-color: var(--wp--preset--color--border, #ddd);
+$plagiarism-checker-form-background-color: var(--wp--preset--color--background, #f9f9f9);
+$plagiarism-checker-form-text-color: var(--wp--preset--color--foreground, #333);
+$plagiarism-checker-form-border-color: var(--wp--preset--color--border, #ddd);
+$plagiarism-checker-input-border-color: var(--wp--preset--color--border, #ddd);
 
 // Structural variables
-$form-width: 70vw;
-$form-height: 80vh;
+$plagiarism-checker-form-width: 70vw;
+$plagiarism-checker-form-height: 80vh;

@@ -5,14 +5,14 @@
 	&--closed {
 		max-height: 30px;
 		overflow: hidden;
-		right: calc( 150px - v.$form-width);
+		right: calc( 150px - v.$plagiarism-checker-form-width);
 		box-shadow: none;
-		background-color: rgba(v.$form-background-color, 0.5);
+		background-color: rgba(v.$plagiarism-checker-form-background-color, 0.5);
 	}
 
 	&--open {
-		max-height: v.$form-height; // Adjust this value based on the form content size
+		max-height: v.$plagiarism-checker-form-height; // Adjust this value based on the form content size
 		right: 0;
-		background-color: v.$form-background-color;
+		background-color: v.$plagiarism-checker-form-background-color;
 	}
 }

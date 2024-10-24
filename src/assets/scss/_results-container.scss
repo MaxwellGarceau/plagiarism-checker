@@ -9,7 +9,7 @@
 
 		li {
 			padding: 10px;
-			border-bottom: 1px solid v.$form-border-color;
+			border-bottom: 1px solid v.$plagiarism-checker-form-border-color;
 
 			&:last-child {
 			border-bottom: none;
@@ -33,7 +33,7 @@
 	}
 
 	&__results {
-		max-height: calc(v.$form-height - (v.$form-height / 3));
+		max-height: calc(v.$plagiarism-checker-form-height - (v.$plagiarism-checker-form-height / 3));
 		overflow: scroll;
 		overflow-x: hidden;
 	}

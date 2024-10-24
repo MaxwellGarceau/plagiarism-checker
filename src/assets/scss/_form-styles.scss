@@ -2,8 +2,8 @@
 
 .plagiarism-checker {
   	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	color: v.$form-text-color;
-	border: 1px solid v.$form-border-color;
+	color: v.$plagiarism-checker-form-text-color;
+	border: 1px solid v.$plagiarism-checker-form-border-color;
 	border-radius: 8px 0 0 0;
 	transition: max-height 0.3s ease-in-out, background-color 0.3s ease-in-out, right 0.3s ease-in-out;
 
@@ -24,13 +24,13 @@
 
   &__input {
     padding: 10px;
-    border: 1px solid v.$input-border-color;
+    border: 1px solid v.$plagiarism-checker-input-border-color;
     border-radius: 4px;
     font-size: 16px;
   }
 
   &__textarea {
-	border: 1px solid v.$input-border-color;
+	border: 1px solid v.$plagiarism-checker-input-border-color;
     border-radius: 4px;
   }
 
