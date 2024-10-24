@@ -2,6 +2,7 @@
 
 namespace Max_Garceau\Plagiarism_Checker\Admin;
 
+use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB;
 use wpdb;
 
 /**
@@ -15,9 +16,9 @@ class Table_Checker {
 	private wpdb $wpdb;
 	private string $table_name;
 
-	public function __construct( wpdb $wpdb ) {
+	public function __construct( wpdb $wpdb, DB $constants ) {
 		$this->wpdb = $wpdb;
-		$this->table_name = $wpdb->prefix . 'plagiarism_checker_access_tokens';
+		$this->table_name = $constants->get_access_token_table_name( $wpdb->prefix );
 	}
 
 	/**

@@ -5,6 +5,7 @@ declare( strict_types = 1 );
 namespace Max_Garceau\Plagiarism_Checker\Admin;
 
 use wpdb;
+use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB;
 
 class Token_Storage {
 
@@ -12,11 +13,12 @@ class Token_Storage {
 	private string $table_name;
 
 	const API_TOKEN_KEY = 'genius_api_token';
-	const TABLE_NAME_NO_PREFIX = 'plagiarism_checker_access_tokens';
 
-	public function __construct( wpdb $wpdb ) {
+	public function __construct( wpdb $wpdb, DB $constants ) {
 		$this->wpdb = $wpdb;
-		$this->table_name = $wpdb->prefix . self::TABLE_NAME_NO_PREFIX;
+
+		// Set DB $constants property if we need more than this in the future
+		$this->table_name = $constants->get_access_token_table_name( $wpdb->prefix );
 	}
 
 	/**
