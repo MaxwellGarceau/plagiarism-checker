@@ -73,14 +73,16 @@ beforeEach(() => {
 	document.body.innerHTML = `
     <form id="plagiarism-checker__form">
       <input id="plagiarism-checker__input"></input>
-      <div id="plagiarism-checker__results"></div>
+	  <div id="plagiarism-checker__results-container" class="plagiarism-checker__results-container">
+      	<div id="plagiarism-checker__results"></div>
+	  </div>
     </form>
   `;
 	textInput = document.querySelector(
 		'#plagiarism-checker__input'
 	) as HTMLInputElement;
 	resultTextarea = document.querySelector(
-		'#plagiarism-checker__results'
+		'#plagiarism-checker__results-container'
 	) as HTMLDivElement;
 
 	// Set a value for the text input
