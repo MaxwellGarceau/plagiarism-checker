@@ -1,6 +1,6 @@
 <?php
 
-declare( strict_types = 1 );
+declare( strict_types=1 );
 
 namespace Max_Garceau\Plagiarism_Checker\Includes;
 
@@ -11,28 +11,20 @@ class Api_Client {
 
 	/**
 	 * The Genius API URL to search for songs.
-	 *
-	 * Since we only have one endpoint we need to search,
-	 * we're going to keep this simple for now.
-	 *
-	 * Let's break this out into a method that can accept endpoints
-	 * if we need to search more endpoints.
 	 */
 	private const API_URL = 'https://api.genius.com/search';
-
 	private const STATUS_OK = 200;
-
 	private const WP_ERROR_CODE = 'genius_api_error';
 
 	/**
-	 * @param Logger   $logger A logger instance to capture any issues.
+	 * @param Logger   $logger    A logger instance to capture any issues.
 	 * @param string   $api_token The API token required to access the Genius API.
-	 * @param Resource $resource A resource instance to handle the formatting of responses.
+	 * @param Resource $resource  A resource instance to handle the formatting of responses.
 	 */
 	public function __construct(
 		private Logger $logger,
 		private string $api_token = '',
-		private Resource $resource // Add the new Resource dependency
+		private Resource $resource
 	) {}
 
 	/**
@@ -42,17 +34,10 @@ class Api_Client {
 	 * @return array|WP_Error The response data or WP_Error on failure.
 	 */
 	public function search_songs( string $text ): array|WP_Error {
-
-		/**
-		 * Early return if no api_token is set and prompt user to enter token
-		 * Prevents unnecessary API requests if the token is not set
-		 */
+		// Early return if no API token is set.
 		if ( $this->api_token === '' ) {
 			$menu_url = add_query_arg(
-				[
-					'page'   => 'plagiarism-checker',
-					'action' => 'edit',
-				],
+				array( 'page' => 'plagiarism-checker', 'action' => 'edit' ),
 				admin_url( 'post.php' )
 			);
 
@@ -68,10 +53,10 @@ class Api_Client {
 		 * sanitization if we change the design in the future.
 		 */
 
-		// Prepare the request URL
-		$url = add_query_arg( [ 'q' => $text ], self::API_URL );
+		// Prepare the request URL.
+		$url = add_query_arg( array( 'q' => $text ), self::API_URL );
 
-		// Set up request headers
+		// Set up request headers.
 		$args = array(
 			'headers' => array(
 				'Authorization' => 'Bearer ' . $this->api_token,
@@ -79,22 +64,22 @@ class Api_Client {
 			'timeout' => 15,
 		);
 
-		// Make the request
+		// Make the request.
 		$response = wp_remote_get( $url, $args );
 
-		// Check if the request failed
+		// Check if the request failed.
 		if ( is_wp_error( $response ) ) {
-			return $response; // Return WP_Error
+			return $response;
 		}
 
-		// Get the response body and decode JSON
+		// Get the response body and decode JSON.
 		$body = wp_remote_retrieve_body( $response );
 		$data = json_decode( $body, true );
 
-		// Check for errors in the API response
+		// Check for errors in the API response.
 		if ( wp_remote_retrieve_response_code( $response ) !== self::STATUS_OK || ! isset( $data['response']['hits'] ) ) {
 			$this->logger->error(
-				'The Genius API request returned a non 200 response.',
+				'The Genius API request returned a non-200 response.',
 				array(
 					'search_text'   => $text,
 					'status_code'   => wp_remote_retrieve_response_code( $response ),
@@ -102,7 +87,6 @@ class Api_Client {
 				)
 			);
 
-			// Format the error response using the Resource class
 			return new WP_Error(
 				self::WP_ERROR_CODE,
 				'The Genius API request failed - ' . ( $data['error'] ?? 'unknown error' ),
@@ -114,7 +98,7 @@ class Api_Client {
 			);
 		}
 
-		// Return the success response using the Resource class
+		// Return the success response using the Resource class.
 		return $this->resource->success( $data['response']['hits'] );
 	}
 }
