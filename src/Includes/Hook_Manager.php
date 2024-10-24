@@ -11,6 +11,7 @@ class Hook_Manager {
 		// Enqueue the Vite assets.
 		add_action( 'wp_enqueue_scripts', [ $main->enqueue, 'vite' ] );
 		add_action( 'wp_enqueue_scripts', [ $main->enqueue, 'theme_json' ] );
+		add_action( 'admin_enqueue_scripts', [ $main->enqueue, 'admin_styles' ] );	
 
 		add_action( 'wp_footer', [ $main->form_controller, 'render' ] );
 		add_action( 'wp_enqueue_scripts', [ $main->enqueue, 'localize_scripts' ] );

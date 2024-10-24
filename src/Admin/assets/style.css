@@ -1,0 +1,23 @@
+/**
+ * Plagiarism Checker Admin CSS
+ *
+ * TODO: If we have enough CSS to warrant it
+ * then let's set up scss and webpack
+ */
+.plagiarism-checker__note {
+	font-size: 0.85rem;
+	font-style: italic;
+	color: #72777c;
+}
+
+.plagiarism-checker__status {
+	font-size: 1rem;
+}
+
+.plagiarism-checker__status {
+	color: #00a0d2;
+}
+
+.plagiarism-checker__error {
+	color: #dc3232;
+}

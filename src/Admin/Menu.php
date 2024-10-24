@@ -30,5 +30,5 @@ class Menu {
 			'dashicons-admin-tools',                        // Icon
 			80                                              // Position
 		);
-	}    
+	}
 }
