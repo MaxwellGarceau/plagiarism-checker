@@ -26,5 +26,7 @@ class Hook_Manager {
 		});
 
 		add_action( 'admin_post_save_plagiarism_checker_token', [ $main->form_handler, 'handle_form_submission' ] );
+
+		add_action( 'admin_init', [ $main->table_manager, 'maybe_show_admin_notice' ] );
 	}
 }

@@ -25,8 +25,6 @@ class Table_Manager {
 
 	/**
 	 * Create the custom table for storing tokens.
-	 * 
-	 * TODO: This should be somewhere else
 	 */
 	public function create_table(): void {
 		$charset_collate = $this->wpdb->get_charset_collate();
@@ -46,7 +44,7 @@ class Table_Manager {
 	 *
 	 * @return bool True if the table exists, false otherwise.
 	 */
-	public function does_table_exist(): bool {
+	private function does_table_exist(): bool {
 		$result = $this->wpdb->get_var( $this->wpdb->prepare(
 			"SHOW TABLES LIKE %s",
 			$this->table_name
