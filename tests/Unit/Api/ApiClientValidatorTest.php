@@ -18,3 +18,7 @@ namespace Tests\Integration;
 it('should return false when given invalid response data', function() {
 	//
 })->group('wp_brain_monkey')->skip('Feature implemented - !!!test not yet written!!!');
+
+it('should return true when given valid response data', function() {
+	//
+})->group('wp_brain_monkey')->skip('Feature implemented - !!!test not yet written!!!');
