@@ -1,0 +1,56 @@
+<?php
+
+namespace Max_Garceau\Plagiarism_Checker\Admin;
+
+use wpdb;
+
+/**
+ * Handles database table creation
+ * 
+ * Also checks if the table exists in the database
+ * and displays an admin error if it does not.
+ */
+class Table_Checker {
+
+	private wpdb $wpdb;
+	private string $table_name;
+
+	public function __construct( wpdb $wpdb ) {
+		$this->wpdb = $wpdb;
+		$this->table_name = $wpdb->prefix . 'plagiarism_checker_access_tokens';
+	}
+
+	/**
+	 * Check if the table exists in the database.
+	 *
+	 * @return bool True if the table exists, false otherwise.
+	 */
+	public function does_table_exist(): bool {
+		$result = $this->wpdb->get_var( $this->wpdb->prepare(
+			"SHOW TABLES LIKE %s",
+			$this->table_name
+		));
+
+		return $result === $this->table_name;
+	}
+
+	/**
+	 * Display an admin notice if the table does not exist.
+	 */
+	public function maybe_show_admin_notice(): void {
+		if ( ! $this->does_table_exist() ) {
+			add_action( 'admin_notices', [ $this, 'display_admin_notice' ] );
+		}
+	}
+
+	/**
+	 * Render the admin notice for missing table.
+	 */
+	public function display_admin_notice(): void {
+		?>
+		<div class="notice notice-error is-dismissible">
+			<p><?php esc_html_e( 'Error: The Plagiarism Checker database table does not exist. Please reinstall or contact support.', 'plagiarism-checker' ); ?></p>
+		</div>
+		<?php
+	}
+}

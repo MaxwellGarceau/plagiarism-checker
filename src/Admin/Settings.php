@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Max_Garceau\Plagiarism_Checker\Admin;
 
-use Max_Garceau\Plagiarism_Checker\Admin\Menu_Constants;
+use Max_Garceau\Plagiarism_Checker\Admin\Constants\Menu;
 use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 
 /**
@@ -20,14 +20,13 @@ use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
  */
 class Settings {
 
-	const SETTINGS_SECTION_ID = 'plagiarism_checker_settings_section';
 	const NONCE_ACTION = 'plagiarism_checker_save_token';
 	const NONCE_NAME = 'plagiarism_checker_nonce';
 
-	private Menu_Constants $constants;
+	private Menu $constants;
 	private Token_Storage $token_storage;
 
-	public function __construct( Menu_Constants $constants, Token_Storage $token_storage ) {
+	public function __construct( Menu $constants, Token_Storage $token_storage ) {
 		$this->constants     = $constants;
 		$this->token_storage = $token_storage;
 	}

@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Max_Garceau\Plagiarism_Checker\Admin;
+namespace Max_Garceau\Plagiarism_Checker\Admin\Constants;
 
 /**
  * Constants for the admin menu
@@ -13,7 +13,7 @@ namespace Max_Garceau\Plagiarism_Checker\Admin;
  * Both Menu and Settings have separate scaffolding functionality.
  * Let's keep them separate by only passing them the constants here.
  */
-class Menu_Constants {
+class Menu {
 	const MENU_SLUG = 'plagiarism-checker';
 	const CAPABILITY = 'read';
 
