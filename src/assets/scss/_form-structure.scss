@@ -16,18 +16,12 @@
   }
 
   &__input,
-  &__submit-button,
-  &__textarea {
+  &__submit-button {
     margin-bottom: 10px;
     width: 100%;
   }
 
   &__toggle {
     display: block; // Ensure the toggle remains visible when the form is closed
-  }
-
-  &__textarea {
-    resize: none;
-    min-height: 150px;
   }
 }

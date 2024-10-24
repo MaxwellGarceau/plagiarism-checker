@@ -6,7 +6,9 @@
 // Components
 @use 'toggle';
 @use 'results-container';
+@use 'results-container-height';
 @use 'result-tag';
+@use 'result';
 
 // Theme compatibility
 @use 'theme-compatibility';

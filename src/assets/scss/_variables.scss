@@ -16,3 +16,6 @@ $plagiarism-checker-input-border-color: var(--wp--preset--color--border, #ddd);
 // Structural variables
 $plagiarism-checker-form-width: 70vw;
 $plagiarism-checker-form-height: 80vh;
+
+// Specific (could be broken out into a function)
+$plagiarism-checker-form-results-container-height: calc($plagiarism-checker-form-height - ($plagiarism-checker-form-height / 3));

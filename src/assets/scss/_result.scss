@@ -1,0 +1,32 @@
+@use 'variables' as v;
+
+.plagiarism-checker {
+	&__result {
+		padding: 10px 10px 15px 10px;
+		border-bottom: 1px solid v.$plagiarism-checker-form-border-color;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.artist-name {
+			font-style: italic;
+			color: v.$plagiarism-checker-color-secondary;
+		}
+	}
+
+	&__result-link {
+		color: v.$plagiarism-checker-color-primary;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	&__result-thumbnail {
+		max-width: 50px;
+		margin-right: 20px;
+		vertical-align: bottom;
+	}
+}

@@ -1,0 +1,22 @@
+@use 'variables' as v;
+
+// Calculation to determine container height
+.plagiarism-checker {
+	&__results,
+	&__results-placeholder {
+		max-height: v.$plagiarism-checker-form-results-container-height;
+	}
+
+	&__results {
+		overflow: scroll;
+		overflow-x: hidden;
+	}
+
+	&__results-placeholder {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		height: 100%; // Limit by max-height
+	}
+}

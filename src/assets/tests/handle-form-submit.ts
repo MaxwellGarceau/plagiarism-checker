@@ -74,7 +74,6 @@ beforeEach(() => {
     <form id="plagiarism-checker__form">
       <input id="plagiarism-checker__input"></input>
 	  <div id="plagiarism-checker__results-container" class="plagiarism-checker__results-container">
-      	<div id="plagiarism-checker__results"></div>
 	  </div>
     </form>
   `;
