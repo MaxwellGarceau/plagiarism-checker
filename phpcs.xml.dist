@@ -1,90 +1,49 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Coding Standards">
-    <description>A custom set of code standard rules to check for WordPress code.</description>
+<ruleset name="WordPress Coding Standards with Short Array Syntax">
+    <description>A custom set of rules based on WordPress Coding Standards, allowing the use of short array syntax.</description>
 
-    <!-- How to scan -->
-    <arg value="sp"/><!-- Show sniff and progress -->
-    <arg name="basepath" value="./"/><!-- Strip the file paths down to the relevant bit -->
-    <arg name="extensions" value="php"/>
-    <arg name="parallel" value="10"/><!-- Enables parallel processing when available for faster results. -->
-    <arg name="cache" value=".phpcs.cache"/>
+    <!-- Use WordPress Coding Standards -->
+    <rule ref="WordPress" />
 
-    <!-- Check for cross-version support for PHP 8.3 and higher. -->
-    <config name="testVersion" value="8.3-"/>
+    <!-- Allow short array syntax ([]) -->
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax.Found" />
 
-    <!-- Minimum WP version to check for usage of deprecated functions, classes and function parameters -->
-    <config name="minimum_supported_wp_version" value="6.6"/>
+    <!-- Custom configurations -->
+    <arg name="extensions" value="php" />
+    <arg name="cache" value=".phpcs.cache" />
+    
+    <!-- Check for cross-version support for PHP 8.3 and higher -->
+    <config name="testVersion" value="8.3-" />
 
-    <!-- Rules:  -->
-
-    <!-- What to scan -->
-     <file>wp-content/mu-plugins/</file>
-     <file>wp-content/plugins/</file>
-     <file>wp-content/themes/</file>
-
-    <!-- Exclude "Third-party Themes" -->
-    <!-- <exclude-pattern>wp-content/themes/twentytwenty/</exclude-pattern> -->
-
-    <!-- Exclude "Third-party Plugins" -->
-    <!-- <exclude-pattern>wp-content/plugins/advanced-custom-fields-pro/</exclude-pattern> -->
+    <!-- Minimum WP version to check for usage of deprecated functions, classes, and function parameters -->
+    <config name="minimum_supported_wp_version" value="6.6" />
 
     <!-- Exclude common files -->
     <exclude-pattern>*/\.idea/*</exclude-pattern>
     <exclude-pattern>*/\.github/*</exclude-pattern>
-    <exclude-pattern>*/\.idea/*</exclude-pattern>
-    <exclude-pattern>*/\.make/*</exclude-pattern>
-    <exclude-pattern>*/\.wordpress-org/*</exclude-pattern>
-    <exclude-pattern>*/assets/*</exclude-pattern>
-    <exclude-pattern>*/languages/*</exclude-pattern>
-    <exclude-pattern>*/lib/*</exclude-pattern>
     <exclude-pattern>*/node_modules/*</exclude-pattern>
-    <exclude-pattern>*/src/js/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
-    <exclude-pattern>*\.js</exclude-pattern>
-    <exclude-pattern>*\.mo</exclude-pattern>
-    <exclude-pattern>*\.po</exclude-pattern>
-    <exclude-pattern>*\.twig</exclude-pattern>
-    <exclude-pattern>*\.css</exclude-pattern>
-    <exclude-pattern>*\.scss</exclude-pattern>
-    <exclude-pattern>wp-content/uploads/</exclude-pattern>
-    <exclude-pattern>wp/*</exclude-pattern>
-    <exclude-pattern>tmp-wordpress-stubs.php</exclude-pattern>
+    <exclude-pattern>wp-content/uploads/*</exclude-pattern>
 
-    <!-- Allow symbol `/` in hook names. -->
-    <rule ref="WordPress.NamingConventions.ValidHookName">
-        <properties>
-            <property name="additionalWordDelimiters" value="/" />
-        </properties>
-    </rule>
+    <!-- Disallow Yoda Conditions expressions -->
+    <rule ref="Generic.ControlStructures.DisallowYodaConditions" />
 
-    <!-- Enforce snake case -->
+    <!-- Enforce snake case for variables -->
     <rule ref="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
 
-
-    <!-- Allow for underscores in theme template file names -->
+    <!-- Allow underscores in theme template file names -->
     <rule ref="WordPress.Files.FileName">
         <properties>
             <property name="is_theme" value="true" />
         </properties>
     </rule>
 
+    <!-- Limit nesting levels -->
     <rule ref="Generic.Metrics.NestingLevel">
         <properties>
             <property name="absoluteNestingLevel" value="4"/>
         </properties>
     </rule>
-
-    <!-- Disallow long array syntax. -->
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax.Found"/>
-
-    <!-- Prohibit Yoda Conditions expressions -->
-    <rule ref="Generic.ControlStructures.DisallowYodaConditions"/>
-
-    <!-- Namespacing required for classes. -->
-    <!-- <rule ref="PSR1.Classes.ClassDeclaration" /> -->
-
-    <!-- Namespacing required for functions. -->
-    <!-- <rule ref="PSR2.Namespaces.NamespaceDeclaration" /> -->
 
     <!-- Forbidden functions -->
     <rule ref="Generic.PHP.ForbiddenFunctions">
@@ -94,7 +53,6 @@
                 <element key="print" value="echo"/>
                 <element key="create_function" value="null"/>
                 <element key="sizeof" value="count"/>
-                <!-- <element key="var_dump" value="null"/> duplicate of WP rule-->
                 <element key="print_r" value="null"/>
                 <element key="eval" value="null"/>
                 <element key="compact" value="null"/>
@@ -116,4 +74,5 @@
     <rule ref="Internal.NoCodeFound">
         <severity>0</severity>
     </rule>
- </ruleset>
+
+</ruleset>

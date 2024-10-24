@@ -17,7 +17,7 @@ class Token_Storage {
 		$this->wpdb = $wpdb;
 
 		// Set DB $constants property if we need more than this in the future
-		$this->table_name = $constants->get_access_token_table_name( $wpdb->prefix );
+		$this->table_name    = $constants->get_access_token_table_name( $wpdb->prefix );
 		$this->api_token_key = $constants->get_api_token_key();
 	}
 
@@ -25,15 +25,17 @@ class Token_Storage {
 	 * Get the API token for the logged-in user.
 	 */
 	public function get_token( int $user_id ): ?string {
-		return $this->wpdb->get_var( $this->wpdb->prepare(
-			"SELECT {$this->api_token_key} FROM {$this->table_name} WHERE user_id = %d",
-			$user_id
-		));
+		return $this->wpdb->get_var(
+			$this->wpdb->prepare(
+				"SELECT {$this->api_token_key} FROM {$this->table_name} WHERE user_id = %d",
+				$user_id
+			)
+		);
 	}
 
 	/**
 	 * Allowed characters:
-	 * 
+	 *
 	 * - A-Z: Uppercase letters.
 	 * - a-z: Lowercase letters.
 	 * - 0-9: Digits.
@@ -72,7 +74,10 @@ class Token_Storage {
 			// Insert new token.
 			$this->wpdb->insert(
 				$this->table_name,
-				[ 'user_id' => $user_id, $this->api_token_key => $sanitized_token ],
+				array(
+					'user_id'            => $user_id,
+					$this->api_token_key => $sanitized_token,
+				),
 				[ '%d', '%s' ]
 			);
 		}

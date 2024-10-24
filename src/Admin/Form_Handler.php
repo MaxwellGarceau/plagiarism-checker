@@ -23,7 +23,7 @@ class Form_Handler {
 			wp_die( esc_html__( 'Security check failed.', 'plagiarism-checker' ) );
 		}
 
-		$user_id  = get_current_user_id();
+		$user_id   = get_current_user_id();
 		$api_token = isset( $_POST['plagiarism_checker_api_token'] ) ? sanitize_text_field( wp_unslash( $_POST['plagiarism_checker_api_token'] ) ) : '';
 
 		if ( $this->token_storage->save_token( $user_id, $api_token ) ) {
