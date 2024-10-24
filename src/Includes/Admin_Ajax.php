@@ -48,7 +48,27 @@ class Admin_Ajax {
 					'api_response'     => $data->get_error_data(),
 				]
 			);
-			wp_send_json_error( $data->get_error_message() );
+
+			/**
+			 * Make custom error response
+			 * 
+			 * I don't like WP_Error's default error response
+			 * 
+			 * TODO: Let's break this out into a response class at some point
+			 * We can extend WP_Error and require the genius response to be present
+			 * Or we can set intelligent fallbacks
+			 */
+			$response = [];
+			$response['message'] = $data->get_error_message( 'genius_api_error' );
+
+			$genius_response_data = $data->get_error_data( 'genius_api_error' );
+			$response['description'] = $genius_response_data['description'] ?? '';
+
+			// Fallback to 400 if for some reason no status code
+			// Let's change this later to a custom 4** code if we need to debug
+			$response['status_code'] = $genius_response_data['status_code'] ?? 400;
+			
+			wp_send_json_error( $response, $response['status_code'] );
 		}
 
 		// Enforce that we have the properties our app requires
@@ -57,7 +77,7 @@ class Admin_Ajax {
 
 			// The request was processed correctly, but there was a discrepancy
 			// in the contract between the client and server.
-			wp_send_json_error( 'API request failed.', 422 );
+			wp_send_json_error( 'API request failed. Not all of the required properties were returned.', 422 );
 		}
 
 		$this->logger->info(

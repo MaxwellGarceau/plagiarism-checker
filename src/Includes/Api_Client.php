@@ -39,24 +39,9 @@ class Api_Client {
 		$this->logger = $logger;
 		$this->api_token = $api_token;
 
-		try {
-			// TODO: Set this via a WP menu where users can add their own token
-			if ( ( $this->api_token === null || $this->api_token === '' ) && isset( $_ENV['GENIUS_API_TOKEN'] ) && $_ENV['GENIUS_API_TOKEN'] !== '' ) {
-				$this->api_token = $_ENV['GENIUS_API_TOKEN'];
-			}
-	
-			if ( $this->api_token === null || $this->api_token === '' ) {
-				throw new \InvalidArgumentException( 'The Genius API token is missing.' );
-			}
-		} catch( \InvalidArgumentException $e ) {
-			$this->logger->error(
-				'The Genius API token is missing.',
-				[
-					'Class_Name::method_name' => __CLASS__ . '::' . __FUNCTION__,
-				]
-			);
-
-			// TODO: This feels like 2015 code. Is there a better way to do this?
+		// TODO: Do we still need this? We already have an admin notice if no token is set.
+		// Maybe we should remove this?
+		if ( $this->api_token === '' ) {
 			add_action( 'wp_footer', fn () => $_POST['api_token_not_set'] = 'true', 1 );
 		}
 	}
@@ -68,6 +53,20 @@ class Api_Client {
 	 * @return array|WP_Error The response data or WP_Error on failure.
 	 */
 	public function search_songs( string $text ): array|WP_Error {
+
+		/**
+		 * Early return if no api_token is set and prompt user to enter token
+		 * Prevents unnecessary API requests if the token is not set
+		 */
+		if ( $this->api_token === '' ) {
+			$menu_url = add_query_arg( array( 
+				'page' => 'plagiarism-checker', // The page slug
+				'action' => 'edit', 
+			), admin_url( 'post.php' ) );
+			return new WP_Error(
+				'genius_api_error',
+				'The Genius API token is not set. Please set the token in the <a href="' . $menu_url . '">admin menu</a>.' );
+		}
 
 		/**
 		 * NOTE: We aren't validating or sanitizing the data here because
@@ -113,7 +112,11 @@ class Api_Client {
 					'response_data' => $data,
 				]
 			);
-			return new WP_Error( 'genius_api_error', 'The Genius API request failed or returned invalid data.', $response );
+
+			$wp_error_data = [];
+			$wp_error_data['description'] = $data['error_description'] ?? '';
+			$wp_error_data['status_code'] = wp_remote_retrieve_response_code( $response );
+			return new WP_Error( 'genius_api_error', 'The Genius API request failed - ' . $data['error'], $wp_error_data );
 		}
 
 		return $data['response']['hits'];

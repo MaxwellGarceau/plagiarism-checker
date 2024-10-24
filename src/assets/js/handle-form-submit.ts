@@ -50,18 +50,25 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 			body: new URLSearchParams(data as any),
 		});
 
+		// Check if the response even finished
 		if (!response.ok) {
-			throw new Error(`HTTP error! Status: ${response.status}`);
+			const data = await response.json(res => res.data);
+			console.log('data:', data);
+			// const errors = JSON.parse(data.data);
+			throw new Error(`HTTP error! Status: ${response.status} - ${data.data.message}`);
 		}
 
+		// Check if the response was successful or not
+		
 		const result: Results[] = await response.json().then((res) => res.data);
+		
+		console.log('response:', result);
 
 		// Render the result to the screen
 		resultTextarea.innerHTML = renderOutput(result);
-	} catch (error) {
-		console.error('Error:', error);
-		resultTextarea.innerHTML =
-			'An error occurred while checking plagiarism.';
+	} catch (errorMessage) {
+		console.error('Error:', errorMessage);
+		resultTextarea.innerHTML = errorMessage;
 	}
 }
 
