@@ -7,7 +7,6 @@ use function Brain\Monkey\Functions\expect as monkeyExpect;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Monolog\Logger;
 use function Brain\Monkey\Functions\when;
-use function Patchwork\redefine;
 use Mockery;
 
 beforeEach(
