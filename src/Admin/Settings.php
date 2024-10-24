@@ -54,7 +54,7 @@ class Settings {
 	 * Load the HTML from an html file.
 	 */
 	public function plagiarism_checker_settings_section_callback(): void {
-		require plugin_dir_path( __DIR__ ) . 'Admin/Views/api_instructions.html';
+		require plugin_dir_path( __DIR__ ) . 'Admin/Views/api_instructions.php';
 	}
 
 	private function render_api_token_field(): void {

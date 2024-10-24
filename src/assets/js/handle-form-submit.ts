@@ -60,7 +60,7 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 
 		// Check if the response was successful or not
 		
-		const result: Results[] = await response.json().then((res) => res.data);
+		const result: Results[] = await response.json().then(res => res.data);
 		
 		console.log('response:', result);
 

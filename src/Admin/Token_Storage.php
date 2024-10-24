@@ -32,15 +32,27 @@ class Token_Storage {
 	}
 
 	/**
+	 * Allowed characters:
+	 * 
+	 * - A-Z: Uppercase letters.
+	 * - a-z: Lowercase letters.
+	 * - 0-9: Digits.
+	 * - -: Hyphen.
+	 * - _: Underscore.
+	 * - .: Dot.
+	 * - @: At symbol.
+	 */
+	private function get_validation_regex(): string {
+		return '/^[A-Za-z0-9\-_\.@]+$/';
+	}
+
+	/**
 	 * Save the API token for the logged-in user.
 	 */
 	public function save_token( int $user_id, string $token ): bool {
 		$sanitized_token = sanitize_text_field( $token );
 
-		/**
-		 * TODO: Find better access token validation
-		 */
-		if ( ! preg_match( '/^[A-Za-z0-9]+$/', $sanitized_token ) ) {
+		if ( ! preg_match( $this->get_validation_regex(), $sanitized_token ) ) {
 			return false; // Invalid token format.
 		}
 
