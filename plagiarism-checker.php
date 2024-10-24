@@ -49,7 +49,7 @@ add_action(
 		// Register activation hook for creating the database table.
 		// TODO: Initialize this from a different class
 		register_activation_hook( __FILE__, function() use ( $container ) {
-			$container->get( \Max_Garceau\Plagiarism_Checker\Admin\Token_Storage::class )->create_table();
+			$container->get( \Max_Garceau\Plagiarism_Checker\Admin\Table_Manager::class )->create_table();
 		});
 
 		// Use the container to initialize the main plugin class
