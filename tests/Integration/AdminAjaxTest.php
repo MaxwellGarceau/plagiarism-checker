@@ -217,16 +217,19 @@ test(
 
 		// Simulate a valid response with all required properties
 		$response_data = [
-			[
-				'result' => [
-					'url'            => 'https://example.com',
-					'title'          => 'Song Title',
-					'primary_artist' => [
-						'name' => 'Artist Name',
-						'url'  => 'https://artist.com',
+			'data' => [
+				[
+					'result' => [
+						'url'            => 'https://example.com',
+						'title'          => 'Song Title',
+						'primary_artist' => [
+							'name' => 'Artist Name',
+							'url'  => 'https://artist.com',
+						],
+						'header_image_thumbnail_url' => 'https://example.com/image.jpg',
 					],
 				],
-			],
+			]
 		];
 
 		// Expect the API client to return the response
@@ -235,11 +238,18 @@ test(
 		->with( 'test text' )
 		->andReturn( $response_data );
 
+		// Mock the validator to confirm it checks for required properties
+		$this->validator
+		->shouldReceive( 'response_has_required_properties' )
+		->once() // Expect the method to be called once
+		->with( $response_data['data'] )
+		->andReturn( true ); // Assume the response has the required properties
+
 		// Expect the logger to log the success
 		$this->logger
 		->shouldReceive( 'info' )
 		->once()
-		->with( 'API request successful. Returning the data to the frontend.', $response_data );
+		->with( 'API request successful. Returning the data to the frontend.', $response_data['data'] );
 
 		// Expect the wp_send_json_success to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );

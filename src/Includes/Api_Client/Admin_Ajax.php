@@ -60,7 +60,7 @@ class Admin_Ajax {
 			wp_send_json_error( $this->resource->error( 'The API response is missing required properties.', '', 422 ) );
 		}
 
-		$this->logger->info( 'API request successful. Returning the data to the frontend.', $data );
+		$this->logger->info( 'API request successful. Returning the data to the frontend.', $data['data'] );
 
 		// Send the success response back to the frontend.
 		wp_send_json_success( $data['data'] );
