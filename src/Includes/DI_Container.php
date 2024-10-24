@@ -81,25 +81,25 @@ class DI_Container {
 		$containerBuilder->addDefinitions(
 			[
 				Api_Client::class => function ( ContainerInterface $c ) {
-					try {
-						$logger = $c->get( Logger::class );
-						$token_storage = $c->get( Token_Storage::class );
-						$user_id = get_current_user_id();
-	
-						$api_token = $token_storage->get_token( $user_id );
-	
-						if ( empty( $api_token ) ) {
-							throw new \Exception( __( 'API token is missing. Please enter your API token in the settings.', 'plagiarism-checker' ) );
-						}
-					} catch ( \Exception $e ) {
-						$c->get( Logger::class )->info( $e->getMessage(), [
-							'user_id' => $user_id,
-						] );
+					$logger = $c->get( Logger::class );
+					$token_storage = $c->get( Token_Storage::class );
+					$user_id = get_current_user_id();
 
-						// Fail gracefully, let a user get a 401 error if they try to use the API
+					// Try to get the API token
+					$api_token = $token_storage->get_token( $user_id );
+
+					// If the API token is missing, handle it gracefully
+					if ( empty( $api_token ) ) {
+						$logger->warning(
+							'API token is missing. Please enter your API token in the settings.',
+							[ 'user_id' => $user_id ]
+						);
+						
+						// Return an empty token, let the user get a 401 if they use the client
 						$api_token = '';
 					}
 
+					// Return the Api_Client instance with the logger and (possibly empty) API token
 					return new Api_Client( $logger, $api_token );
 				},
 			]
