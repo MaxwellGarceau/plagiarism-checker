@@ -25,8 +25,12 @@ type Results = {
 export default async function handleFormSubmit(event: Event): Promise<void> {
 	event.preventDefault();
 
-	const textInput = document.querySelector('#plagiarism-checker__input') as HTMLInputElement;
-	const resultTextarea = document.querySelector('#plagiarism-checker__results') as HTMLDivElement;
+	const textInput = document.querySelector(
+		'#plagiarism-checker__input'
+	) as HTMLInputElement;
+	const resultTextarea = document.querySelector(
+		'#plagiarism-checker__results'
+	) as HTMLDivElement;
 
 	const data: PlagiarismCheckData = {
 		text: textInput.value,
@@ -38,13 +42,18 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 	try {
 		const response: Response = await fetch(data._ajax_url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+			headers: {
+				'Content-Type':
+					'application/x-www-form-urlencoded; charset=UTF-8',
+			},
 			body: new URLSearchParams(data as any),
 		});
 
 		const result = await response.json();
 		if (!response.ok) {
-			throw new Error(`Status: ${result.status_code} - ${result.message}: ${result.description}`);
+			throw new Error(
+				`Status: ${result.status_code} - ${result.message}: ${result.description}`
+			);
 		}
 
 		resultTextarea.innerHTML = renderOutput(result.data);
@@ -53,13 +62,12 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 	}
 }
 
-
 function renderOutput(result: Results[]): string {
-	let output = '<ul>';
+	let output = '<ul class="plagiarism-checker__results">';
 	output += result
 		.map((e: Results) => {
 			const songTitle = `<a href="${e.result.url}" target="_blank">${e.result.title}</a>`;
-			const artistName = `<a href="${e.result.primary_artist.url}" target="_blank">${e.result.primary_artist.name}</a>`;
+			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" target="_blank">${e.result.primary_artist.name}</a></span>`;
 			return `<li>${songTitle} - ${artistName}</li>`;
 		})
 		.join('\n');

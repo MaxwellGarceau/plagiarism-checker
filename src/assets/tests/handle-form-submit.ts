@@ -92,7 +92,9 @@ describe('handleFormSubmit', () => {
 		mockFetchSuccess();
 
 		// Create a mock submit event
-		const form = document.querySelector('#plagiarism-checker__form') as HTMLFormElement;
+		const form = document.querySelector(
+			'#plagiarism-checker__form'
+		) as HTMLFormElement;
 		const event = new Event('submit', { bubbles: true, cancelable: true });
 
 		// Trigger the submit event
@@ -110,7 +112,9 @@ describe('handleFormSubmit', () => {
 		mockFetchFailure();
 
 		// Create a mock submit event
-		const form = document.querySelector('#plagiarism-checker__form') as HTMLFormElement;
+		const form = document.querySelector(
+			'#plagiarism-checker__form'
+		) as HTMLFormElement;
 		const event = new Event('submit', { bubbles: true, cancelable: true });
 
 		// Trigger the submit event
