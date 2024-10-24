@@ -41,7 +41,10 @@ beforeEach(
 		// Mock WordPress helper functions to throw exceptions, simulating die
 		// when wp_send_json_* are called
 		when( 'wp_send_json_error' )->alias(
-			function ( $message, $status_code = null ) {
+			function ( array|string $message, $status_code = null ) {
+				if ( is_array( $message ) ) {
+					$message = json_encode( $message );
+				}
 				throw new \RuntimeException( "wp_send_json_error called: {$message}", $status_code ?? 500 );
 			}
 		);
@@ -76,15 +79,32 @@ test(
 		->shouldReceive( 'verify_nonce' )
 		->andReturn( Nonce_Status::INVALID );
 
+		// Mock the validator to confirm it checks for required properties
+		$this->validator
+		->shouldNotReceive( 'response_has_required_properties' );
+
 		// Expect the logger to log the error
 		$this->logger
 		->shouldReceive( 'error' )
 		->once()
 		->with( 'Invalid or expired nonce.' );
 
+		// Mock the Resource class's error method to ensure it is called with correct arguments
+		$resource_return = [
+			'success' => false,
+			'message' => 'Invalid or expired nonce.',
+			'description' => '',
+			'status_code' => 403,
+		];
+		$this->resource
+		->shouldReceive( 'error' )
+		->once() // Expect it to be called once
+		->with( 'Invalid or expired nonce.', '', 403 ) // Expect these arguments
+		->andReturn($resource_return); // Return the array as expected
+
 		// Expect the wp_send_json_error to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
-		$this->expectExceptionMessage( 'wp_send_json_error called: Invalid or expired nonce.' );
+		$this->expectExceptionMessage( 'wp_send_json_error called: ' . json_encode($resource_return) );
 
 		// Call the method
 		$this->admin_ajax->handle_plagiarism_checker_request();
@@ -103,10 +123,14 @@ test(
 		->shouldReceive( 'verify_nonce' )
 		->andReturn( Nonce_Status::VALID );
 
+		// Mock the validator to confirm it checks for required properties
+		$this->validator
+		->shouldNotReceive( 'response_has_required_properties' );
+
 		// Set up global $_POST without 'text'
 		$_POST = [];
 
-		// Expect the wp_send_json_success to be called, which will throw an exception
+		// Expect the wp_send_json_error to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
 		$this->expectExceptionMessage( 'wp_send_json_error called' );
 
@@ -145,6 +169,10 @@ test(
 		->with( 'test text' )
 		->andReturn( $wp_error );
 
+		// Mock the validator to confirm it checks for required properties
+		$this->validator
+		->shouldNotReceive( 'response_has_required_properties' );
+
 		// Expect the logger to log the error
 		$this->logger
 		->shouldReceive( 'error' )
@@ -171,7 +199,7 @@ test(
 
 
 test(
-	'validates API response for missing required properties',
+	'throws validation error if response is missing required properties',
 	function () {
 		// Set up nonce service to return valid status
 		$this->nonce_service
@@ -182,18 +210,20 @@ test(
 		$_POST = [ 'text' => 'test text' ];
 
 		// Simulate a response missing required properties
-		$response_data = [ [ 'result' => [ 'title' => 'Song Title' ] ] ];
-
-		$this->api_client
-		->shouldReceive( 'search_songs' )
-		->with( 'test text' )
-		->andReturn( $response_data ); // Set the return value as the response data
+		$response_data = [ 'data' => [ [ 'result' => [ 'title' => 'Song Title' ] ] ]];
 
 		// Expect the API client to return the response
 		$this->api_client
 		->shouldReceive( 'search_songs' )
 		->with( 'test text' )
 		->andReturn( $response_data );
+
+		// Mock the validator to confirm it checks for required properties
+		$this->validator
+		->shouldReceive( 'response_has_required_properties' )
+		->once() // Expect the method to be called once
+		->with( $response_data['data'] )
+		->andReturn( false ); // Assume the response has the required properties
 
 		// Expect the logger to log the error
 		$this->logger
