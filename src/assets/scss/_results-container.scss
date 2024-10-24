@@ -1,0 +1,40 @@
+@use 'variables' as v;
+
+.plagiarism-checker {
+	&__results-container {
+		list-style-type: none;
+		padding: 0;
+		margin: 20px 0 0;
+		overflow: hidden;
+
+		li {
+			padding: 10px;
+			border-bottom: 1px solid v.$form-border-color;
+
+			&:last-child {
+			border-bottom: none;
+			}
+
+			a {
+			color: var(--wp--preset--color--primary, #007cba);
+			text-decoration: none;
+			font-weight: bold;
+
+			&:hover {
+				text-decoration: underline;
+			}
+			}
+
+			.artist-name {
+			font-style: italic;
+			color: var(--wp--preset--color--secondary, #666);
+			}
+		}
+	}
+
+	&__results {
+		max-height: calc(v.$form-height - (v.$form-height / 3));
+		overflow: scroll;
+		overflow-x: hidden;
+	}
+}

@@ -1,0 +1,18 @@
+@use 'variables' as v;
+
+.plagiarism-checker {
+	// Ensure the form can be opened and closed
+	&--closed {
+		max-height: 30px;
+		overflow: hidden;
+		right: calc( 150px - v.$form-width);
+		box-shadow: none;
+		background-color: rgba(v.$form-background-color, 0.5);
+	}
+
+	&--open {
+		max-height: v.$form-height; // Adjust this value based on the form content size
+		right: 0;
+		background-color: v.$form-background-color;
+	}
+}

@@ -29,7 +29,7 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		'#plagiarism-checker__input'
 	) as HTMLInputElement;
 	const resultTextarea = document.querySelector(
-		'#plagiarism-checker__results'
+		'#plagiarism-checker__results-container'
 	) as HTMLDivElement;
 
 	const data: PlagiarismCheckData = {

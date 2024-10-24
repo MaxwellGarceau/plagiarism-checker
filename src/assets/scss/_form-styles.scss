@@ -1,52 +1,42 @@
-/**
- * Visual Styles (Skin Layer)
- *
- * It's easier to separate the visual CSS from
- * the structural CSS
- *
- * This way we have a clear picture of where to make changes
- * for the sidebar functionality versus the visual display
- */
+@use 'variables' as v;
+
 .plagiarism-checker {
-    padding: 20px;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px 0 0 0;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, right 0.3s ease-in-out;
+  	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	color: v.$form-text-color;
+	border: 1px solid v.$form-border-color;
+	border-radius: 8px 0 0 0;
+	transition: max-height 0.3s ease-in-out, background-color 0.3s ease-in-out, right 0.3s ease-in-out;
 
-    &--closed {
-        // Optionally, define a different visual state when closed
-        box-shadow: none;
+  &__submit-button {
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: var(--wp--preset--color--primary-hover, #005a99); // Fallback for hover state
     }
-  
-    &__submit-button {
-      background-color: var(--wp--preset--color--primary);
-      color: #000;
-      cursor: pointer;
-    }
-
-    &__toggle {
-        background-color: var(--wp--preset--color--secondary);
-        color: #000;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        padding: 10px;
-        border-radius: 4px;
-        margin-bottom: 10px;
-        display: block; // Ensure it remains visible
-      }
-
-	  &__results {
-		background-color: #f9f9f9;
-		margin-top: 10px;
-		padding: 15px;
-		border-radius: 8px;
-	  }
-	
-	  .error {
-		color: red;
-		font-size: 14px;
-	  }
   }
-  
+
+  &__toggle {
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  &__input {
+    padding: 10px;
+    border: 1px solid v.$input-border-color;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  &__textarea {
+	border: 1px solid v.$input-border-color;
+    border-radius: 4px;
+  }
+
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 20px;
+  }
+}
