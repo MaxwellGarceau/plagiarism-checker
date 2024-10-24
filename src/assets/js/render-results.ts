@@ -12,10 +12,10 @@ type Results = {
 
 /**
  * Class to render the results of the plagiarism check.
- * 
+ *
  * Refactored into a class because I really don't want this functionality
  * to be exposed except via the one displayResults method.
- * 
+ *
  * @class PlagiarismResultsRenderer
  */
 export class PlagiarismResultsRenderer {
@@ -42,12 +42,21 @@ export class PlagiarismResultsRenderer {
 	private generateResultsHtml(results: Results[]): string {
 		let output = '<ul class="plagiarism-checker__results">';
 		output += results
-			.map(({ result: { url, title, header_image_thumbnail_url, primary_artist } }: Results) => {
-				const songTitle = `<a href="${url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${title}</a>`;
-				const artistName = `<span class="artist-name"><a href="${primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${primary_artist.name}</a></span>`;
-				const thumbnail = `<img src="${header_image_thumbnail_url}" alt="${title} - ${primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
-				return `<li class="plagiarism-checker__result">${thumbnail}${songTitle} - ${artistName}</li>`;
-			})
+			.map(
+				({
+					result: {
+						url,
+						title,
+						header_image_thumbnail_url,
+						primary_artist,
+					},
+				}: Results) => {
+					const songTitle = `<a href="${url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${title}</a>`;
+					const artistName = `<span class="artist-name"><a href="${primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${primary_artist.name}</a></span>`;
+					const thumbnail = `<img src="${header_image_thumbnail_url}" alt="${title} - ${primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
+					return `<li class="plagiarism-checker__result">${thumbnail}${songTitle} - ${artistName}</li>`;
+				}
+			)
 			.join('\n');
 		output += '</ul>';
 		return output;

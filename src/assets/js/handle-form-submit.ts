@@ -11,6 +11,7 @@ type Response = {
 	ok: boolean;
 	json: Function;
 	status: number;
+	statusText: string;
 };
 
 export default async function handleFormSubmit(event: Event): Promise<void> {
@@ -39,17 +40,27 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		const response: Response = await fetch(data._ajax_url, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				'Content-Type':
+					'application/x-www-form-urlencoded; charset=UTF-8',
 			},
 			body: new URLSearchParams(data as any),
 		});
 
 		// Parse the JSON response from the backend
 		const parsedJson = await response.json();
-		const results = parsedJson.data;
-		
+
+		const results = parsedJson?.data;
+
 		// Handle non-OK responses by throwing an error
 		if (!response.ok) {
+			// Error with fetch request - we didn't even receive an error respoce
+			if (results === undefined) {
+				throw new Error(
+					`Error: Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
+				);
+			}
+
+			// We've received an error response - let's display it
 			throw new Error(
 				`Status: ${results.status_code} - ${results.message}: ${results.description}`
 			);
@@ -57,8 +68,8 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 
 		// Render the result using the imported renderResults function
 		renderer.displayResults(results);
-
 	} catch (errorMessage) {
+		console.log('ERROR MESSAGE', errorMessage);
 		// Display an error message if the request fails
 		resultsContainer.innerHTML = renderer.displayErrors(errorMessage);
 	}
