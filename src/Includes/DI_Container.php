@@ -4,6 +4,7 @@ declare( strict_types = 1 );
 
 namespace Max_Garceau\Plagiarism_Checker\Includes;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use Max_Garceau\Plagiarism_Checker\Utilities\Logger_Init;
 use Monolog\Logger;
@@ -15,6 +16,16 @@ use wpdb;
  * TODO: Not sure this file should live here, but it's a start
  */
 class DI_Container {
+
+	private static ?Container $container = null;
+
+	// Initialize and return the container
+	public static function get_container(): Container {
+		if ( self::$container === null ) {
+			self::$container = self::build_container();
+		}
+		return self::$container;
+	}
 
 	public static function build_container(): \DI\Container {
 		$containerBuilder = new ContainerBuilder();

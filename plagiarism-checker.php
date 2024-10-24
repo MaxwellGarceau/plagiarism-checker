@@ -46,13 +46,12 @@ add_action(
 		// Initialize the plugin.
 		$container = DI_Container::build_container();
 
-		// Register activation hook for creating the database table.
-		// TODO: Initialize this from a different class
-		register_activation_hook( __FILE__, function() use ( $container ) {
-			$container->get( \Max_Garceau\Plagiarism_Checker\Admin\Table_Manager::class )->create_table();
-		});
-
 		// Use the container to initialize the main plugin class
 		$container->get( Main::class )->init();
 	}
 );
+
+// Register activation hook for creating the database table.
+register_activation_hook( __FILE__, function() {
+	DI_Container::get_container()->get( \Max_Garceau\Plagiarism_Checker\Admin\Table_Manager::class )->create_table();
+});

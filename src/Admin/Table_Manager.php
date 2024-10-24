@@ -27,6 +27,7 @@ class Table_Manager {
 	 * Create the custom table for storing tokens.
 	 */
 	public function create_table(): void {
+		error_log( 'Creating table' );
 		$charset_collate = $this->wpdb->get_charset_collate();
 		$sql = "CREATE TABLE {$this->table_name} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
