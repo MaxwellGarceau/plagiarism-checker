@@ -2,3 +2,11 @@
 
 @use 'form-structure';
 @use 'form-styles';
+
+// Components
+@use 'toggle';
+@use 'results-container';
+@use 'result-tag';
+
+// Theme compatibility
+@use 'theme-compatibility';

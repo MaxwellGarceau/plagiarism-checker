@@ -16,7 +16,7 @@ class Api_Client {
 	 * we're going to keep this simple for now.
 	 *
 	 * Let's break this out into a method that can accept endpoints
-	 * if we need to search more endpoints
+	 * if we need to search more endpoints.
 	 */
 	private const API_URL = 'https://api.genius.com/search';
 
@@ -24,9 +24,15 @@ class Api_Client {
 
 	private const WP_ERROR_CODE = 'genius_api_error';
 
+	/**
+	 * @param Logger   $logger A logger instance to capture any issues.
+	 * @param string   $api_token The API token required to access the Genius API.
+	 * @param Resource $resource A resource instance to handle the formatting of responses.
+	 */
 	public function __construct(
 		private Logger $logger,
-		private string $api_token = ''
+		private string $api_token = '',
+		private Resource $resource // Add the new Resource dependency
 	) {}
 
 	/**
@@ -42,36 +48,36 @@ class Api_Client {
 		 * Prevents unnecessary API requests if the token is not set
 		 */
 		if ( $this->api_token === '' ) {
-			$menu_url = add_query_arg( [ 
-				'page' => 'plagiarism-checker', // The page slug
-				'action' => 'edit', 
-			], admin_url( 'post.php' ) );
+			$menu_url = add_query_arg(
+				[
+					'page'   => 'plagiarism-checker',
+					'action' => 'edit',
+				],
+				admin_url( 'post.php' )
+			);
+
 			return new WP_Error(
 				self::WP_ERROR_CODE,
-				'The Genius API token is not set. Please set the token in the <a href="' . $menu_url . '">admin menu</a>.' );
+				'The Genius API token is not set. Please set the token in the <a href="' . $menu_url . '">admin menu</a>.'
+			);
 		}
 
 		/**
 		 * NOTE: We aren't validating or sanitizing the data here because
 		 * we're already doing that in Admin_Ajax. We should consider adding
-		 * sanitization if we change the design in the future
+		 * sanitization if we change the design in the future.
 		 */
 
 		// Prepare the request URL
-		$url = add_query_arg(
-			[
-				'q' => $text,
-			],
-			self::API_URL
-		);
+		$url = add_query_arg( [ 'q' => $text ], self::API_URL );
 
 		// Set up request headers
-		$args = [
-			'headers' => [
+		$args = array(
+			'headers' => array(
 				'Authorization' => 'Bearer ' . $this->api_token,
-			],
+			),
 			'timeout' => 15,
-		];
+		);
 
 		// Make the request
 		$response = wp_remote_get( $url, $args );
@@ -89,22 +95,26 @@ class Api_Client {
 		if ( wp_remote_retrieve_response_code( $response ) !== self::STATUS_OK || ! isset( $data['response']['hits'] ) ) {
 			$this->logger->error(
 				'The Genius API request returned a non 200 response.',
-				[
+				array(
 					'search_text'   => $text,
 					'status_code'   => wp_remote_retrieve_response_code( $response ),
 					'response_data' => $data,
-				]
+				)
 			);
 
-			$message = $data['error'] ?? 'unknown error';
-			$wp_error_data = [
-				'message' => $message, // Duplicate message, but I feel better having it here too
-				'description' => $data['error_description'] ?? '',
-				'status_code' => wp_remote_retrieve_response_code( $response ),
-			];
-			return new WP_Error( self::WP_ERROR_CODE, 'The Genius API request failed - ' . $message, $wp_error_data );
+			// Format the error response using the Resource class
+			return new WP_Error(
+				self::WP_ERROR_CODE,
+				'The Genius API request failed - ' . ( $data['error'] ?? 'unknown error' ),
+				$this->resource->error(
+					$data['error'] ?? 'unknown error',
+					$data['error_description'] ?? '',
+					wp_remote_retrieve_response_code( $response )
+				)
+			);
 		}
 
-		return $data['response']['hits'];
+		// Return the success response using the Resource class
+		return $this->resource->success( $data['response']['hits'] );
 	}
 }

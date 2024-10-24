@@ -1,0 +1,84 @@
+@use 'variables' as v;
+
+.plagiarism-checker {
+	&__results-container,
+	&__results {
+		list-style-type: none;
+	}
+
+	&__results-container {
+		padding: 0;
+		margin: 20px 0 0;
+		overflow: hidden;
+		height: 100%;
+
+		&--error {
+			color: red;
+			margin-top: 20px;
+		  }
+	}
+
+	&__results {
+		padding-left: 15px;
+	}
+
+	&__result {
+		padding: 10px 10px 15px 10px;
+		border-bottom: 1px solid v.$plagiarism-checker-form-border-color;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.artist-name {
+			font-style: italic;
+			color: v.$plagiarism-checker-color-secondary;
+		}
+	}
+
+	&__result-link {
+		color: v.$plagiarism-checker-color-primary;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	&__result-thumbnail {
+		max-width: 50px;
+		margin-right: 20px;
+		vertical-align: bottom;
+	}
+
+	&__textarea {
+		height: 100%;
+	}
+}
+
+// Calculation to determine container height
+.plagiarism-checker {
+	&__results {
+		max-height: calc(v.$plagiarism-checker-form-height - (v.$plagiarism-checker-form-height / 3));
+		overflow: scroll;
+		overflow-x: hidden;
+	}
+}
+
+.plagiarism-checker {
+	&__results-container {
+		&:not(.plagiarism-checker__results-container--has-results) {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-style: italic;
+			color: v.$plagiarism-checker-color-secondary;
+			font-weight: 300;
+			overflow: hidden;
+	
+			& > .plagiarism-checker__results {
+				overflow: hidden;
+			}
+		}
+	}
+}

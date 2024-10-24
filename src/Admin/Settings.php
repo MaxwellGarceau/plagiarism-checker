@@ -9,19 +9,19 @@ use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 
 /**
  * Settings page for the Plagiarism Checker plugin.
- * 
+ *
  * I would love to use the options API because it's quick, convenient,
  * and secure, but I anticipate the admin page growing and supporting
  * a plethora of API clients. I would prefer to start the admin page
  * without the constraints of the settings API admin system creation.
- * 
+ *
  * I also like separating the plugin data from the site as it makes debugging,
  * migration, and overall data management easier.
  */
 class Settings {
 
 	const NONCE_ACTION = 'plagiarism_checker_save_token';
-	const NONCE_NAME = 'plagiarism_checker_nonce';
+	const NONCE_NAME   = 'plagiarism_checker_nonce';
 
 	private Menu $constants;
 	private Token_Storage $token_storage;
@@ -31,11 +31,15 @@ class Settings {
 		$this->token_storage = $token_storage;
 	}
 
+	/**
+	 * TODO: Refactor nonce generation so that we use the Nonce_Service
+	 * to generate nonces here as well
+	 */
 	public function plagiarism_checker_settings_page(): void {
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Plagiarism Checker Settings', $this->constants->get_menu_slug() ); ?></h1>
-			<?php $this->plagiarism_checker_settings_section_callback() ?>
+			<?php $this->plagiarism_checker_settings_section_callback(); ?>
 			<form method="post" action="admin-post.php">
 				<input type="hidden" name="action" value="save_plagiarism_checker_token">
 				<?php
@@ -50,7 +54,7 @@ class Settings {
 
 	/**
 	 * Callback for the settings section.
-	 * 
+	 *
 	 * Load the HTML from an html file.
 	 */
 	public function plagiarism_checker_settings_section_callback(): void {

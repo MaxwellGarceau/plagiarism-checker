@@ -6,20 +6,21 @@ namespace Max_Garceau\Plagiarism_Checker\Includes;
 
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Status;
-use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
 use Monolog\Logger;
 
 class Admin_Ajax {
 
 	/**
-	 * @param Nonce_Service $nonce_service
-	 * @param Api_Client    $api_client
-	 * @param Logger        $logger
+	 * @param Nonce_Service $nonce_service The service used to validate nonces.
+	 * @param Api_Client    $api_client The client responsible for making requests to the Genius API.
+	 * @param Logger        $logger A logger to capture any issues.
+	 * @param Resource      $resource A resource instance to handle the formatting of responses.
 	 */
 	public function __construct(
 		private readonly Nonce_Service $nonce_service,
 		private readonly Api_Client $api_client,
-		private readonly Logger $logger
+		private readonly Logger $logger,
+		private readonly Resource $resource
 	) {}
 
 	public function handle_plagiarism_checker_request(): void {
@@ -27,10 +28,7 @@ class Admin_Ajax {
 		// Verify nonce
 		if ( $this->nonce_service->verify_nonce() === Nonce_Status::INVALID ) {
 			$this->logger->error( 'Invalid or expired nonce.' );
-			wp_send_json_error( [
-				'message' => 'Invalid or expired nonce.',
-				'description' => '',
-			], 403 );
+			wp_send_json_error( $this->resource->error( 'Invalid or expired nonce.', '', 403 ) );
 		}
 
 		// Validate and sanitize
@@ -38,62 +36,31 @@ class Admin_Ajax {
 
 		// TODO: Do I need a looser check here?
 		if ( $text === '' ) {
-			wp_send_json_error( [
-				'message' => 'No text to search was provided.',
-				'description' => '',
-			], 422 );
+			wp_send_json_error( $this->resource->error( 'No text to search was provided.', '', 422 ) );
 		}
 
 		// Make API request to Genius and get response
 		$data = $this->api_client->search_songs( $text );
+
+		// Handle the error response from the API client
 		if ( is_wp_error( $data ) ) {
-			$this->logger->error(
-				'API request failed',
-				[
-					'wp_error_message' => $data->get_error_message(),
-					'api_response'     => $data->get_error_data(),
-				]
-			);
-
-			/**
-			 * Make custom error response
-			 * 
-			 * I don't like WP_Error's default error response
-			 * 
-			 * TODO: Let's break this out into a response class at some point
-			 * We can extend WP_Error and require the genius response to be present
-			 * Or we can set intelligent fallbacks
-			 */
-			$response = [];
-			$response['message'] = $data->get_error_message( 'genius_api_error' );
-
-			$genius_response_data = $data->get_error_data( 'genius_api_error' );
-			$response['description'] = $genius_response_data['description'] ?? '';
-
-			// Fallback to 400 if for some reason no status code
-			// Let's change this later to a custom 4** code if we need to debug			
-			wp_send_json_error( $response, $genius_response_data['status_code'] ?? 400 );
+			$error_data = $data->get_error_data();
+			wp_send_json_error( $error_data, $error_data['status_code'] ?? 400 );
 		}
 
 		// Enforce that we have the properties our app requires
-		if ( ! $this->response_has_required_properties( $data ) ) {
+		if ( ! $this->response_has_required_properties( $data['data'] ) ) {
 			$this->logger->error( 'API request failed. The response is missing required properties.' );
 
 			// The request was processed correctly, but there was a discrepancy
 			// in the contract between the client and server.
-			wp_send_json_error( [
-				'message' => 'The API response is missing required properties.',
-				'description' => '',
-			], 422 );
+			wp_send_json_error( $this->resource->error( 'The API response is missing required properties.', '', 422 ) );
 		}
 
-		$this->logger->info(
-			'API request successful. Returning the data to the frontend.',
-			$data
-		);
+		$this->logger->info( 'API request successful. Returning the data to the frontend.', $data );
 
-		// Process the response and send it back to the frontend
-		wp_send_json_success( $data );
+		// Send the success response back to the frontend
+		wp_send_json_success( $data['data'] );
 	}
 
 	/**
@@ -110,14 +77,13 @@ class Admin_Ajax {
 	 * @return bool True if all result objects have the required properties, false otherwise.
 	 */
 	private function response_has_required_properties( array $data ): bool {
+		error_log( print_r( $data, true ) );
 		// Define the required properties structure for each result object
 		$required_properties = [
 			'url',
 			'title',
-			'primary_artist' => [
-				'name',
-				'url',
-			],
+			'primary_artist' => array( 'name', 'url' ),
+			'header_image_thumbnail_url',
 		];
 
 		// Loop over each result object and validate its properties

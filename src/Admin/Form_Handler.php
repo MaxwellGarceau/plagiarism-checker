@@ -14,12 +14,16 @@ class Form_Handler {
 		$this->token_storage = $token_storage;
 	}
 
+	/**
+	 * TODO: Refactor nonce handling so that we use the Nonce_Service
+	 * to handle nonces here as well
+	 */
 	public function handle_form_submission(): void {
 		if ( ! isset( $_POST['plagiarism_checker_nonce'] ) || ! wp_verify_nonce( $_POST['plagiarism_checker_nonce'], 'plagiarism_checker_save_token' ) ) {
 			wp_die( esc_html__( 'Security check failed.', 'plagiarism-checker' ) );
 		}
 
-		$user_id  = get_current_user_id();
+		$user_id   = get_current_user_id();
 		$api_token = isset( $_POST['plagiarism_checker_api_token'] ) ? sanitize_text_field( wp_unslash( $_POST['plagiarism_checker_api_token'] ) ) : '';
 
 		if ( $this->token_storage->save_token( $user_id, $api_token ) ) {

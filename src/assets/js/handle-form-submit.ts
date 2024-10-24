@@ -19,25 +19,25 @@ type Results = {
 			name: string;
 			url: string;
 		};
+		header_image_thumbnail_url: string;
 	};
 };
 
 export default async function handleFormSubmit(event: Event): Promise<void> {
 	event.preventDefault();
-	
-	// Query the DOM elements we need
+
 	const textInput = document.querySelector(
 		'#plagiarism-checker__input'
 	) as HTMLInputElement;
-	const resultTextarea = document.querySelector(
-		'#plagiarism-checker__results'
+	const resultsContainer = document.querySelector(
+		'#plagiarism-checker__results-container'
 	) as HTMLDivElement;
 
 	const data: PlagiarismCheckData = {
 		text: textInput.value,
-		_ajax_nonce: (window as any).plagiarismCheckerAjax.nonce, // Using the nonce
+		_ajax_nonce: (window as any).plagiarismCheckerAjax.nonce,
 		_ajax_url: (window as any).plagiarismCheckerAjax.ajax_url,
-		action: 'plagiarism_checker', // Include the action param
+		action: 'plagiarism_checker',
 	};
 
 	try {
@@ -50,35 +50,28 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 			body: new URLSearchParams(data as any),
 		});
 
-		// Check if the response even finished
+		const result = await response.json();
 		if (!response.ok) {
-			const data = await response.json(res => res.data);
-			console.log('data:', data);
-			// const errors = JSON.parse(data.data);
-			throw new Error(`HTTP error! Status: ${response.status} - ${data.data.message}`);
+			throw new Error(
+				`Status: ${result.status_code} - ${result.message}: ${result.description}`
+			);
 		}
 
-		// Check if the response was successful or not
-		
-		const result: Results[] = await response.json().then(res => res.data);
-		
-		console.log('response:', result);
-
-		// Render the result to the screen
-		resultTextarea.innerHTML = renderOutput(result);
+		resultsContainer.innerHTML = renderOutput(result.data);
+		resultsContainer.classList.add('plagiarism-checker__results-container--has-results');
 	} catch (errorMessage) {
-		console.error('Error:', errorMessage);
-		resultTextarea.innerHTML = errorMessage;
+		resultsContainer.innerHTML = `<div class="plagiarism-checker__results-container--error">${errorMessage}</div>`;
 	}
 }
 
 function renderOutput(result: Results[]): string {
-	let output = '<ul>';
+	let output = '<ul class="plagiarism-checker__results">';
 	output += result
 		.map((e: Results) => {
-			const songTitle = `<a href="${e.result.url}" target="_blank">${e.result.title}</a>`;
-			const artistName = `<a href="${e.result.primary_artist.url}" target="_blank">${e.result.primary_artist.name}</a>`;
-			return `<li>${songTitle} - ${artistName}</li>`;
+			const songTitle = `<a href="${e.result.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${e.result.title}</a>`;
+			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${e.result.primary_artist.name}</a></span>`;
+			const thumbnail = `<img src="${e.result.header_image_thumbnail_url}" alt="${e.result.title} - ${e.result.primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
+			return `<li class="plagiarism-checker__result">${thumbnail}${songTitle} - ${artistName}</li>`;
 		})
 		.join('\n');
 	output += '</ul>';

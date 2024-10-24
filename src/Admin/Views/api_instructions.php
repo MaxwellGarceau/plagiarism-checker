@@ -7,16 +7,16 @@
 <p>4. Copy and paste the "Client Secret" into the field below.</p>
 <p class="plagiarism-checker__note">More information on the Genius.com API can be found in the <a href="https://docs.genius.com/#/authentication-h1" target="_blank">developer documentation</a>.</p>
 <?php
-	if ( isset( $_GET['status'] ) && $_GET['status'] === 'error' ) {
-		?>
+if ( isset( $_GET['status'] ) && $_GET['status'] === 'error' ) {
+	?>
 		<p class="plagiarism-checker__status plagiarism-checker__error" style="color:#dc3232"><strong>Error:</strong> There was an error saving your token. Please try again.</p>
 		<p class="plagiarism-checker__note"><strong>Note:</strong> If you need to regenerate your token, you can do so in the <a href="https://genius.com/api-clients/new" target="_blank">API section</a> of your Genius.com account settings.</p>
-		<?php
-	}
+	<?php
+}
 
-	if ( isset( $_GET['status'] ) && $_GET['status'] === 'success' ) {
-		?>
+if ( isset( $_GET['status'] ) && $_GET['status'] === 'success' ) {
+	?>
 		<p class="plagiarism-checker__status plagiarism-checker__success" style="color:#00a0d2"><strong>Success:</strong> Your token has been saved.</p>
-		<?php
-	}
+	<?php
+}
 ?>

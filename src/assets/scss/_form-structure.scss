@@ -1,51 +1,33 @@
 @use 'variables' as v;
 
-/**
- * Structural Styles (Object-Oriented)
- *
- * It's easier to separate the visual CSS from
- * the structural CSS
- *
- * This way we have a clear picture of where to make changes
- * for the sidebar functionality versus the visual display
- */
 .plagiarism-checker {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    max-width: v.$form-width;
-    z-index: 9999;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  max-width: v.$plagiarism-checker-form-width;
+  z-index: 9999;
+  padding: 20px;
 
-    // Ensure the toggle remains visible when the form is closed
-
-    &--closed {
-      max-height: 30px;
-      opacity: .5;
-      overflow: hidden;
-      right: - v.$form-width + 90px;
-    }
-  
-    &--open {
-      max-height: 500px; // Adjust this value based on the form content size
-      opacity: 1;
-    }
-  
-    &__form {
-      display: flex;
-      flex-direction: column;
-    }
-  
-    &__input,
-    &__submit-button,
-    &__textarea {
-      margin-bottom: 10px;
-    }
-  
-    &__textarea {
-      resize: none;
-      min-height: 150px;
-      width: 100%;
-    }
+  &__form {
+    display: flex;
+    flex-direction: column;
   }
-  
+
+  &__input,
+  &__submit-button,
+  &__textarea {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  &__toggle {
+    display: block; // Ensure the toggle remains visible when the form is closed
+  }
+
+  &__textarea {
+    resize: none;
+    min-height: 150px;
+  }
+}

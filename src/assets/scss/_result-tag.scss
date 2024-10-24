@@ -1,0 +1,42 @@
+@use 'variables' as v;
+
+.plagiarism-checker {
+	&__result-link {
+		position: relative;
+
+		// Positioning
+		&:before {
+			content: "";
+			font-size: .5rem;
+			font-weight: 300;
+			position: absolute;
+			top: 18px;
+			left: -5px;
+			font-style: italic;
+		}
+	}
+	
+	// Labels
+	&__result-link--song {
+		&:before {
+			content: "song";
+		}
+	}
+
+	&__result-link--artist {
+		&:before {
+			content: "artist";
+		}
+	}
+}
+
+.plagiarism-checker {
+	&__result-link {
+		&:hover {
+			color: v.$plagiarism-checker-color-primary-hover;
+		}
+		&:before {
+			color: v.$plagiarism-checker-color-primary-hover;
+		}
+	}
+}
