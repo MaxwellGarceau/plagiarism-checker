@@ -3,9 +3,10 @@
 .plagiarism-checker {
 	// Ensure the form can be opened and closed
 	&--closed {
-		max-height: 30px;
+		max-height: 75px;
+		padding-bottom: 0;
 		overflow: hidden;
-		right: calc( 150px - v.$plagiarism-checker-form-width);
+		right: calc( 190px - v.$plagiarism-checker-form-width);
 		box-shadow: none;
 		background-color: rgba(v.$plagiarism-checker-form-background-color, 0.5);
 	}
