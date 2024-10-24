@@ -55,6 +55,16 @@ class Enqueue {
 		);
 	}
 
+	public function admin_styles() {
+		// Enqueue theme.json styles
+		wp_enqueue_style(
+			'plagiarism-checker-admin-styles',
+			$this->get_plugin_base_url( '/src/Admin/assets/style.css' ), // adjust the path as per your plugin structure
+			[],
+			wp_get_theme()->get( 'Version' )
+		);
+	}
+
 	private function get_plugin_base_path( string $path = '' ): string {
 		return plugin_dir_path( __FILE__ ) . '../..' . $path;
 	}

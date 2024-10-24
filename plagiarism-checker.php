@@ -50,3 +50,8 @@ add_action(
 		$container->get( Main::class )->init();
 	}
 );
+
+// Register activation hook for creating the database table.
+register_activation_hook( __FILE__, function() {
+	DI_Container::get_container()->get( \Max_Garceau\Plagiarism_Checker\Admin\Table_Manager::class )->create_table();
+});

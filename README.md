@@ -1,3 +1,5 @@
+# Developer readme
+
 ## App Design Choices
 Below is a brief, dev focused, outline of some of the app design and architecture choices made for this plugin.
 
@@ -26,6 +28,21 @@ Things I would like to do next
 #### UI
 - More controls for the user to minimize the toggle
 - A user can enter "request" mode, highlight text, and on mouse release a rest request is sent
+
+## App Features
+
+### Admin ajax and API client (to genius.com)
+High level
+- On form submission an admin ajax request is passed to the BE
+- The BE validates/sanitizes and then makes a request to genius.com
+- Request is returned, handled, and then sent back to FE
+- FE displays output to user
+
+### Admin page and user data management
+High level
+- Handles API token input from users and stores them
+- Data storage is on a per user basis
+- Custom plugin DB tables for easier separation between site and plugin
 
 ## Testing
 
