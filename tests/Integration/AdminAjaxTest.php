@@ -73,7 +73,7 @@ afterEach(
 	}
 );
 
-test(
+it(
 	'returns error for invalid nonce',
 	function () {
 		// Set up nonce service to return invalid status
@@ -117,7 +117,7 @@ test(
 )->group( 'wp_brain_monkey' );
 
 
-test(
+it(
 	'returns error if no text provided',
 	function () {
 		// Set up nonce service to return valid status
@@ -158,8 +158,8 @@ test(
 )->group( 'wp_brain_monkey' );
 
 
-test(
-	'handles API errors correctly',
+it(
+	'handles non 200 API responses correctly',
 	function () {
 		$search_text = 'test text';
 		// Set up nonce service to return valid status
@@ -225,7 +225,7 @@ test(
 )->group( 'wp_brain_monkey' );
 
 
-test(
+it(
 	'throws validation error if response is missing required properties',
 	function () {
 		// Set up nonce service to return valid status
@@ -271,7 +271,7 @@ test(
 )->group( 'wp_brain_monkey' );
 
 
-test(
+it(
 	'returns success if request is valid and response has required properties',
 	function () {
 		// Set up nonce service to return valid status
