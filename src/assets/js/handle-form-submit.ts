@@ -51,26 +51,22 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 
 		const results = parsedJson?.data;
 
-		// Handle non-OK responses by throwing an error
-		if (!response.ok) {
-			// Error with fetch request - we didn't even receive an error respoce
-			if (results === undefined) {
-				throw new Error(
-					`Error: Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
-				);
-			}
-
-			// We've received an error response - let's display it
+		// Error with fetch request - we didn't even receive an error respoce
+		if (!response.ok && results === undefined) {
 			throw new Error(
-				`Status: ${results.status_code} - ${results.message}: ${results.description}`
+				`Error: Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
 			);
 		}
 
+		// Request succeeded, but we didn't get the answer we wanted
+		const resultsHtml = results.success ?
+			renderer.getSuccessHtml(results) :
+			renderer.getErrorHtml(results);
+
 		// Render the result using the imported renderResults function
-		renderer.displayResults(results);
+		renderer.displayResults(resultsHtml);
 	} catch (errorMessage) {
-		console.log('ERROR MESSAGE', errorMessage);
 		// Display an error message if the request fails
-		resultsContainer.innerHTML = renderer.displayErrors(errorMessage);
+		resultsContainer.innerHTML = renderer.getServerFailureHtml(errorMessage);
 	}
 }

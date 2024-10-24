@@ -58,7 +58,11 @@ class Client {
 
 			return new WP_Error(
 				self::WP_ERROR_CODE,
-				'The Genius API token is not set. Please set the token in the <a href="' . $menu_url . '">admin menu</a>.'
+				'The Genius API token is not set.',
+				$this->resource->error(
+					'The Genius API token is not set.',
+					'The Genius API token is not set. Please set the token in the <a href="' . $menu_url . '">admin menu</a>.',
+					401 ),
 			);
 		}
 

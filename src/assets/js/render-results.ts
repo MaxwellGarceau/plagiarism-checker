@@ -10,28 +10,51 @@ type Results = {
 	};
 };
 
+type Error = {
+	message: string;
+	description: string;
+	status_code: number;
+}
+
 /**
  * Class to render the results of the plagiarism check.
  *
- * Refactored into a class because I really don't want this functionality
- * to be exposed except via the one displayResults method.
+ * Opening up Html getters to public
+ * I don't want to overengineer this class by accepting a response
+ * and trying to do all the routing internally.
+ * 
+ * This level of separate is good for now.
  *
  * @class PlagiarismResultsRenderer
  */
 export class PlagiarismResultsRenderer {
 	constructor(private resultsContainer: HTMLDivElement) {}
 
-	public displayResults(results: Results[]): void {
-		this.resultsContainer.innerHTML = this.hasResults(results)
-			? this.getEmptyResultsHtml()
-			: this.generateResultsHtml(results);
+	public displayResults(results: string): void {
+		this.resultsContainer.innerHTML = results;
 		this.resultsContainer.classList.add(
 			'plagiarism-checker__results-container--has-results'
 		);
 	}
 
-	public displayErrors(errorMessage: string): string {
-		return `<div class="plagiarism-checker__results-container--error">${errorMessage}</div>`;
+	public getSuccessHtml(results: Results[]): string {
+		return this.hasResults(results)
+			? this.getEmptyResultsHtml()
+			: this.generateResultsHtml(results);
+	}
+
+	public getErrorHtml({ message, description, status_code }: Error): string {
+		return `<div class="plagiarism-checker__results-container--error">
+					<p class="plagiarism-check__error-message"><span class="plagiarism-checker__error-label">Message:</span> ${message}</p>
+					<p class="plagiarism-check__error-description"><span class="plagiarism-checker__error-label">Description:</span> ${description}</p>
+					<p class="plagiarism-check__error-status-code"><span class="plagiarism-checker__error-label">Status code:</span> ${status_code}</p>
+				</div>`;
+	}
+
+	public getServerFailureHtml(errorMessage: string = 'Error: Failed to fetch results from the server'): string {
+		return `<div class="plagiarism-checker__results-container--error">
+					<p class="plagiarism-check__error-message">${errorMessage}</p>
+				</div>`;
 	}
 
 	/**
