@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Max_Garceau\Plagiarism_Checker\Includes;
+namespace Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
 
 class Resource {
 

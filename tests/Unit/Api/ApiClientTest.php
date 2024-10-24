@@ -2,26 +2,30 @@
 
 namespace Tests\Unit\Api;
 
-use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use function Brain\Monkey\Functions\expect as monkeyExpect;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Monolog\Logger;
+use function Brain\Monkey\Functions\when;
 use Mockery;
 
 beforeEach(
 	function () {
 		$this->apiToken = 'mocked_api_token';
+		$this->wp_error_code = 'genius_api_error';
 	}
 );
 
 it(
 	'sends a valid API request and returns the expected result',
 	function () {
+
 		$responseJsonPath = dirname( __DIR__, 2 ) . '/__fixtures/response.json';
 		$expected_data    = json_decode( file_get_contents( $responseJsonPath ), true );
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
-		$client     = new Api_Client( $loggerMock, $this->apiToken );
+		$client     = new Client( $loggerMock, new Resource(), $this->apiToken );
 
 		// Mock add_query_arg to return the expected API URL
 		$expected_url = 'https://api.genius.com/search?q=heart';
@@ -72,10 +76,10 @@ it(
 		$result = $client->search_songs( 'heart' );
 
 		// Assert that $result has 10 entries
-		expect( count( $result ) )->toBe( 10 );
+		expect( count( $result['data'] ) )->toBe( 10 );
 
 		// Assert that the result matches the expected data
-		expect( $result )->toEqualCanonicalizing( $expected_data['response']['hits'] );
+		expect( $result['data'] )->toEqualCanonicalizing( $expected_data['response']['hits'] );
 	}
 )->group( 'wp_brain_monkey' );
 
@@ -102,7 +106,7 @@ it(
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
-		$client     = new Api_Client( $loggerMock, $this->apiToken );
+		$client     = new Client( $loggerMock, new Resource(), $this->apiToken );
 
 		// Mock add_query_arg to return the expected API URL
 		$expected_url = 'https://api.genius.com/search?q=klfkjadfajdf;kjfd';
@@ -144,7 +148,7 @@ it(
 		$result = $client->search_songs( 'klfkjadfajdf;kjfd' );
 
 		// Assert that $result is an empty array
-		expect( $result )->toBe( $expected_data['response']['hits'] );
+		expect( $result['data'] )->toBe( $expected_data['response']['hits'] );
 	}
 )->group( 'wp_brain_monkey' );
 
@@ -179,6 +183,31 @@ it(
 			)
 			->andReturn( $expected_url );
 
+		// Mock WP_Error
+		$formatted_genius_response = [
+			'error' => 'Here would be the Genius message.',
+			'error_description' => 'This is a longer response from Genius regarding the request failure.',
+			'status_code' => 400,
+		];
+
+		$wp_error_message = 'The Genius API request failed - ' . $formatted_genius_response['error'];
+
+		// Simulate an API error response
+		$wp_error = Mockery::mock( 'WP_Error' );
+		$wp_error
+		->shouldReceive( 'get_error_message' )
+		->with( $this->wp_error_code )
+		->andReturn( $wp_error_message );
+		$wp_error
+		->shouldReceive( 'get_error_data' )
+		->with( $this->wp_error_code )
+		->andReturn( $formatted_genius_response );
+
+		// Mock the factory that creates WP_Error
+		$wp_error_factory = function ( $code, $message, $data ) use ( $wp_error ) {
+			return $wp_error;
+		};
+
         // Mock the logger but leave its behavior for other methods intact
         $loggerMock = Mockery::mock(Logger::class)->shouldIgnoreMissing();
 
@@ -186,16 +215,24 @@ it(
         $loggerMock->shouldReceive('error')
             ->once()
             ->with(
-                Mockery::pattern('/non 200 response/i'),
-                Mockery::on(function ($context) use ($search_text) {
-                    return $context['search_text'] === $search_text &&
-							$context['status_code'] === 500;
+				// Contains Genius API request failed text
+                Mockery::on( fn($c) => stripos( $c, 'Genius API request failed' ) !== false ),
+
+				// Assert error is Genius message
+				// Assert description includes "request failure"
+				// Assert status code is 400
+                Mockery::on(function ( $context ) {
+                    return (
+						stripos( $context['error'], 'Genius message' ) !== false &&
+						stripos( $context['error_description'], 'request failure' ) &&
+						$context['status_code'] === 400
+					);
                 })
             );
 
         // Create the API client with the logger mock
 		/** @var \Monolog\Logger $loggerMock */
-		$client = new Api_Client( $loggerMock, $this->apiToken );
+		$client = new Client( $loggerMock, new Resource(), $this->apiToken, $wp_error_factory );
 
 		// Mock wp_remote_get to return an empty response
 		monkeyExpect( 'wp_remote_get' )->once()
@@ -222,9 +259,6 @@ it(
 			->with( $response )
 			->andReturn( 500 );
 
-		// Mock the WP_Error class
-		Mockery::mock('WP_Error');
-
         // Call the method and assert the results
         $result = $client->search_songs($search_text);
 
@@ -239,7 +273,7 @@ it(
 it(
 	'does not sanitize or validate data',
 	function () {
-		// The Api_Client is only accessed through Admin_Ajax
+		// The Client is only accessed through Admin_Ajax
 		// which already sanitizes and validates the data
 	}
 )->group( 'wp_brain_monkey' )->skip( 'This is a note.' );
@@ -248,33 +282,27 @@ it(
     'throws an error when no api token is set',
     function () {
 
+		when('admin_url')->justReturn('https://example.com/wp-admin/');
+
         // Mock the logger but leave its behavior for other methods intact
         $loggerMock = Mockery::mock(Logger::class)->shouldIgnoreMissing();
 
         // Expect the logger to be called with the error message
-        $loggerMock->shouldReceive('error')
-            ->once()
-            ->with(
-                Mockery::pattern('/missing/i'),
-                Mockery::on(function ($context) {
-                    return isset($context['Class_Name::method_name']) &&
-                           preg_match('/Api_Client::__construct/i', $context['Class_Name::method_name']);
-                })
-            );
+        $loggerMock->shouldNotReceive('error');
 
         // Simulate missing API token
         $_ENV['GENIUS_API_TOKEN'] = '';
 
-        // Catch the exception thrown by Api_Client due to missing token
-        try {
-			/** @var \Monolog\Logger $loggerMock */
-            $client = new Api_Client($loggerMock);
-        } catch (\Exception $e) {
-            expect($e->getMessage())->toContain('API token is missing');
-        }
+		// Mock WP_Error
+		Mockery::mock( 'WP_Error' );
+
+		/** @var \Monolog\Logger $loggerMock */
+		$client = new Client($loggerMock, new Resource(), '');
+
+		$result = $client->search_songs('no-api-token-entered');
 
         // Assert that the logger was called with the expected error
-        expect($loggerMock)->toHaveReceived('error');
+        expect($result)->toBeInstanceOf(\WP_Error::class);
 
 		// We definitely don't want to make a request if the token is missing
 		monkeyExpect('wp_remote_get')->never();

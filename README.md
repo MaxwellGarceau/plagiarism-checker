@@ -38,6 +38,14 @@ High level
 - Request is returned, handled, and then sent back to FE
 - FE displays output to user
 
+#### Error Handling
+The goal here is to handle our own user errors (no API key, invalid search text, etc) while also handling error responses such as invalid/expired auth token, empty response, etc from the API we're requesting data from.
+
+#### Ideas for next steps
+- Create a response class for ensuring consistency in delivering responses to the FE
+- Create a Resource_Success class and only return Resource_Success|WP_Error from the Song_Controller
+- Extend WP_Error and require the error data as an argument (as opposed to just the required message)
+
 ### Admin page and user data management
 High level
 - Handles API token input from users and stores them
