@@ -7,6 +7,7 @@ use function Brain\Monkey\Functions\expect as monkeyExpect;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Monolog\Logger;
 use function Brain\Monkey\Functions\when;
+use function Patchwork\redefine;
 use Mockery;
 
 beforeEach(
@@ -203,6 +204,11 @@ it(
 		->with( $this->wp_error_code )
 		->andReturn( $formatted_genius_response );
 
+		// Mock the factory that creates WP_Error
+		$wp_error_factory = function ( $code, $message, $data ) use ( $wp_error ) {
+			return $wp_error;
+		};
+
         // Mock the logger but leave its behavior for other methods intact
         $loggerMock = Mockery::mock(Logger::class)->shouldIgnoreMissing();
 
@@ -210,16 +216,24 @@ it(
         $loggerMock->shouldReceive('error')
             ->once()
             ->with(
-                Mockery::pattern('/non 200 response/i'),
-                Mockery::on(function ($context) use ($search_text) {
-                    return $context['search_text'] === $search_text &&
-							$context['status_code'] === 500;
+				// Contains Genius API request failed text
+                Mockery::on( fn($c) => stripos( $c, 'Genius API request failed' ) !== false ),
+
+				// Assert error is Genius message
+				// Assert description includes "request failure"
+				// Assert status code is 400
+                Mockery::on(function ( $context ) {
+                    return (
+						stripos( $context['error'], 'Genius message' ) !== false &&
+						stripos( $context['error_description'], 'request failure' ) &&
+						$context['status_code'] === 400
+					);
                 })
             );
 
         // Create the API client with the logger mock
 		/** @var \Monolog\Logger $loggerMock */
-		$client = new Client( $loggerMock, new Resource(), $this->apiToken );
+		$client = new Client( $loggerMock, new Resource(), $this->apiToken, $wp_error_factory );
 
 		// Mock wp_remote_get to return an empty response
 		monkeyExpect( 'wp_remote_get' )->once()

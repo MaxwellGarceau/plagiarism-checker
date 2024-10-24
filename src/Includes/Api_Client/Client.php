@@ -20,16 +20,27 @@ class Client {
 	// Need to consolidate
 	private const WP_ERROR_CODE = 'genius_api_error';
 
+	private \Closure $wp_error_factory;
+
 	/**
 	 * @param Logger   $logger    A logger instance to capture any issues.
 	 * @param string   $api_token The API token required to access the Genius API.
 	 * @param Resource $resource  A resource instance to handle the formatting of responses.
+	 * @param callable $wp_error_factory A factory function to create WP_Error instances.
 	 */
 	public function __construct(
 		private Logger $logger,
 		private Resource $resource,
 		private string $api_token = '',
-	) {}
+		\Closure $wp_error_factory = null
+	) {
+		/**
+		 * Creating WP_Error objects via factory to allow for unit testing
+		 */
+		$this->wp_error_factory = $wp_error_factory ?: function ( $code, $message, $data ) {
+            return new WP_Error( $code, $message, $data );
+        };
+	}
 
 	/**
 	 * Makes a GET request to the Genius API.
@@ -84,14 +95,16 @@ class Client {
 		if ( wp_remote_retrieve_response_code( $response ) !== self::STATUS_OK || ! isset( $data['response']['hits'] ) ) {
 			$message = 'The Genius API request failed - ' . ( $data['error'] ?? 'unknown error' );
 
-			$wp_error = new WP_Error( self::WP_ERROR_CODE, $message, $this->resource->error(
+			// Create a WP_Error from our factory
+			$wp_error = call_user_func($this->wp_error_factory,
+				self::WP_ERROR_CODE, $message, $this->resource->error(
 					$data['error'] ?? 'unknown error',
 					$data['error_description'] ?? '',
 					wp_remote_retrieve_response_code( $response )
 				)
 			);
 
-			$this->logger->error( $message, $wp_error->get_error_data( self::WP_ERROR_CODE ) );
+			$this->logger->error( $wp_error->get_error_message( self::WP_ERROR_CODE ), $wp_error->get_error_data( self::WP_ERROR_CODE ) );
 
 			return $wp_error;
 		}
