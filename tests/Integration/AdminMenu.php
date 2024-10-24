@@ -17,11 +17,11 @@ namespace Tests\Integration;
 
 it('should create the plagiarism checker DB tables upon plugin activation', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should save the API token to the DB', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 /**
  * Security tests
@@ -29,15 +29,15 @@ it('should save the API token to the DB', function() {
 
 it('should prevent malicious input from being saved to the DB', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should prevent entering a token without a nonce', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should not display one users access token to another users', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 /**
  * Secondary tests
@@ -45,15 +45,15 @@ it('should not display one users access token to another users', function() {
 
 it('should return the API token when queried, if exists, and populate the input', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should display a warning when the DB tables are not created', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should refuse to save invalid access tokens', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 /**
  * UI tests
@@ -61,16 +61,16 @@ it('should refuse to save invalid access tokens', function() {
 
 it('should create the menu page', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should create the settings page', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should display a success message when a token is correctly saved to the DB', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
 
 it('should display an error message when a token does not meet validation criteria', function() {
 	//
-})->group('full_wp')->skip('Feature implemented - !!!test not yet written!!!');
+})->group('wp_full')->skip('Feature implemented - !!!test not yet written!!!');
