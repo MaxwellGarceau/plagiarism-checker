@@ -24,53 +24,35 @@ type Results = {
 
 export default async function handleFormSubmit(event: Event): Promise<void> {
 	event.preventDefault();
-	
-	// Query the DOM elements we need
-	const textInput = document.querySelector(
-		'#plagiarism-checker__input'
-	) as HTMLInputElement;
-	const resultTextarea = document.querySelector(
-		'#plagiarism-checker__results'
-	) as HTMLDivElement;
+
+	const textInput = document.querySelector('#plagiarism-checker__input') as HTMLInputElement;
+	const resultTextarea = document.querySelector('#plagiarism-checker__results') as HTMLDivElement;
 
 	const data: PlagiarismCheckData = {
 		text: textInput.value,
-		_ajax_nonce: (window as any).plagiarismCheckerAjax.nonce, // Using the nonce
+		_ajax_nonce: (window as any).plagiarismCheckerAjax.nonce,
 		_ajax_url: (window as any).plagiarismCheckerAjax.ajax_url,
-		action: 'plagiarism_checker', // Include the action param
+		action: 'plagiarism_checker',
 	};
 
 	try {
 		const response: Response = await fetch(data._ajax_url, {
 			method: 'POST',
-			headers: {
-				'Content-Type':
-					'application/x-www-form-urlencoded; charset=UTF-8',
-			},
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
 			body: new URLSearchParams(data as any),
 		});
 
-		// Check if the response even finished
+		const result = await response.json();
 		if (!response.ok) {
-			const data = await response.json(res => res.data);
-			console.log('data:', data);
-			// const errors = JSON.parse(data.data);
-			throw new Error(`HTTP error! Status: ${response.status} - ${data.data.message}`);
+			throw new Error(`Status: ${result.status_code} - ${result.message}: ${result.description}`);
 		}
 
-		// Check if the response was successful or not
-		
-		const result: Results[] = await response.json().then(res => res.data);
-		
-		console.log('response:', result);
-
-		// Render the result to the screen
-		resultTextarea.innerHTML = renderOutput(result);
+		resultTextarea.innerHTML = renderOutput(result.data);
 	} catch (errorMessage) {
-		console.error('Error:', errorMessage);
-		resultTextarea.innerHTML = errorMessage;
+		resultTextarea.innerHTML = `<div class="error">${errorMessage}</div>`;
 	}
 }
+
 
 function renderOutput(result: Results[]): string {
 	let output = '<ul>';
