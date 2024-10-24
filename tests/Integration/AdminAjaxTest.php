@@ -4,7 +4,7 @@ namespace Tests\Integration;
 
 use Max_Garceau\Plagiarism_Checker\Includes\Admin_Ajax;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
-use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Status;
 use Monolog\Logger;
 use Mockery;
@@ -18,7 +18,7 @@ beforeEach(
 
 		// Mock dependencies - don't worry about API client
 		$this->nonce_service = Mockery::mock( Nonce_Service::class );
-		$this->api_client    = Mockery::mock( Api_Client::class );
+		$this->api_client    = Mockery::mock( Client::class );
 		$this->logger        = Mockery::mock( Logger::class );
 
 		// Initialize the class

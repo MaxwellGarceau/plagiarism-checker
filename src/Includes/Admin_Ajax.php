@@ -6,20 +6,21 @@ namespace Max_Garceau\Plagiarism_Checker\Includes;
 
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Status;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use Monolog\Logger;
 
 class Admin_Ajax {
 
 	/**
 	 * @param Nonce_Service          $nonce_service  The service used to validate nonces.
-	 * @param Api_Client             $api_client     The client responsible for making requests to the Genius API.
+	 * @param Client             $api_client     The client responsible for making requests to the Genius API.
 	 * @param Logger                 $logger         A logger to capture any issues.
 	 * @param Resource               $resource       A resource instance to handle the formatting of responses.
 	 * @param Api_Response_Validator $validator      A validator instance to check API response integrity.
 	 */
 	public function __construct(
 		private readonly Nonce_Service $nonce_service,
-		private readonly Api_Client $api_client,
+		private readonly Client $api_client,
 		private readonly Logger $logger,
 		private readonly Resource $resource,
 		private readonly Api_Response_Validator $validator

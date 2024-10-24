@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Api;
 
-use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
+use Max_Garceau\Plagiarism_Checker\Includes\Client\Client;
 use function Brain\Monkey\Functions\expect as monkeyExpect;
 use Monolog\Logger;
 use Mockery;
@@ -21,7 +21,7 @@ it(
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
-		$client     = new Api_Client( $loggerMock, $this->apiToken );
+		$client     = new Client( $loggerMock, $this->apiToken );
 
 		// Mock add_query_arg to return the expected API URL
 		$expected_url = 'https://api.genius.com/search?q=heart';
@@ -102,7 +102,7 @@ it(
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
-		$client     = new Api_Client( $loggerMock, $this->apiToken );
+		$client     = new Client( $loggerMock, $this->apiToken );
 
 		// Mock add_query_arg to return the expected API URL
 		$expected_url = 'https://api.genius.com/search?q=klfkjadfajdf;kjfd';
@@ -195,7 +195,7 @@ it(
 
         // Create the API client with the logger mock
 		/** @var \Monolog\Logger $loggerMock */
-		$client = new Api_Client( $loggerMock, $this->apiToken );
+		$client = new Client( $loggerMock, $this->apiToken );
 
 		// Mock wp_remote_get to return an empty response
 		monkeyExpect( 'wp_remote_get' )->once()
@@ -239,7 +239,7 @@ it(
 it(
 	'does not sanitize or validate data',
 	function () {
-		// The Api_Client is only accessed through Admin_Ajax
+		// The Client is only accessed through Admin_Ajax
 		// which already sanitizes and validates the data
 	}
 )->group( 'wp_brain_monkey' )->skip( 'This is a note.' );
@@ -258,17 +258,17 @@ it(
                 Mockery::pattern('/missing/i'),
                 Mockery::on(function ($context) {
                     return isset($context['Class_Name::method_name']) &&
-                           preg_match('/Api_Client::__construct/i', $context['Class_Name::method_name']);
+                           preg_match('/Client::__construct/i', $context['Class_Name::method_name']);
                 })
             );
 
         // Simulate missing API token
         $_ENV['GENIUS_API_TOKEN'] = '';
 
-        // Catch the exception thrown by Api_Client due to missing token
+        // Catch the exception thrown by Client due to missing token
         try {
 			/** @var \Monolog\Logger $loggerMock */
-            $client = new Api_Client($loggerMock);
+            $client = new Client($loggerMock);
         } catch (\Exception $e) {
             expect($e->getMessage())->toContain('API token is missing');
         }

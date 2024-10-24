@@ -8,7 +8,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 use Max_Garceau\Plagiarism_Checker\Utilities\Logger_Init;
 use Monolog\Logger;
-use Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use Psr\Container\ContainerInterface;
 use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 use Max_Garceau\Plagiarism_Checker\Includes\Resource;
@@ -67,9 +67,9 @@ class DI_Container {
 		 *
 		 * I thought about taking the factory pattern approach, perform
 		 * the logic to get the API access token in the factory, and
-		 * output a new Api_Client instance with the token.
+		 * output a new Client instance with the token.
 		 *
-		 * However, I think instantiating the Api_Client with the
+		 * However, I think instantiating the Client with the
 		 * token directly in the DI container is a better approach
 		 * because it's simpler, requires less verbosity of code,
 		 * and is easier to understand.
@@ -79,11 +79,11 @@ class DI_Container {
 		 * @param Logger $logger
 		 * @param string $api_key
 		 *
-		 * @return Api_Client
+		 * @return Client
 		 */
 		$containerBuilder->addDefinitions(
 			[
-				Api_Client::class => function ( ContainerInterface $c ) {
+				Client::class => function ( ContainerInterface $c ) {
 					$logger        = $c->get( Logger::class );
 					$token_storage = $c->get( Token_Storage::class );
 					$user_id       = get_current_user_id();
@@ -102,8 +102,8 @@ class DI_Container {
 						$api_token = '';
 					}
 
-					// Return the Api_Client instance with the logger and (possibly empty) API token
-					return new Api_Client( $logger, $api_token, new Resource() );
+					// Return the Client instance with the logger and (possibly empty) API token
+					return new Client( $logger, new Resource(), $api_token  );
 				},
 			]
 		);

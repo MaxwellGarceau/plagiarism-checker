@@ -2,12 +2,13 @@
 
 declare( strict_types=1 );
 
-namespace Max_Garceau\Plagiarism_Checker\Includes;
+namespace Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
 
 use WP_Error;
 use Monolog\Logger;
+use Max_Garceau\Plagiarism_Checker\Includes\Resource;
 
-class Api_Client {
+class Client {
 
 	/**
 	 * The Genius API URL to search for songs.
@@ -23,8 +24,8 @@ class Api_Client {
 	 */
 	public function __construct(
 		private Logger $logger,
+		private Resource $resource,
 		private string $api_token = '',
-		private Resource $resource
 	) {}
 
 	/**
