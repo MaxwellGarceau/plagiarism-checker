@@ -15,6 +15,9 @@ class Client {
 	 */
 	private const API_URL = 'https://api.genius.com/search';
 	private const STATUS_OK = 200;
+
+	// TODO: This exists in the Api_Client\Client class too
+	// Need to consolidate
 	private const WP_ERROR_CODE = 'genius_api_error';
 
 	/**
@@ -79,24 +82,18 @@ class Client {
 
 		// Check for errors in the API response.
 		if ( wp_remote_retrieve_response_code( $response ) !== self::STATUS_OK || ! isset( $data['response']['hits'] ) ) {
-			$this->logger->error(
-				'The Genius API request returned a non-200 response.',
-				array(
-					'search_text'   => $text,
-					'status_code'   => wp_remote_retrieve_response_code( $response ),
-					'response_data' => $data,
-				)
-			);
+			$message = 'The Genius API request failed - ' . ( $data['error'] ?? 'unknown error' );
 
-			return new WP_Error(
-				self::WP_ERROR_CODE,
-				'The Genius API request failed - ' . ( $data['error'] ?? 'unknown error' ),
-				$this->resource->error(
+			$wp_error = new WP_Error( self::WP_ERROR_CODE, $message, $this->resource->error(
 					$data['error'] ?? 'unknown error',
 					$data['error_description'] ?? '',
 					wp_remote_retrieve_response_code( $response )
 				)
 			);
+
+			$this->logger->error( $message, $wp_error->get_error_data( self::WP_ERROR_CODE ) );
+
+			return $wp_error;
 		}
 
 		// Return the success response using the Resource class.

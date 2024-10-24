@@ -18,6 +18,8 @@ beforeEach(
 		// Set up Brain Monkey
 		Monkey\setUp();
 
+		$this->wp_error_code = 'genius_api_error';
+
 		// Mock dependencies - don't worry about API client
 		/** @var Nonce_Service $nonce_service */
 		$this->nonce_service = Mockery::mock( Nonce_Service::class );
@@ -159,44 +161,56 @@ test(
 test(
 	'handles API errors correctly',
 	function () {
+		$search_text = 'test text';
 		// Set up nonce service to return valid status
 		$this->nonce_service
 		->shouldReceive( 'verify_nonce' )
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST with text
-		$_POST = [ 'text' => 'test text' ];
+		$_POST = [ 'text' => $search_text ];
+
+		$formatted_genius_response = [
+			'error' => 'Here would be the Genius message.',
+			'error_description' => 'This is a longer response from Genius regarding the request failure.',
+			'status_code' => 400,
+		];
+
+		$wp_error_message = 'The Genius API request failed - ' . $formatted_genius_response['error'];
 
 		// Simulate an API error response
 		$wp_error = Mockery::mock( 'WP_Error' );
 		$wp_error
 		->shouldReceive( 'get_error_message' )
-		->andReturn( 'API request failed' );
+		->with( $this->wp_error_code )
+		->andReturn( $wp_error_message );
 		$wp_error
 		->shouldReceive( 'get_error_data' )
-		->andReturn( [] );
+		->with( $this->wp_error_code )
+		->andReturn( $formatted_genius_response );
 
 		// Expect the API client to return WP_Error
 		$this->api_client
 		->shouldReceive( 'search_songs' )
-		->with( 'test text' )
+		->with( $search_text )
 		->andReturn( $wp_error );
 
-		// Mock the validator to confirm it checks for required properties
+		// Mock the Resource class's error method to ensure it is called with correct arguments
+
+		// We're formatting the resource in the Api_Client\Client
+		// As far as Admin_Ajax is concerned, no resource activity happens here
+		$resource_return = [ ...$formatted_genius_response, 'success' => false ];
+		$this->resource
+		->shouldNotReceive( 'error' );
+
+		// We don't get to validator until we have a response
 		$this->validator
 		->shouldNotReceive( 'response_has_required_properties' );
 
-		// Expect the logger to log the error
+		// We're logging the error in the Api_Client\Client
+		// As far as Admin_Ajax is concerned, the error is never logged
 		$this->logger
-		->shouldReceive( 'error' )
-		->once()
-		->with(
-			'API request failed',
-			[
-				'wp_error_message' => 'API request failed',
-				'api_response'     => [],
-			]
-		);
+		->shouldNotReceive( 'error' );
 
 		// Expect the wp_send_json_success to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
@@ -206,7 +220,7 @@ test(
 		$this->admin_ajax->handle_plagiarism_checker_request();
 
 		// Verify wp_send_json_error was called
-		Monkey\Functions\expect( 'wp_send_json_error' )->once()->with( 'API request failed' );
+		Monkey\Functions\expect( 'wp_send_json_error' )->once()->with( $resource_return );
 	}
 )->group( 'wp_brain_monkey' );
 

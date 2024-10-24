@@ -13,9 +13,13 @@ use Monolog\Logger;
 
 class Admin_Ajax {
 
+	// TODO: This exists in the Api_Client\Client class too
+	// Need to consolidate
+	const WP_ERROR_CODE = 'genius_api_error';
+
 	/**
 	 * @param Nonce_Service          $nonce_service  The service used to validate nonces.
-	 * @param Client             $api_client     The client responsible for making requests to the Genius API.
+	 * @param Client                 $api_client     The client responsible for making requests to the Genius API.
 	 * @param Logger                 $logger         A logger to capture any issues.
 	 * @param Resource               $resource       A resource instance to handle the formatting of responses.
 	 * @param Api_Response_Validator $validator      A validator instance to check API response integrity.
@@ -50,7 +54,7 @@ class Admin_Ajax {
 
 		// Handle errors from the API client.
 		if ( is_wp_error( $data ) ) {
-			$error_data = $data->get_error_data();
+			$error_data = $data->get_error_data( self::WP_ERROR_CODE ); // No error formatting here because this was formatted in the API client.
 			wp_send_json_error( $error_data, $error_data['status_code'] ?? 400 );
 		}
 
