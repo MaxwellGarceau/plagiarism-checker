@@ -19,6 +19,7 @@ type Results = {
 			name: string;
 			url: string;
 		};
+		header_image_thumbnail_url: string;
 	};
 };
 
@@ -68,7 +69,8 @@ function renderOutput(result: Results[]): string {
 		.map((e: Results) => {
 			const songTitle = `<a href="${e.result.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--song" target="_blank">${e.result.title}</a>`;
 			const artistName = `<span class="artist-name"><a href="${e.result.primary_artist.url}" class="plagiarism-checker__result-link plagiarism-checker__result-link--artist" target="_blank">${e.result.primary_artist.name}</a></span>`;
-			return `<li class="plagiarism-checker__result">${songTitle} - ${artistName}</li>`;
+			const thumbnail = `<img src="${e.result.header_image_thumbnail_url}" alt="${e.result.title} - ${e.result.primary_artist.name}" class="plagiarism-checker__result-thumbnail" />`;
+			return `<li class="plagiarism-checker__result">${thumbnail}${songTitle} - ${artistName}</li>`;
 		})
 		.join('\n');
 	output += '</ul>';

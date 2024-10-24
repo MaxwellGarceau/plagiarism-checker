@@ -30,7 +30,9 @@
     transition: background-color 0.3s ease;
 	// background-color: v.$plagiarism-checker-color-primary-hover;
 
-	&:hover {
+	&:hover,
+	&:active,
+	&:focus {
 		background-color: var(--wp--preset--color--primary-hover, #005a99); // Fallback for hover state
 	}
   }
