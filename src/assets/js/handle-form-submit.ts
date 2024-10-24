@@ -54,7 +54,7 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		// Error with fetch request - we didn't even receive an error respoce
 		if (!response.ok && results === undefined) {
 			throw new Error(
-				`Error: Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
+				`Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
 			);
 		}
 
