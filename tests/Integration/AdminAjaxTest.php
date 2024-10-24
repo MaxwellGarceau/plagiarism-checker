@@ -252,6 +252,23 @@ it(
 		->with( $response_data['data'] )
 		->andReturn( false ); // Assume the response has the required properties
 
+		// Mock the Resource class's error method to ensure it is called with correct arguments
+		$resource_return = [
+			'success' => false,
+			'message' => 'The API response is missing required properties.',
+			'description' => '',
+			'status_code' => 422,
+		];
+		$this->resource
+		->shouldReceive( 'error' )
+		->once() // Expect it to be called once
+		->with( 
+			$resource_return['message'],
+			$resource_return['description'],
+			$resource_return['status_code']
+		 ) // Expect these arguments
+		->andReturn( $resource_return ); // Return the array as expected
+
 		// Expect the logger to log the error
 		$this->logger
 		->shouldReceive( 'error' )
@@ -266,7 +283,7 @@ it(
 		$this->admin_ajax->handle_plagiarism_checker_request();
 
 		// Verify wp_send_json_error was called with status 422
-		Monkey\Functions\expect( 'wp_send_json_error' )->once()->with( 'API request failed.', 422 );
+		Monkey\Functions\expect( 'wp_send_json_error' )->once()->with( $resource_return );
 	}
 )->group( 'wp_brain_monkey' );
 
