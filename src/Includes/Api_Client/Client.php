@@ -6,7 +6,7 @@ namespace Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
 
 use WP_Error;
 use Monolog\Logger;
-use Max_Garceau\Plagiarism_Checker\Includes\Resource;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 
 class Client {
 

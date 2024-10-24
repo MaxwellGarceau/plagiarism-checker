@@ -2,10 +2,12 @@
 
 namespace Tests\Integration;
 
-use Max_Garceau\Plagiarism_Checker\Includes\Admin_Ajax;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Admin_Ajax;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Status;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Api_Response_Validator;
 use Monolog\Logger;
 use Mockery;
 use Brain\Monkey;
@@ -20,9 +22,11 @@ beforeEach(
 		$this->nonce_service = Mockery::mock( Nonce_Service::class );
 		$this->api_client    = Mockery::mock( Client::class );
 		$this->logger        = Mockery::mock( Logger::class );
+		$this->resource      = Mockery::mock( Resource::class );
+		$this->validator     = Mockery::mock( Api_Response_Validator::class );
 
 		// Initialize the class
-		$this->admin_ajax = new Admin_Ajax( $this->nonce_service, $this->api_client, $this->logger );
+		$this->admin_ajax = new Admin_Ajax( $this->nonce_service, $this->api_client, $this->logger, $this->resource, $this->validator );
 
 		// Mock WordPress helper functions to throw exceptions, simulating die
 		// when wp_send_json_* are called

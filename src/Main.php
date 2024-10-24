@@ -5,7 +5,7 @@ declare( strict_types = 1 );
 namespace Max_Garceau\Plagiarism_Checker;
 
 use Max_Garceau\Plagiarism_Checker\Views\Form_Controller;
-use Max_Garceau\Plagiarism_Checker\Includes\Admin_Ajax;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Admin_Ajax;
 use Max_Garceau\Plagiarism_Checker\Includes\Enqueue;
 use Max_Garceau\Plagiarism_Checker\Includes\Hook_Manager;
 use Max_Garceau\Plagiarism_Checker\Admin\Menu;

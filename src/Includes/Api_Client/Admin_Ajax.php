@@ -2,11 +2,13 @@
 
 declare( strict_types=1 );
 
-namespace Max_Garceau\Plagiarism_Checker\Includes;
+namespace Max_Garceau\Plagiarism_Checker\Includes\Api_Client;
 
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Service;
 use Max_Garceau\Plagiarism_Checker\Services\Nonce_Status;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Api_Response_Validator;
 use Monolog\Logger;
 
 class Admin_Ajax {

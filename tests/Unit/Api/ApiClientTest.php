@@ -2,8 +2,9 @@
 
 namespace Tests\Unit\Api;
 
-use Max_Garceau\Plagiarism_Checker\Includes\Client\Client;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use function Brain\Monkey\Functions\expect as monkeyExpect;
+use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Monolog\Logger;
 use Mockery;
 
@@ -21,7 +22,7 @@ it(
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
-		$client     = new Client( $loggerMock, $this->apiToken );
+		$client     = new Client( $loggerMock, new Resource(), $this->apiToken );
 
 		// Mock add_query_arg to return the expected API URL
 		$expected_url = 'https://api.genius.com/search?q=heart';
@@ -102,7 +103,7 @@ it(
 
 		/** @var \Monolog\Logger $loggerMock */
 		$loggerMock = Mockery::mock( Logger::class );
-		$client     = new Client( $loggerMock, $this->apiToken );
+		$client     = new Client( $loggerMock, new Resource(), $this->apiToken );
 
 		// Mock add_query_arg to return the expected API URL
 		$expected_url = 'https://api.genius.com/search?q=klfkjadfajdf;kjfd';
@@ -195,7 +196,7 @@ it(
 
         // Create the API client with the logger mock
 		/** @var \Monolog\Logger $loggerMock */
-		$client = new Client( $loggerMock, $this->apiToken );
+		$client = new Client( $loggerMock, new Resource(), $this->apiToken );
 
 		// Mock wp_remote_get to return an empty response
 		monkeyExpect( 'wp_remote_get' )->once()
@@ -268,7 +269,7 @@ it(
         // Catch the exception thrown by Client due to missing token
         try {
 			/** @var \Monolog\Logger $loggerMock */
-            $client = new Client($loggerMock);
+            $client = new Client($loggerMock, new Resource());
         } catch (\Exception $e) {
             expect($e->getMessage())->toContain('API token is missing');
         }
