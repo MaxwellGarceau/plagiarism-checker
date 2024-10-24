@@ -1,6 +1,6 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import handleFormSubmit from '../js/handle-form-submit';
-import { AdminAjaxResponse } from '../js/types';
+import { FetchResponse } from '../js/types';
 
 // Mock the DOM elements
 let textInput: HTMLInputElement;
@@ -14,7 +14,7 @@ let mockConsoleError: ReturnType<typeof vi.spyOn>;
 };
 
 // Mock fetch response data
-const mockResponseData: AdminAjaxResponse = {
+const mockResponseData: FetchResponse = {
 	data: {
 		success: true,
 		data: [

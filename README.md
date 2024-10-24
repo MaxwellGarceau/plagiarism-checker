@@ -10,7 +10,7 @@ Below is a brief, dev focused, outline of some of the app design and architectur
 ### BE
 - PHP 8.3 features
 - Composer
-- Testing with PHPUnit
+- Testing with Pest (Brain Monkey and WP Core options)
 
 ### High level overview
 - Output a widget on the sidebar with an input form and submit button
@@ -40,6 +40,11 @@ High level
 
 #### Error Handling
 The goal here is to handle our own user errors (no API key, invalid search text, etc) while also handling error responses such as invalid/expired auth token, empty response, etc from the API we're requesting data from.
+
+##### BE
+The BE has a series of checks to ensure that all possible scenarios are handled and returned in a consistent format to the FE. The Resource class is enforcing consistent response formatting in all responses.
+
+On the FE, TypeScript is checking to ensure that all responses from the BE are routed to the correct places and that data inconsistency will cause problems.
 
 #### Ideas for next steps
 - Create a response class for ensuring consistency in delivering responses to the FE

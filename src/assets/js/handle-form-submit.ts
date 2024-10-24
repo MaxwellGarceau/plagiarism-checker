@@ -1,4 +1,5 @@
 import { PlagiarismResultsRenderer } from './render-results';
+import { AdminAjaxResponse } from './types';
 
 // Only used here, stays here for now
 type PlagiarismCheckData = {
@@ -43,19 +44,20 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		// Parse the JSON response from the backend
 		const parsedJson = await response.json();
 
-		const results = parsedJson?.data;
+		const adminAjaxResponse: AdminAjaxResponse = parsedJson?.data;
 
 		// Error with fetch request - we didn't even receive an error respoce
-		if (!response.ok && results === undefined) {
+		if (!response.ok && adminAjaxResponse === undefined) {
 			throw new Error(
 				`Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
 			);
 		}
 
+
 		// Request succeeded, but we didn't get the answer we wanted
-		const resultsHtml = !results.success
-			? renderer.getErrorHtml(results.data)
-			: renderer.getSuccessHtml(results.data);
+		const resultsHtml = !adminAjaxResponse.success
+			? renderer.getErrorHtml(adminAjaxResponse.data)
+			: renderer.getSuccessHtml(adminAjaxResponse.data);
 
 		// Render the result using the imported renderResults function
 		renderer.displayResults(resultsHtml);
