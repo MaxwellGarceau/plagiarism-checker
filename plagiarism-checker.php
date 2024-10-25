@@ -10,7 +10,7 @@ declare( strict_types = 1 );
  * Author URI:      https://resume.maxgarceau.com/
  * Text Domain:     plagiarism-checker
  * Domain Path:     /languages
- * Version:         0.1.0
+ * Version:         1.0.0
  * Requires at least: 6.6
  * Requires PHP:      8.1
  *
