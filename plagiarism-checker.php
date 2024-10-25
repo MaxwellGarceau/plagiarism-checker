@@ -11,6 +11,8 @@ declare( strict_types = 1 );
  * Text Domain:     plagiarism-checker
  * Domain Path:     /languages
  * Version:         0.1.0
+ * Requires at least: 6.6
+ * Requires PHP:      8.1
  *
  * @package         Plagiarism_Checker
  */
