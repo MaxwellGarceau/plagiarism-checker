@@ -5,8 +5,6 @@
 .deployignore
 .distignore
 .editorconfig
-.eslintignore
-.eslintrc
 Gruntfile.js
 vite.config.js
 webpack.config.js
@@ -35,6 +33,10 @@ node_modules
 phpcs.xml
 .phpcs.xml.dist
 phpcs.xml.dist
+.prettierrc
+eslint.config.js
+.eslintignore
+.eslintrc
 
 # Tests
 phpunit.xml
@@ -62,6 +64,6 @@ Thumbs.db
 behat.yml
 bitbucket-pipelines.yml
 bin
-.circleci/config.yml
+.circleci/
 multisite.xml
 multisite.xml.dist
