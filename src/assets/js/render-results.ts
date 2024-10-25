@@ -28,12 +28,28 @@ export class PlagiarismResultsRenderer {
 	}
 
 	public getErrorHtml({ message, description, status_code }: Error): string {
+		const fallbackMessage = message ?? "Unknown error. Please check your API credentials or contact the developer.";
+	
+		// Construct each line only if the corresponding variable exists
+		const descriptionHtml = description
+			? `<div class="plagiarism-checker__error plagiarism-checker__error-description"><p class="plagiarism-checker__error-label">Description:</p> <pre class="plagiarism-checker__pre">${description}</pre></div>`
+			: '';
+			
+		const statusCodeHtml = status_code
+			? `<div class="plagiarism-checker__error plagiarism-checker__error-status-code"><p class="plagiarism-checker__error-label">Status code:</p> <pre class="plagiarism-checker__pre">${status_code}</pre></div>`
+			: '';
+	
+		// Return the HTML string, including only the parts that exist
 		return `<div class="plagiarism-checker__results">
-					<div class="plagiarism-checker__error plagiarism-checker__error-message"><p class="plagiarism-checker__error-label">Message:</p> <pre class="plagiarism-checker__pre">${message}</pre></div>
-					<div class="plagiarism-checker__error plagiarism-checker__error-description"><p class="plagiarism-checker__error-label">Description:</p> <pre class="plagiarism-checker__pre">${description}</pre></div>
-					<div class="plagiarism-checker__error plagiarism-checker__error-status-code"><p class="plagiarism-checker__error-label">Status code:</p> <pre class="plagiarism-checker__pre">${status_code}</pre></div>
+					<div class="plagiarism-checker__error plagiarism-checker__error-message">
+						<p class="plagiarism-checker__error-label">Message:</p> 
+						<pre class="plagiarism-checker__pre">${fallbackMessage}</pre>
+					</div>
+					${descriptionHtml}
+					${statusCodeHtml}
 				</div>`;
 	}
+	
 
 	public getServerFailureHtml(
 		errorMessage: string = 'Error: Failed to fetch results from the server'
