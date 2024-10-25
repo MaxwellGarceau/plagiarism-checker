@@ -18,6 +18,12 @@
 	color: #00a0d2;
 }
 
+/* Default WP error style */
 .plagiarism-checker__error {
 	color: #dc3232;
+}
+
+.plagiarism-checker__highlight {
+	font-weight: bold;
+	color: #b32d2e;
 }
