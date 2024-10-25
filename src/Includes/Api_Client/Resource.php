@@ -13,10 +13,7 @@ class Resource {
 	 * @return array The formatted response.
 	 */
 	public function success( array $data ): array {
-		return [
-			'success' => true,
-			'data' => $data,
-		];
+		return $this->response( true, $data );
 	}
 
 	/**
@@ -31,11 +28,24 @@ class Resource {
 	 * @return array The formatted error response.
 	 */
 	public function error( string $message, string $description = '', int $status_code = 400 ): array {
-		return [
-			'success' => false,
+		return $this->response( false, [
 			'message' => $message,
 			'description' => $description,
 			'status_code' => $status_code,
+		] );
+	}
+
+	/**
+	 * Format response for return to FE.
+	 * 
+	 * Same structure for FE to determine success or failure.
+	 * 
+	 * @param array $data The data to send back to the frontend.
+	 */
+	private function response( $success, $data ): array {
+		return [
+			'success' => $success,
+			'data' => $data
 		];
 	}
 }

@@ -36,7 +36,6 @@ beforeEach(
 		/** @var Api_Response_Validator $validator */
 		$this->validator = Mockery::mock( Api_Response_Validator::class );
 
-
 		// Initialize the class
 		$this->admin_ajax = new Admin_Ajax( $this->nonce_service, $this->api_client, $this->logger, $this->resource, $this->validator );
 
@@ -92,12 +91,12 @@ it(
 		->with( 'Invalid or expired nonce.' );
 
 		// Mock the Resource class's error method to ensure it is called with correct arguments
-		$resource_return = [
-			'success' => false,
-			'message' => 'Invalid or expired nonce.',
+		$resource_return = array(
+			'success'     => false,
+			'message'     => 'Invalid or expired nonce.',
 			'description' => '',
 			'status_code' => 403,
-		];
+		);
 		$this->resource
 		->shouldReceive( 'error' )
 		->once() // Expect it to be called once
@@ -106,7 +105,7 @@ it(
 
 		// Expect the wp_send_json_error to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
-		$this->expectExceptionMessage( 'wp_send_json_error called: ' . json_encode($resource_return) );
+		$this->expectExceptionMessage( 'wp_send_json_error called: ' . json_encode( $resource_return ) );
 
 		// Call the method
 		$this->admin_ajax->handle_plagiarism_checker_request();
@@ -126,12 +125,12 @@ it(
 		->andReturn( Nonce_Status::VALID );
 
 		// Mock the Resource class's error method to ensure it is called with correct arguments
-		$resource_return = [
-			'success' => false,
-			'message' => 'No text to search was provided.',
+		$resource_return = array(
+			'success'     => false,
+			'message'     => 'No text to search was provided.',
 			'description' => '',
 			'status_code' => 422,
-		];
+		);
 		$this->resource
 		->shouldReceive( 'error' )
 		->once() // Expect it to be called once
@@ -143,7 +142,7 @@ it(
 		->shouldNotReceive( 'response_has_required_properties' );
 
 		// Set up global $_POST without 'text'
-		$_POST = [];
+		$_POST = array();
 
 		// Expect the wp_send_json_error to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
@@ -168,15 +167,15 @@ it(
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST with text
-		$_POST = [ 'text' => $search_text ];
+		$_POST = array( 'text' => $search_text );
 
-		$formatted_genius_response = [
-			'error' => 'Here would be the Genius message.',
-			'error_description' => 'This is a longer response from Genius regarding the request failure.',
+		$formatted_genius_response = array(
+			'message'     => 'Here would be the Genius message.',
+			'description' => 'This is a longer response from Genius regarding the request failure.',
 			'status_code' => 400,
-		];
+		);
 
-		$wp_error_message = 'The Genius API request failed - ' . $formatted_genius_response['error'];
+		$wp_error_message = 'The Genius API request failed - ' . $formatted_genius_response['message'];
 
 		// Simulate an API error response
 		$wp_error = Mockery::mock( 'WP_Error' );
@@ -187,7 +186,10 @@ it(
 		$wp_error
 		->shouldReceive( 'get_error_data' )
 		->with( $this->wp_error_code )
-		->andReturn( $formatted_genius_response );
+		->andReturn( [
+			'succcess' => false,
+			'data' => $formatted_genius_response
+		] );
 
 		// Expect the API client to return WP_Error
 		$this->api_client
@@ -199,9 +201,18 @@ it(
 
 		// We're formatting the resource in the Api_Client\Client
 		// As far as Admin_Ajax is concerned, no resource activity happens here
-		$resource_return = [ ...$formatted_genius_response, 'success' => false ];
+		$resource_return = [
+			'success' => false,
+			'data' => $formatted_genius_response,
+		];
 		$this->resource
-		->shouldNotReceive( 'error' );
+		->shouldReceive( 'error' )
+		->with(
+			$formatted_genius_response['message'],
+			$formatted_genius_response['description'],
+			$formatted_genius_response['status_code']
+		)
+		->andReturn( $resource_return );
 
 		// We don't get to validator until we have a response
 		$this->validator
@@ -234,10 +245,10 @@ it(
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST with text
-		$_POST = [ 'text' => 'test text' ];
+		$_POST = array( 'text' => 'test text' );
 
 		// Simulate a response missing required properties
-		$response_data = [ 'data' => [ [ 'result' => [ 'title' => 'Song Title' ] ] ]];
+		$response_data = array( 'data' => [ array( 'result' => array( 'title' => 'Song Title' ) ) ] );
 
 		// Expect the API client to return the response
 		$this->api_client
@@ -253,20 +264,20 @@ it(
 		->andReturn( false ); // Assume the response has the required properties
 
 		// Mock the Resource class's error method to ensure it is called with correct arguments
-		$resource_return = [
-			'success' => false,
-			'message' => 'The API response is missing required properties.',
+		$resource_return = array(
+			'success'     => false,
+			'message'     => 'The API response is missing required properties.',
 			'description' => '',
 			'status_code' => 422,
-		];
+		);
 		$this->resource
 		->shouldReceive( 'error' )
 		->once() // Expect it to be called once
-		->with( 
+		->with(
 			$resource_return['message'],
 			$resource_return['description'],
 			$resource_return['status_code']
-		 ) // Expect these arguments
+		) // Expect these arguments
 		->andReturn( $resource_return ); // Return the array as expected
 
 		// Expect the logger to log the error
@@ -297,24 +308,24 @@ it(
 		->andReturn( Nonce_Status::VALID );
 
 		// Set up global $_POST with text
-		$_POST = [ 'text' => 'test text' ];
+		$_POST = array( 'text' => 'test text' );
 
 		// Simulate a valid response with all required properties
-		$response_data = [
+		$response_data = array(
 			'data' => [
-				[
-					'result' => [
-						'url'            => 'https://example.com',
-						'title'          => 'Song Title',
-						'primary_artist' => [
+				array(
+					'result' => array(
+						'url'                        => 'https://example.com',
+						'title'                      => 'Song Title',
+						'primary_artist'             => array(
 							'name' => 'Artist Name',
 							'url'  => 'https://artist.com',
-						],
+						),
 						'header_image_thumbnail_url' => 'https://example.com/image.jpg',
-					],
-				],
-			]
-		];
+					),
+				),
+			],
+		);
 
 		// Expect the API client to return the response
 		$this->api_client
@@ -335,7 +346,19 @@ it(
 		->once()
 		->with( 'API request successful. Returning the data to the frontend.', $response_data['data'] );
 
-		// Expect the wp_send_json_success to be called, which will throw an exception
+		$this->resource
+		->shouldReceive( 'success' )
+		->once() // Expect it to be called once
+		->with( $response_data['data'] ) // Expect these arguments
+		->andReturn(
+			array(
+				...$response_data,
+				'success' => true,
+			)
+		); // Return the array as expected
+
+		// Expect the wp_send_json_success to be called, which will throw an exception.
+		// If this fails wp_send_json_success was not called. Check beforeEach for alias.
 		$this->expectException( \RuntimeException::class );
 		$this->expectExceptionMessage( 'wp_send_json_success called' );
 
@@ -346,3 +369,11 @@ it(
 		Monkey\Functions\expect( 'wp_send_json_success' )->once()->with( $response_data );
 	}
 )->group( 'wp_brain_monkey' );
+
+// TODO: Let's return a resource from admin ajax
+// We validate properties inside the resource and throw errors if anything is wrong
+it(
+	'always returns a resource to the FE',
+	function () {
+	}
+)->group( 'wp_brain_monkey' )->skip( 'Feature implemented - !!!test not yet written!!!' );

@@ -19,6 +19,7 @@ export default mergeConfig(viteConfig, defineConfig({
     coverage: {
       include: ['src/assets/tests/**'],
       all: true,
-    }
+    },
+	silent: false,
   },
 }))

@@ -1,0 +1,36 @@
+	@use 'variables' as v;
+
+	// These are the core styles to have the shape and structure of plagiarism checker
+	// Let's leave them here, separated from their individual components so we can separate
+	// the structure from the style
+
+	// The rest of the scss, more or less, will be component based BEM methodology
+	.plagiarism-checker {
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		max-width: v.$plagiarism-checker-form-width;
+		z-index: 9999;
+		padding: 20px;
+
+		// border-box or no border-box... =)
+	  	// box-sizing: border-box;
+
+	&__form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__input,
+	&__submit-button {
+		margin-bottom: 10px;
+		width: 100%;
+		box-sizing: border-box; // prevent input from stretching past container width
+	}
+
+	&__toggle {
+		display: block; // Ensure the toggle remains visible when the form is closed
+	}
+}

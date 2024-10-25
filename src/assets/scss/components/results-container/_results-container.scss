@@ -1,0 +1,26 @@
+@use '../../variables' as v;
+
+.plagiarism-checker {
+	&__results-container,
+	&__results {
+		list-style-type: none;
+	}
+
+	&__results-container {
+		padding: 0;
+		margin: 20px 0 0;
+		overflow: hidden;
+		height: 100%;
+	}
+
+	&__results {
+		padding-left: 15px;
+		margin: 0;
+	}
+
+	&__results-placeholder {
+		font-style: italic;
+		color: v.$plagiarism-checker-color-secondary;
+		font-weight: 300;
+	}
+}

@@ -1,12 +1,30 @@
 // @use variables in a file by file situation
 
-@use 'form-structure';
-@use 'form-styles';
+/**
+ * Layouts
+ */
+@use 'layout-structure';
+@use 'layout-styles';
 
-// Components
-@use 'toggle';
-@use 'results-container';
-@use 'result-tag';
+/**
+ * Components
+ */
+@use 'components/results-container/results-container';
+@use 'components/results-container/results-container-height';
+@use 'components/result/result-tag';
+@use 'components/result/result';
+@use 'components/button';
+@use 'components/input';
+@use 'components/error';
 
-// Theme compatibility
+/**
+ * States
+ */
+
+// Open/close the form styling
+@use 'open-close-states';
+
+/**
+ * Theme compatibility
+ */
 @use 'theme-compatibility';

@@ -6,11 +6,23 @@ Below is a brief, dev focused, outline of some of the app design and architectur
 ### FE
 - TypeScript
 - Vite
+- Scss
+- Inherit from WP styles where possible
+- Responsive (cool trick with vh and calc to tame the results column)
+
+#### CSS/Scss
+This project takes a hybrid approach to CSS. The default is BEM convention via Scss with a light implementation of SMACSS only where absolutely necessary.
+
+However, where it makes sense, Object Oriented CSS is also employed in order to separate some of the more intricate structural components from their styles.
+
+Theme compatibility is a priority as opposed to one particular styling goal.
+
+In short, the CSS for this project should be composable. Avoid the use of global styles where possible. Inherit from WP for the best theme compatibility where possible. Use intelligent fallbacks to styles that will coordinate across the spectrum of designs.
 
 ### BE
 - PHP 8.3 features
 - Composer
-- Testing with PHPUnit
+- Testing with Pest (Brain Monkey and WP Core options)
 
 ### High level overview
 - Output a widget on the sidebar with an input form and submit button
@@ -40,6 +52,11 @@ High level
 
 #### Error Handling
 The goal here is to handle our own user errors (no API key, invalid search text, etc) while also handling error responses such as invalid/expired auth token, empty response, etc from the API we're requesting data from.
+
+##### BE
+The BE has a series of checks to ensure that all possible scenarios are handled and returned in a consistent format to the FE. The Resource class is enforcing consistent response formatting in all responses.
+
+On the FE, TypeScript is checking to ensure that all responses from the BE are routed to the correct places and that data inconsistency will cause problems.
 
 #### Ideas for next steps
 - Create a response class for ensuring consistency in delivering responses to the FE

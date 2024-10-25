@@ -1,0 +1,23 @@
+@use '../variables' as v;
+
+.plagiarism-checker {
+	&__error {
+		margin: 0 0 15px;
+
+		&:last-child {
+			margin: 0;
+		}
+	}
+	
+	&__error-label {
+		color: v.$plagiarism-checker-color-red;
+		font-weight: 500;
+		display: inline;
+	}
+
+	&__pre {
+		text-wrap: wrap;
+		margin: 0;
+		line-height: 1.4;
+	}
+}

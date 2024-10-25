@@ -1,16 +1,12 @@
 import { PlagiarismResultsRenderer } from './render-results';
+import { AdminAjaxResponse } from './types';
 
+// Only used here, stays here for now
 type PlagiarismCheckData = {
 	text: string;
 	_ajax_nonce: string;
 	_ajax_url: string;
 	action: string;
-};
-
-type Response = {
-	ok: boolean;
-	json: Function;
-	status: number;
 };
 
 export default async function handleFormSubmit(event: Event): Promise<void> {
@@ -39,27 +35,35 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 		const response: Response = await fetch(data._ajax_url, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+				'Content-Type':
+					'application/x-www-form-urlencoded; charset=UTF-8',
 			},
 			body: new URLSearchParams(data as any),
 		});
 
 		// Parse the JSON response from the backend
 		const parsedJson = await response.json();
-		const results = parsedJson.data;
-		
-		// Handle non-OK responses by throwing an error
-		if (!response.ok) {
+
+		const adminAjaxResponse: AdminAjaxResponse = parsedJson?.data;
+
+		// Error with fetch request - we didn't even receive an error respoce
+		if (!response.ok && adminAjaxResponse === undefined) {
 			throw new Error(
-				`Status: ${results.status_code} - ${results.message}: ${results.description}`
+				`Failed to fetch results from the server - Status: ${response.status} - ${response.statusText}`
 			);
 		}
 
-		// Render the result using the imported renderResults function
-		renderer.displayResults(results);
 
+		// Request succeeded, but we didn't get the answer we wanted
+		const resultsHtml = !adminAjaxResponse.success
+			? renderer.getErrorHtml(adminAjaxResponse.data)
+			: renderer.getSuccessHtml(adminAjaxResponse.data);
+
+		// Render the result using the imported renderResults function
+		renderer.displayResults(resultsHtml);
 	} catch (errorMessage) {
 		// Display an error message if the request fails
-		resultsContainer.innerHTML = renderer.displayErrors(errorMessage);
+		resultsContainer.innerHTML =
+			renderer.getServerFailureHtml(errorMessage);
 	}
 }

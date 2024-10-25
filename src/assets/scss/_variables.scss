@@ -5,6 +5,9 @@ $plagiarism-checker-color-primary: var(--wp--preset--color--primary, --wp--prese
 $plagiarism-checker-color-secondary: var(--wp--preset--color--secondary, --wp--preset--color--accent-2, #cfcabe);
 $plagiarism-checker-color-tertiary: var(--wp--preset--color--tertiary, --wp--preset--color--accent-3, #007cba);
 
+// Stock colors
+$plagiarism-checker-color-red: var(--wp--preset--color--vivid-red, #cf2e2e);
+
 $plagiarism-checker-color-primary-hover: var(--wp--preset--color--primary-hover, #005a99);
 
 // Forms
@@ -16,3 +19,6 @@ $plagiarism-checker-input-border-color: var(--wp--preset--color--border, #ddd);
 // Structural variables
 $plagiarism-checker-form-width: 70vw;
 $plagiarism-checker-form-height: 80vh;
+
+// Specific (could be broken out into a function)
+$plagiarism-checker-form-results-container-height: calc(#{$plagiarism-checker-form-height} - 220px);

@@ -1,0 +1,11 @@
+@use 'variables' as v;
+
+// This is a catch all file for styles that don't have a home yet
+
+.plagiarism-checker {
+  	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	color: v.$plagiarism-checker-form-text-color;
+	border: 1px solid v.$plagiarism-checker-form-border-color;
+	border-radius: 8px 0 0 0;
+	transition: max-height 0.3s ease-in-out, background-color 0.3s ease-in-out, right 0.3s ease-in-out;
+}

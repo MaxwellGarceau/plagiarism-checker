@@ -55,18 +55,20 @@ class Admin_Ajax {
 		// Handle errors from the API client.
 		if ( is_wp_error( $data ) ) {
 			$error_data = $data->get_error_data( self::WP_ERROR_CODE ); // No error formatting here because this was formatted in the API client.
-			wp_send_json_error( $error_data, $error_data['status_code'] ?? 400 );
+
+			// TODO: Let's clean this up. Maybe we pass in a resource to WP_Error that we create in the Api_Client?
+			wp_send_json_error( $this->resource->error( $error_data['data']['message'], $error_data['data']['description'], $error_data['data']['status_code'] ?? 400 ) );
 		}
 
 		// Enforce that we have the required properties in the API response.
 		if ( ! $this->validator->response_has_required_properties( $data['data'] ) ) {
 			$this->logger->error( 'API request failed. The response is missing required properties.' );
-			wp_send_json_error( $this->resource->error( 'The API response is missing required properties.', '', 422 ) );
+			wp_send_json_error( $this->resource->error( 'The API response is missing required properties.', 'The API response from Genius did not send back all of the song, artist, and image data that was required.', 422 ) );
 		}
 
 		$this->logger->info( 'API request successful. Returning the data to the frontend.', $data['data'] );
 
 		// Send the success response back to the frontend.
-		wp_send_json_success( $data['data'] );
+		wp_send_json_success( $this->resource->success( $data['data'] ), 200 );
 	}
 }
