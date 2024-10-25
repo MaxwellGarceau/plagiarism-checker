@@ -88,10 +88,11 @@ export class PlagiarismResultsRenderer {
 	}
 
 	private getEmptyResultsHtml(): string {
-		return '<div class="plagiarism-checker__results-container--no-results">No plagiarism detected!</div>';
+		return '<div class="plagiarism-checker__results-none">No plagiarism detected!</div>';
 	}
 
 	private hasResults(results: Result[]): boolean {
+		console.log(results.length)
 		return results.length === 0;
 	}
 }
