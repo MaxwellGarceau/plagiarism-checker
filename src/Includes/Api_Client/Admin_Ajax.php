@@ -63,7 +63,7 @@ class Admin_Ajax {
 		// Enforce that we have the required properties in the API response.
 		if ( ! $this->validator->response_has_required_properties( $data['data'] ) ) {
 			$this->logger->error( 'API request failed. The response is missing required properties.' );
-			wp_send_json_error( $this->resource->error( 'The API response is missing required properties.', '', 422 ) );
+			wp_send_json_error( $this->resource->error( 'The API response is missing required properties.', 'The API response from Genius did not send back all of the song, artist, and image data that was required.', 422 ) );
 		}
 
 		$this->logger->info( 'API request successful. Returning the data to the frontend.', $data['data'] );
