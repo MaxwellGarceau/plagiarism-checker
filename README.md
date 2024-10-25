@@ -103,7 +103,7 @@ High level
 
 ## Testing
 
-TLDR: Don't write end to end feature tests unless you really need to. Let's keep an eye on ways to both run tests based on what kind of mocking they need as well as what group they're part of.
+**TLDR:** Don't write end to end feature tests unless you really need to. Let's keep an eye on ways to both run tests based on what kind of mocking they need as well as what group they're part of.
 
 - Pest (version 1 to use Yoast WP Testing Utils)
 - Yoast WP Testing Utils (provides access to WP_Unit functions)
