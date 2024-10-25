@@ -6,6 +6,14 @@ Below is a brief, dev focused, outline of some of the app design and architectur
 ### FE
 - TypeScript
 - Vite
+- Scss
+- Inherit from WP styles where possible
+- Responsive (cool trick with vh and calc to tame the results column)
+
+#### CSS/Scss
+This project takes a hybrid approach to CSS. The default is BEM convention via Scss. However, where it makes sense, Object Oriented CSS is also employed in order to separate some of the more intricate structural components from their styles. In addition, theme compatibility is a priority as opposed to one particular styling goal.
+
+In short, the CSS for this project should be composable. Avoid the use of global styles where possible. Inherit from WP for the best theme compatibility where possible. Use intelligent fallbacks to styles that will coordinate across the spectrum of designs.
 
 ### BE
 - PHP 8.3 features

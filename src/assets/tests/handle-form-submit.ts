@@ -137,7 +137,7 @@ describe('handleFormSubmit', () => {
 		// Expect the resultTextarea to contain the error message
 		expect(resultTextarea.innerHTML).toBe(
 			`<div class="plagiarism-checker__results-container--error">
-					<p class="plagiarism-check__error-message">Error: Failed to fetch results from the server - Status: 500 - Internal Server Error</p>
+					<p class="plagiarism-checker__error plagiarism-checker__error-message">Error: Failed to fetch results from the server - Status: 500 - Internal Server Error</p>
 				</div>`
 		);
 	});

@@ -28,10 +28,10 @@ export class PlagiarismResultsRenderer {
 	}
 
 	public getErrorHtml({ message, description, status_code }: Error): string {
-		return `<div class="plagiarism-checker__results-container--error">
-					<p class="plagiarism-check__error-message"><span class="plagiarism-checker__error-label">Message:</span> ${message}</p>
-					<p class="plagiarism-check__error-description"><span class="plagiarism-checker__error-label">Description:</span> ${description}</p>
-					<p class="plagiarism-check__error-status-code"><span class="plagiarism-checker__error-label">Status code:</span> ${status_code}</p>
+		return `<div class="plagiarism-checker__results">
+					<div class="plagiarism-checker__error plagiarism-checker__error-message"><p class="plagiarism-checker__error-label">Message:</p> <pre class="plagiarism-checker__pre">${message}</pre></div>
+					<div class="plagiarism-checker__error plagiarism-checker__error-description"><p class="plagiarism-checker__error-label">Description:</p> <pre class="plagiarism-checker__pre">${description}</pre></div>
+					<div class="plagiarism-checker__error plagiarism-checker__error-status-code"><p class="plagiarism-checker__error-label">Status code:</p> <pre class="plagiarism-checker__pre">${status_code}</pre></div>
 				</div>`;
 	}
 
@@ -39,7 +39,7 @@ export class PlagiarismResultsRenderer {
 		errorMessage: string = 'Error: Failed to fetch results from the server'
 	): string {
 		return `<div class="plagiarism-checker__results-container--error">
-					<p class="plagiarism-check__error-message">${errorMessage}</p>
+					<p class="plagiarism-checker__error plagiarism-checker__error-message">${errorMessage}</p>
 				</div>`;
 	}
 
