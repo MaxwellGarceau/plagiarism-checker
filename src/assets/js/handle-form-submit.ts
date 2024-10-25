@@ -53,7 +53,6 @@ export default async function handleFormSubmit(event: Event): Promise<void> {
 			);
 		}
 
-
 		// Request succeeded, but we didn't get the answer we wanted
 		const resultsHtml = !adminAjaxResponse.success
 			? renderer.getErrorHtml(adminAjaxResponse.data)

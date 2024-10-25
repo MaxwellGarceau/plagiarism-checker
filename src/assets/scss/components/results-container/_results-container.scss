@@ -18,9 +18,16 @@
 		margin: 0;
 	}
 
-	&__results-placeholder {
+	&__results-placeholder,
+	&__results-none {
 		font-style: italic;
 		color: v.$plagiarism-checker-color-secondary;
-		font-weight: 300;
+		font-weight: v.$plagiarism-checker-font-weight-light;
+	}
+
+	&__results-none {
+		font-weight: v.$plagiarism-checker-font-weight-medium;
+		font-size: v.$plagiarism-checker-font-size-very-large;
+		color: v.$plagiarism-checker-color-primary;
 	}
 }

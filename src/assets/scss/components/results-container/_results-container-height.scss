@@ -3,7 +3,8 @@
 // Calculation to determine container height
 .plagiarism-checker {
 	&__results,
-	&__results-placeholder {
+	&__results-placeholder,
+	&__results-none {
 		max-height: v.$plagiarism-checker-form-results-container-height;
 		height: 100%;
 	}
@@ -13,7 +14,8 @@
 		overflow-x: hidden;
 	}
 
-	&__results-placeholder {
+	&__results-placeholder,
+	&__results-none {
 		display: flex;
 		justify-content: center;
 		align-items: center;

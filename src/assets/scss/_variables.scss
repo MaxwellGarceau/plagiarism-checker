@@ -16,6 +16,13 @@ $plagiarism-checker-form-text-color: var(--wp--preset--color--foreground, #333);
 $plagiarism-checker-form-border-color: var(--wp--preset--color--border, #ddd);
 $plagiarism-checker-input-border-color: var(--wp--preset--color--border, #ddd);
 
+// Font weight
+$plagiarism-checker-font-weight-light: 300;
+$plagiarism-checker-font-weight-medium: 500;
+
+// Font size
+$plagiarism-checker-font-size-very-large: 1.75rem;
+
 // Structural variables
 $plagiarism-checker-form-width: 70vw;
 $plagiarism-checker-form-height: 80vh;
