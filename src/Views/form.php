@@ -1,6 +1,6 @@
 <section id="plagiarism-checker" class="plagiarism-checker plagiarism-checker--closed">
-	<div class="wp-block-button plagiarism-checker__toggle" id="plagiarism-checker__toggle">
-		<button class="plagiarism-checker__button button button-primary wp-block-button__link wp-element-button">
+	<div class="wp-block-button plagiarism-checker__toggle">
+		<button id="plagiarism-checker__toggle" class="plagiarism-checker__button button button-primary wp-block-button__link wp-element-button">
 			Toggle Form
 		</button>
 	</div>
