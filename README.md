@@ -1,14 +1,50 @@
 # Developer readme
 
+Below are a list of some of the technical key points of this plugin.
+
+## Backend
+
+- **PHP in the context of a WordPress plugin**
+  - Use of the WP Admin Ajax as well as the `/wp-json` REST API
+  - Nonces for request verification
+  - Validation and sanitization of input
+  - Resource formatting and error handling
+  - WP custom admin menu for storing API tokens
+  - Using the WPDB API to create, read from, and update a custom DB table specifically for Plagiarism Checker
+  - Validation, sanitization, and token management using WP standard security functions
+- **Object-Oriented Programming Paradigm**
+  - Complimented by design patterns
+  - Autoloading with Composer and PHP-DI
+  - PHP 8.3 features: type hinting, constructor promotion
+- **Testing**
+  - Testing with Pest (and I set up a variation of the WP scaffold plugin-tests)
+- **Logging**
+  - Logging with Monolog configured to integrate into the `WP_DEBUG` constants
+
+## Frontend
+
+- **JavaScript in the context of WordPress**
+  - Using the WP Admin Ajax API to fetch data from the backend
+  - Error handling for server failures, non-200 responses, empty data, missing API token, and successful requests
+- **User Interface**
+  - Sticky, toggleable web form available only to logged-in users
+  - Cross-theme compatibility styling:
+    - Inherit from WP-supported styles where possible and set neutral fallbacks where themes do not support them
+  - Responsive design principles and techniques without the use of media queries
+- **TypeScript used exclusively**
+  - Both functional and class-based approaches (where they made sense)
+- **Vite as a build tool**
+  - Modern JS/TS including ES6+/ES2023
+  - Modular imports and exports
+  - Assets compiled down to single, optimized files
+  - Tests written with Vite
+- **Scss**
+  - BEM methodology
+  - Object-Oriented CSS (lightly used to separate form structure from style)
+  - Low specificity styles
+
 ## App Design Choices
 Below is a brief, dev focused, outline of some of the app design and architecture choices made for this plugin.
-
-### FE
-- TypeScript
-- Vite
-- Scss
-- Inherit from WP styles where possible
-- Responsive (cool trick with vh and calc to tame the results column)
 
 #### CSS/Scss
 This project takes a hybrid approach to CSS. The default is BEM convention via Scss with a light implementation of SMACSS only where absolutely necessary.
@@ -18,11 +54,6 @@ However, where it makes sense, Object Oriented CSS is also employed in order to 
 Theme compatibility is a priority as opposed to one particular styling goal.
 
 In short, the CSS for this project should be composable. Avoid the use of global styles where possible. Inherit from WP for the best theme compatibility where possible. Use intelligent fallbacks to styles that will coordinate across the spectrum of designs.
-
-### BE
-- PHP 8.3 features
-- Composer
-- Testing with Pest (Brain Monkey and WP Core options)
 
 ### High level overview
 - Output a widget on the sidebar with an input form and submit button
@@ -34,6 +65,7 @@ Things I would like to do next
 
 #### Functionality
 - Support cross referencing an entire song
+- Compare the lyrics from Genius with the song lyrics and develop a similarity score
 - Implement better algorithms for "percentage based" plagiarism
 - Have different "plagiarism" scores
 
@@ -71,7 +103,7 @@ High level
 
 ## Testing
 
-TLDR: Don't write end to end feature tests unless you really need to. Let's keep an eye on ways to both run tests based on what kind of mocking they need as well as what group they're part of.
+**TLDR:** Don't write end to end feature tests unless you really need to. Let's keep an eye on ways to both run tests based on what kind of mocking they need as well as what group they're part of.
 
 - Pest (version 1 to use Yoast WP Testing Utils)
 - Yoast WP Testing Utils (provides access to WP_Unit functions)
