@@ -34,16 +34,6 @@ class Enqueue {
 		);
 	}
 
-	public function theme_json(): void {
-		// Enqueue theme.json styles
-		wp_enqueue_style(
-			'plagiarism-checker-theme-styles',
-			$this->get_plugin_base_url( '/theme.json' ), // adjust the path as per your plugin structure
-			[],
-			wp_get_theme()->get( 'Version' )
-		);
-	}
-
 	public function localize_scripts(): void {
 		wp_localize_script(
 			self::JS_SCRIPTS_HANDLE,
@@ -56,7 +46,6 @@ class Enqueue {
 	}
 
 	public function admin_styles() {
-		// Enqueue theme.json styles
 		wp_enqueue_style(
 			'plagiarism-checker-admin-styles',
 			$this->get_plugin_base_url( '/src/Admin/assets/style.css' ), // adjust the path as per your plugin structure
