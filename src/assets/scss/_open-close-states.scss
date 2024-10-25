@@ -3,7 +3,7 @@
 .plagiarism-checker {
 	// Ensure the form can be opened and closed
 	&--closed {
-		max-height: 75px;
+		max-height: 60px;
 		padding-bottom: 0;
 		overflow: hidden;
 		right: calc( 190px - v.$plagiarism-checker-form-width);
