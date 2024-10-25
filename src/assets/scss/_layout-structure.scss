@@ -1,5 +1,10 @@
 @use 'variables' as v;
 
+// These are the core styles to have the shape and structure of plagiarism checker
+// Let's leave them here, separated from their individual components so we can separate
+// the structure from the style
+
+// The rest of the scss, more or less, will be component based BEM methodology
 .plagiarism-checker {
   position: fixed;
   bottom: 0;

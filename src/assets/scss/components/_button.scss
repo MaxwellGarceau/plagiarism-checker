@@ -1,0 +1,15 @@
+@use '../variables' as v;
+
+.plagiarism-checker {
+	&__button {
+		cursor: pointer;
+		border: none;
+		transition: background-color 0.3s ease;
+	
+		&:hover,
+		&:active,
+		&:focus {
+			background-color: v.$plagiarism-checker-color-primary-hover; // Fallback for hover state
+		}
+	}
+}
