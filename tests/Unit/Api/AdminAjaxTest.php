@@ -30,8 +30,9 @@ beforeEach(
 		/** @var Logger $logger */
 		$this->logger = Mockery::mock( Logger::class );
 
-		/** @var Resource $resource */
-		$this->resource = Mockery::mock( Resource::class );
+		// /** @var Resource $resource */
+		// $this->resource = Mockery::mock( Resource::class );
+		$this->resource = new Resource();
 
 		/** @var Api_Response_Validator $validator */
 		$this->validator = Mockery::mock( Api_Response_Validator::class );
@@ -93,15 +94,12 @@ it(
 		// Mock the Resource class's error method to ensure it is called with correct arguments
 		$resource_return = array(
 			'success'     => false,
-			'message'     => 'Invalid or expired nonce.',
-			'description' => '',
-			'status_code' => 403,
+			'data' => array(
+				'message'     => 'Invalid or expired nonce.',
+				'description' => '',
+				'status_code' => 403,
+			),
 		);
-		$this->resource
-		->shouldReceive( 'error' )
-		->once() // Expect it to be called once
-		->with( 'Invalid or expired nonce.', '', 403 ) // Expect these arguments
-		->andReturn( $resource_return ); // Return the array as expected
 
 		// Expect the wp_send_json_error to be called, which will throw an exception
 		$this->expectException( \RuntimeException::class );
@@ -123,19 +121,6 @@ it(
 		$this->nonce_service
 		->shouldReceive( 'verify_nonce' )
 		->andReturn( Nonce_Status::VALID );
-
-		// Mock the Resource class's error method to ensure it is called with correct arguments
-		$resource_return = array(
-			'success'     => false,
-			'message'     => 'No text to search was provided.',
-			'description' => '',
-			'status_code' => 422,
-		);
-		$this->resource
-		->shouldReceive( 'error' )
-		->once() // Expect it to be called once
-		->with( 'No text to search was provided.', '', 422 ) // Expect these arguments
-		->andReturn( $resource_return ); // Return the array as expected
 
 		// Mock the validator to confirm it checks for required properties
 		$this->validator
@@ -205,14 +190,6 @@ it(
 			'success' => false,
 			'data' => $formatted_genius_response,
 		];
-		$this->resource
-		->shouldReceive( 'error' )
-		->with(
-			$formatted_genius_response['message'],
-			$formatted_genius_response['description'],
-			$formatted_genius_response['status_code']
-		)
-		->andReturn( $resource_return );
 
 		// We don't get to validator until we have a response
 		$this->validator
@@ -272,15 +249,6 @@ it(
 				'status_code' => 422,
 			),
 		);
-		$this->resource
-		->shouldReceive( 'error' )
-		->once() // Expect it to be called once
-		->with(
-			$resource_return['data']['message'],
-			$resource_return['data']['description'],
-			$resource_return['data']['status_code']
-		) // Expect these arguments
-		->andReturn( $resource_return ); // Return the array as expected
 
 		// Expect the logger to log the error
 		$this->logger
@@ -347,17 +315,6 @@ it(
 		->shouldReceive( 'info' )
 		->once()
 		->with( 'API request successful. Returning the data to the frontend.', $response_data['data'] );
-
-		$this->resource
-		->shouldReceive( 'success' )
-		->once() // Expect it to be called once
-		->with( $response_data['data'] ) // Expect these arguments
-		->andReturn(
-			array(
-				...$response_data,
-				'success' => true,
-			)
-		); // Return the array as expected
 
 		// Expect the wp_send_json_success to be called, which will throw an exception.
 		// If this fails wp_send_json_success was not called. Check beforeEach for alias.
