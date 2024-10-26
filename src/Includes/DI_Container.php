@@ -112,10 +112,13 @@ class DI_Container {
 		);
 
 		/**
-		 * Send the Token_Storage class the correct encryption class
+		 * Display an admin notice if Sodium is not available
 		 * 
-		 * If the server supports libsodium then use the Encryption class
-		 * Otherwise, we'll send an Encryption_Disabled_Strategy class that does not encrypt.
+		 * I experimented with supporting disabled encryption, but it caused too
+		 * many unnecessary bugs when encryption would switch between enabled and disabled.
+		 * 
+		 * There's really no reason to support disabled encryption and Sodium is a party of
+		 * WP Core. If the server does not support Sodium, the user should contact their host.
 		 */
 		$containerBuilder->addDefinitions([
 			Token_Storage::class => function ( ContainerInterface $c ) {
