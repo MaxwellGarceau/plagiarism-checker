@@ -9,7 +9,7 @@ node_modules/
 *.tar.gz
 *.zip
 .phpunit.result.cache
-coverage/**
+coverage/
 
 # Composer
 /vendor/

@@ -3,6 +3,7 @@
 namespace Max_Garceau\Plagiarism_Checker\Admin;
 
 use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB;
+use Max_Garceau\Plagiarism_Checker\Admin\Notice;
 use wpdb;
 
 /**
@@ -16,9 +17,11 @@ class Table_Manager {
 	private wpdb $wpdb;
 	private string $table_name;
 	private string $api_token_key;
+	private Notice $notice;
 
-	public function __construct( wpdb $wpdb, DB $constants ) {
+	public function __construct( wpdb $wpdb, DB $constants, Notice $notice ) {
 		$this->wpdb          = $wpdb;
+		$this->notice        = $notice;
 		$this->table_name    = $constants->get_access_token_table_name( $wpdb->prefix );
 		$this->api_token_key = $constants->get_api_token_key();
 	}
@@ -60,18 +63,14 @@ class Table_Manager {
 	 */
 	public function maybe_show_admin_notice(): void {
 		if ( ! $this->does_table_exist() ) {
-			add_action( 'admin_notices', [ $this, 'display_admin_notice' ] );
+			add_action(
+				'admin_notices',
+				function () {
+					$this->notice->display_error_notice(
+						'Error: The Plagiarism Checker database table does not exist. Please reinstall or contact support.'
+					);
+				}
+			);
 		}
-	}
-
-	/**
-	 * Render the admin notice for missing table.
-	 */
-	public function display_admin_notice(): void {
-		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php esc_html_e( 'Error: The Plagiarism Checker database table does not exist. Please reinstall or contact support.', 'plagiarism-checker' ); ?></p>
-		</div>
-		<?php
 	}
 }

@@ -12,6 +12,10 @@ use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Client;
 use Psr\Container\ContainerInterface;
 use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
+use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB as DB_Constants;
+use Max_Garceau\Plagiarism_Checker\Admin\Notice;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Disabled_Strategy;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Libsodium_Encryption_Strategy;
 use wpdb;
 
 /**
@@ -107,6 +111,36 @@ class DI_Container {
 				},
 			]
 		);
+
+		/**
+		 * Send the Token_Storage class the correct encryption class
+		 * 
+		 * If the server supports libsodium then use the Libsodium_Encryption_Strategy class
+		 * Otherwise, we'll send an Encryption_Disabled_Strategy class that does not encrypt.
+		 */
+		$containerBuilder->addDefinitions([
+			Token_Storage::class => function ( ContainerInterface $c ) {
+				
+				// If the server does not support libsodium, display an admin notice
+				if ( ! extension_loaded( 'sodium' ) ) {
+					add_action(
+						'admin_notices',
+						function () use ( $c ) {
+							$c->get( Notice::class )->display_error_notice( __( 'Error: The encryption library "Sodium" is not available on your site! This means the sensitive data you enter into Plagiarism Checker will not be encrypted!!!', 'plagiarism-checker' ) );
+						}
+					);
+				}
+
+				// Return Libsodium Encryption if available
+				$encryption = extension_loaded( 'sodium' )
+					? new Libsodium_Encryption_Strategy()
+					: new Encryption_Disabled_Strategy();
+				$wpdb = $c->get( wpdb::class );
+				$db_constants = new DB_Constants();
+
+				return new Token_Storage( $wpdb, $db_constants, $encryption );
+			}
+		]);
 
 		// Build and return the container
 		return $containerBuilder->build();

@@ -21,7 +21,8 @@
         "wordpress/wordpress": "^6.6",
         "yoast/phpunit-polyfills": "^1.0",
         "yoast/wp-test-utils": "^1.0",
-        "mockery/mockery": "^1.6"
+        "mockery/mockery": "^1.6",
+        "vlucas/phpdotenv": "^5.6"
     },
     "scripts": {
         "sniff": "phpcs --standard=phpcs.xml.dist --extensions=php",
@@ -49,8 +50,7 @@
     "require": {
         "kucrut/vite-for-wp": "^0.9.3",
         "php-di/php-di": "^6.4",
-        "monolog/monolog": "^3.7",
-        "vlucas/phpdotenv": "^5.6"
+        "monolog/monolog": "^3.7"
     },
     "repositories": [
         {

@@ -4,7 +4,22 @@
  * TODO: If we have enough CSS to warrant it
  * then let's set up scss and webpack
  */
-.plagiarism-checker__note {
+.plagiarism-checker__api-instructions-container p,
+.plagiarism-checker__list li {
+	font-size: 1.05rem;
+	letter-spacing: .025rem;
+}
+
+.plagiarism-checker__list li {
+	margin-bottom: 1rem;
+}
+
+.plagiarism-checker__api-instructions-container img {
+	margin: 1rem 0 1.5rem;
+	display: block;
+}
+
+.plagiarism-checker__api-instructions-container .plagiarism-checker__note {
 	font-size: 0.85rem;
 	font-style: italic;
 	color: #72777c;
@@ -26,4 +41,13 @@
 .plagiarism-checker__highlight {
 	font-weight: bold;
 	color: #b32d2e;
+}
+
+/**
+ * Image
+ */
+.plagiarism-checker__img {
+	width: 100%;
+	max-width: 500px;
+	height: auto;
 }
