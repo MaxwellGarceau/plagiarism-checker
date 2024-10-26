@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
 
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Interface;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Strategy_Interface;
 
 /**
  * Returns original data and disables encryption
@@ -15,7 +15,7 @@ use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Interface;
  *
  * TODO: Do we really want this complexity?
  */
-class Encryption_Disabled implements Encryption_Interface {
+class Encryption_Disabled_Strategy implements Encryption_Strategy_Interface {
 
 	public function encrypt( string $data ): string {
 		return $data; // Return original data if encryption is disabled

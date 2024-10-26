@@ -14,8 +14,8 @@ use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB as DB_Constants;
 use Max_Garceau\Plagiarism_Checker\Admin\Notice;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Disabled;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Libsodium_Encryption;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Disabled_Strategy;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Libsodium_Encryption_Strategy;
 use wpdb;
 
 /**
@@ -115,8 +115,8 @@ class DI_Container {
 		/**
 		 * Send the Token_Storage class the correct encryption class
 		 * 
-		 * If the server supports libsodium then use the Libsodium_Encryption class
-		 * Otherwise, we'll send an Encryption_Disabled class that does not encrypt.
+		 * If the server supports libsodium then use the Libsodium_Encryption_Strategy class
+		 * Otherwise, we'll send an Encryption_Disabled_Strategy class that does not encrypt.
 		 */
 		$containerBuilder->addDefinitions([
 			Token_Storage::class => function ( ContainerInterface $c ) {
@@ -132,8 +132,8 @@ class DI_Container {
 				}
 
 				$encryption = extension_loaded( 'sodium' )
-					? new Libsodium_Encryption()
-					: new Encryption_Disabled();
+					? new Libsodium_Encryption_Strategy()
+					: new Encryption_Disabled_Strategy();
 				$wpdb = $c->get( wpdb::class );
 				$db_constants = new DB_Constants();
 

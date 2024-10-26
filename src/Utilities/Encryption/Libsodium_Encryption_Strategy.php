@@ -4,7 +4,7 @@ declare( strict_types = 1 );
 
 namespace Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
 
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Interface;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Strategy_Interface;
 
 /**
  * Encrypt and decrypt data using the libsodium extension.
@@ -19,7 +19,7 @@ use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Interface;
  * while simultaneously allowing us to pull in the security
  * benefit in our encryption here.
  */
-class Libsodium_Encryption implements Encryption_Interface {
+class Libsodium_Encryption_Strategy implements Encryption_Strategy_Interface {
 
 	private string $key;
 
