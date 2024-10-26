@@ -2,6 +2,7 @@
 .DS_Store
 phpcs.xml
 phpunit.xml
+.phpcs.cache
 Thumbs.db
 wp-cli.local.yml
 node_modules/

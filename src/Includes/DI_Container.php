@@ -14,8 +14,7 @@ use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB as DB_Constants;
 use Max_Garceau\Plagiarism_Checker\Admin\Notice;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Disabled_Strategy;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Libsodium_Encryption_Strategy;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
 use wpdb;
 
 /**
@@ -113,10 +112,13 @@ class DI_Container {
 		);
 
 		/**
-		 * Send the Token_Storage class the correct encryption class
+		 * Display an admin notice if Sodium is not available
 		 * 
-		 * If the server supports libsodium then use the Libsodium_Encryption_Strategy class
-		 * Otherwise, we'll send an Encryption_Disabled_Strategy class that does not encrypt.
+		 * I experimented with supporting disabled encryption, but it caused too
+		 * many unnecessary bugs when encryption would switch between enabled and disabled.
+		 * 
+		 * There's really no reason to support disabled encryption and Sodium is a party of
+		 * WP Core. If the server does not support Sodium, the user should contact their host.
 		 */
 		$containerBuilder->addDefinitions([
 			Token_Storage::class => function ( ContainerInterface $c ) {
@@ -126,18 +128,14 @@ class DI_Container {
 					add_action(
 						'admin_notices',
 						function () use ( $c ) {
-							$c->get( Notice::class )->display_error_notice( __( 'Error: The encryption library "Sodium" is not available on your site! This means the sensitive data you enter into Plagiarism Checker will not be encrypted!!!', 'plagiarism-checker' ) );
+							$c->get( Notice::class )->display_error_notice( __( 'Error: The encryption library "Sodium" is not available on your site! Plagiarism Checker will not work without Sodium. Please reach out to your host to ask them about enabling the php extension "libsodium".', 'plagiarism-checker' ) );
 						}
 					);
 				}
 
-				// Return Libsodium Encryption if available
-				$encryption = extension_loaded( 'sodium' )
-					? new Libsodium_Encryption_Strategy()
-					: new Encryption_Disabled_Strategy();
+				$encryption = new Encryption();
 				$wpdb = $c->get( wpdb::class );
 				$db_constants = new DB_Constants();
-
 				return new Token_Storage( $wpdb, $db_constants, $encryption );
 			}
 		]);
