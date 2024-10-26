@@ -6,16 +6,16 @@ namespace Max_Garceau\Plagiarism_Checker\Admin;
 
 use wpdb;
 use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption_Interface;
 
 class Token_Storage {
 
 	private wpdb $wpdb;
 	private string $table_name;
 	private string $api_token_key;
-	private Encryption $encryption;
+	private Encryption_Interface $encryption;
 
-	public function __construct( wpdb $wpdb, DB $constants, Encryption $encryption ) {
+	public function __construct( wpdb $wpdb, DB $constants, Encryption_Interface $encryption ) {
 		$this->wpdb = $wpdb;
 		$this->table_name    = $constants->get_access_token_table_name( $wpdb->prefix );
 		$this->api_token_key = $constants->get_api_token_key();
