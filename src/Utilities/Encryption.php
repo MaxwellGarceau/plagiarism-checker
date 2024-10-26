@@ -6,6 +6,19 @@ namespace Max_Garceau\Plagiarism_Checker\Utilities;
 
 use Max_Garceau\Plagiarism_Checker\Admin\Notice;
 
+/**
+ * Encrypt and decrypt data using the libsodium extension.
+ * 
+ * Here, we're leaning into the WP functionality by using
+ * wp_salt as our key. This way, we can sure we have a stable
+ * input that is unique for every different WordPress site.
+ * 
+ * We also give the user the ability to increase their security
+ * by augmenting the native WP salt with a server side secret
+ * key. The secret key would have the benefit of being private
+ * while simultaneously allowing us to pull in the security
+ * benefit in our encryption here.
+ */
 class Encryption {
 
 	private string $key;
