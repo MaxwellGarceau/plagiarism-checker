@@ -21,6 +21,7 @@ class Table_Manager {
 
 	public function __construct( wpdb $wpdb, DB $constants, Notice $notice ) {
 		$this->wpdb          = $wpdb;
+		$this->notice        = $notice;
 		$this->table_name    = $constants->get_access_token_table_name( $wpdb->prefix );
 		$this->api_token_key = $constants->get_api_token_key();
 	}

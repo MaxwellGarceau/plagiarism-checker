@@ -131,6 +131,7 @@ class DI_Container {
 					);
 				}
 
+				// Return Libsodium Encryption if available
 				$encryption = extension_loaded( 'sodium' )
 					? new Libsodium_Encryption_Strategy()
 					: new Encryption_Disabled_Strategy();
