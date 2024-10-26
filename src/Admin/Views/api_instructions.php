@@ -21,16 +21,15 @@ function get_admin_img_dir_url( $img = '' ) {
 		<li>Visit the <a href="https://genius.com/api-clients/new" target="_blank">API section</a> in your account settings.</li>
 		<li>
 			Fill in the "App Name" and "App Website URL" fields. <span class="plagiarism-checker__highlight">Use <code style="display: inline-block">https://example.com/</code> for your App Website URL.</span> Then click "save".
-			<img class="plagiarism-checker__img" src="<?php echo get_admin_img_dir_url( 'new-api-client.png' ); ?>"></img>
+			<img class="plagiarism-checker__img" src="<?php echo get_admin_img_dir_url( 'new-api-client.png' ); ?>"/>
 		</li>
 		<li>Find the section that says <span class="plagiarism-checker__highlight">"Client Access Token"</span> and click the button that says <span class="plagiarism-checker__highlight">"Generate Access Token"</span>.
-			<img class="plagiarism-checker__img" src="<?php echo get_admin_img_dir_url( 'generate-access-token.png' ); ?>"></img>
+			<img class="plagiarism-checker__img" src="<?php echo get_admin_img_dir_url( 'generate-access-token.png' ); ?>"/>
+			<img class="plagiarism-checker__img" src="<?php echo get_admin_img_dir_url( 'copy-access-token.png' ); ?>"/>
 		</li>
-		<li>Copy and paste the <span class="plagiarism-checker__highlight">"Client Access Token"</span> into the field below.
-			<img class="plagiarism-checker__img" src="<?php echo get_admin_img_dir_url( 'copy-access-token.png' ); ?>"></img>
+		<li>Copy and paste the <span class="plagiarism-checker__highlight">"Client Access Token"</span> into the Client Access Token field below.
 		</li>
 	</ol>
-	<p class="plagiarism-checker__note">Note: Make sure you copy/paste the <span class="plagiarism-checker__highlight">"Client Access Token"</span> token and NOT the "Client Secret". More information on the Genius.com API can be found in the <a href="https://docs.genius.com/#/authentication-h1" target="_blank">developer documentation</a>.</p>
 	<?php
 	if ( isset( $_GET['status'] ) && $_GET['status'] === 'error' ) {
 		?>

@@ -64,6 +64,7 @@ class Settings {
 	private function render_api_token_field(): void {
 		$user_id = get_current_user_id();
 		$token   = $this->token_storage->get_token( $user_id );
-		echo '<input type="password" name="plagiarism_checker_api_token" value="' . esc_attr( $token ) . '" class="regular-text">';
+		require plugin_dir_path( __DIR__ ) . 'Admin/Views/client_access_token_input.php';
+		require plugin_dir_path( __DIR__ ) . 'Admin/Views/help_note.html';
 	}
 }

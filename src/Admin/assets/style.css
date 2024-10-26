@@ -19,7 +19,7 @@
 	display: block;
 }
 
-.plagiarism-checker__note {
+.plagiarism-checker__api-instructions-container .plagiarism-checker__note {
 	font-size: 0.85rem;
 	font-style: italic;
 	color: #72777c;
