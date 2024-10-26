@@ -13,7 +13,7 @@ use function Brain\Monkey\Functions\when;
  * These tests should cover everything in the /src/Admin directory.
  */
 
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
 use Mockery;
 
 /**

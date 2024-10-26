@@ -6,7 +6,7 @@ namespace Max_Garceau\Plagiarism_Checker\Admin;
 
 use wpdb;
 use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
 
 class Token_Storage {
 

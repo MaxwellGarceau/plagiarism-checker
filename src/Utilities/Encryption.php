@@ -2,7 +2,7 @@
 
 declare( strict_types = 1 );
 
-namespace Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
+namespace Max_Garceau\Plagiarism_Checker\Utilities;
 
 /**
  * Encrypt and decrypt data using the libsodium extension.

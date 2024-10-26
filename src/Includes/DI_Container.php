@@ -14,7 +14,7 @@ use Max_Garceau\Plagiarism_Checker\Admin\Token_Storage;
 use Max_Garceau\Plagiarism_Checker\Includes\Api_Client\Resource;
 use Max_Garceau\Plagiarism_Checker\Admin\Constants\DB as DB_Constants;
 use Max_Garceau\Plagiarism_Checker\Admin\Notice;
-use Max_Garceau\Plagiarism_Checker\Utilities\Encryption\Encryption;
+use Max_Garceau\Plagiarism_Checker\Utilities\Encryption;
 use wpdb;
 
 /**
