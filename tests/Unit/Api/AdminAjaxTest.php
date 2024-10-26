@@ -266,17 +266,19 @@ it(
 		// Mock the Resource class's error method to ensure it is called with correct arguments
 		$resource_return = array(
 			'success'     => false,
-			'message'     => 'The API response is missing required properties.',
-			'description' => '',
-			'status_code' => 422,
+			'data' => array(
+				'message'     => 'The API response is missing required properties.',
+				'description' => 'The API response from Genius did not send back all of the song, artist, and image data that was required.',
+				'status_code' => 422,
+			),
 		);
 		$this->resource
 		->shouldReceive( 'error' )
 		->once() // Expect it to be called once
 		->with(
-			$resource_return['message'],
-			$resource_return['description'],
-			$resource_return['status_code']
+			$resource_return['data']['message'],
+			$resource_return['data']['description'],
+			$resource_return['data']['status_code']
 		) // Expect these arguments
 		->andReturn( $resource_return ); // Return the array as expected
 
