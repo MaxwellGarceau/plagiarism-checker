@@ -16,7 +16,7 @@
 if ( ! extension_loaded( 'sodium' ) ) :
 	?>
 		<p class="plagiarism-checker__status plagiarism-checker__error" style="color:#dc3232">
-			<strong>Error:</strong> You can not use Plagiarism Checker if your server does not support the sodium extension for encryption. Please reach out to your host to ask about enabling "libsodium".
+			<strong>Error:</strong> You can not use Plagiarism Checker if your server does not support the Sodium extension for encryption. Please reach out to your host to ask about enabling "libsodium".
 		</p>
 		<input type="text" name="" value="Your server does not support sodium encryption" disabled class="regular-text">
 	<?php else : ?>
